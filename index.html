@@ -4,21 +4,23 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>투자 대시보드</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
 <style>
-  :root{--bg:#0b0d11;--bar:#0c0e12;--line:#222732;--txt:#e6e8ec;--mut:#8b93a3;--accent:#6ea8fe;}
+  :root{--bg:#0f1115;--bar:#0b0d11;--panel:#161a21;--panel2:#1c2029;--line:#262b36;
+    --txt:#e8eaee;--mut:#8b93a3;--accent:#6ea8fe}
   *{box-sizing:border-box}
   html,body{height:100%;margin:0}
-  body{background:var(--bg);color:var(--txt);font-family:"Segoe UI","Malgun Gothic",sans-serif;display:flex;flex-direction:column}
-  header{flex:none;background:var(--bar);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;padding:9px 16px;flex-wrap:wrap}
-  .logo{font-weight:750;font-size:15px;letter-spacing:.2px}
-  .logo .dot{color:var(--accent)}
-  nav{display:flex;gap:4px;flex-wrap:wrap;margin-left:6px}
-  nav button{background:transparent;border:1px solid transparent;color:var(--mut);padding:7px 13px;border-radius:9px;cursor:pointer;font-size:13.5px;font-family:inherit}
-  nav button:hover{color:var(--txt);background:#161a22}
-  nav button.on{background:#1d2330;color:#fff;border-color:#2f384a}
-  nav button .ic{margin-right:5px}
+  body{background:var(--bg);color:var(--txt);
+    font-family:'Pretendard Variable','Pretendard','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
+    display:flex;flex-direction:column;-webkit-font-smoothing:antialiased}
+  header{flex:none;background:var(--bar);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;padding:10px 16px;flex-wrap:wrap}
+  .logo{font-weight:800;font-size:15px;letter-spacing:-.2px;display:flex;align-items:center;gap:8px;white-space:nowrap}
+  .logo .dot{width:8px;height:8px;border-radius:2px;background:var(--accent);display:inline-block}
+  nav{display:flex;gap:3px;flex-wrap:wrap;margin-left:8px}
+  nav button{background:transparent;border:1px solid transparent;color:var(--mut);padding:7px 13px;border-radius:9px;cursor:pointer;font-size:13.5px;font-family:inherit;white-space:nowrap}
+  nav button:hover{color:var(--txt);background:#161b24}
+  nav button.on{background:var(--panel2);color:#fff;border-color:var(--line)}
   .spacer{margin-left:auto;color:var(--mut);font-size:12px}
-  .spacer a{color:var(--mut)}
   main{flex:1;position:relative;min-height:0}
   iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:var(--bg)}
   .loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--mut);font-size:14px;pointer-events:none;opacity:0;transition:opacity .2s}
@@ -28,7 +30,7 @@
 </head>
 <body>
 <header>
-  <span class="logo">투자 <span class="dot">●</span> 대시보드</span>
+  <span class="logo"><span class="dot"></span>투자 대시보드</span>
   <nav id="nav"></nav>
   <span class="spacer" id="meta"></span>
 </header>
@@ -38,12 +40,12 @@
 </main>
 <script>
 const TOOLS = [
-  {id:"cycle",  name:"경기순환",   ic:"🧭", url:"https://ydk39562055-hub.github.io/cycle-checklist/"},
-  {id:"rotation",name:"로테이션",  ic:"🔄", url:"https://ydk39562055-hub.github.io/rotation-lab/"},
-  {id:"growth", name:"성장가속",   ic:"🚀", url:"https://ydk39562055-hub.github.io/growth-signal-reports/"},
-  {id:"macro",  name:"매크로",     ic:"🧩", url:"https://mosaic-macro-dash.netlify.app/"},
-  {id:"us",     name:"주도주·미국", ic:"📡", url:"./radar-us/"},
-  {id:"kr",     name:"주도주·한국", ic:"📡", url:"./radar-kr/"},
+  {id:"cycle",   name:"경기순환",   url:"https://ydk39562055-hub.github.io/cycle-checklist/"},
+  {id:"rotation",name:"로테이션",   url:"https://ydk39562055-hub.github.io/rotation-lab/"},
+  {id:"growth",  name:"성장가속",   url:"https://ydk39562055-hub.github.io/growth-signal-reports/"},
+  {id:"macro",   name:"매크로",     url:"https://mosaic-macro-dash.netlify.app/"},
+  {id:"us",      name:"주도주·미국", url:"./radar-us/"},
+  {id:"kr",      name:"주도주·한국", url:"./radar-kr/"},
 ];
 const nav=document.getElementById('nav'), frame=document.getElementById('frame'), loading=document.getElementById('loading');
 let cur=null;
@@ -59,10 +61,9 @@ function go(id){
 frame.addEventListener('load',()=>loading.classList.remove('show'));
 TOOLS.forEach(t=>{
   const b=document.createElement('button'); b.dataset.id=t.id;
-  b.innerHTML=`<span class="ic">${t.ic}</span>${t.name}`;
+  b.textContent=t.name;
   b.onclick=()=>go(t.id); nav.appendChild(b);
 });
-document.getElementById('meta').textContent='';
 const start=location.hash.slice(1) || (function(){try{return localStorage.getItem('hub_last')}catch(e){return null}})() || TOOLS[0].id;
 go(TOOLS.find(t=>t.id===start)?start:TOOLS[0].id);
 window.addEventListener('hashchange',()=>{const h=location.hash.slice(1); if(h&&h!==cur) go(h);});
