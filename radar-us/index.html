@@ -1,27 +1,39 @@
 <!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>주도주 레이더 · 미국</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
 <style>
- body{margin:0;background:#0f1115;color:#e6e8ec;font-family:"Segoe UI","Malgun Gothic",sans-serif;font-size:14px}
- .wrap{max-width:1100px;margin:0 auto;padding:20px}
- h1{font-size:18px;margin:0 0 4px} .sub{color:#8b93a3;font-size:13px;margin-bottom:16px}
- .badge{display:inline-block;background:#1d212b;border:1px solid #2a2f3a;border-radius:8px;padding:6px 12px;margin-bottom:14px}
- table{border-collapse:collapse;width:100%;font-size:13px}
- th,td{border-bottom:1px solid #222732;padding:7px 9px;text-align:right;white-space:nowrap}
- th{color:#8b93a3;font-weight:600;text-align:right;position:sticky;top:0;background:#0f1115}
- td.tk{text-align:left;font-weight:700;color:#6ea8fe} th:nth-child(2),td:nth-child(2){text-align:left}
+ :root{--bg:#0f1115;--bar:#0b0d11;--panel:#161a21;--panel2:#1c2029;--line:#262b36;--txt:#e8eaee;--mut:#8b93a3;--mut2:#5d6470;--accent:#6ea8fe;--green:#3fae6b;--red:#e5544b}
+ *{box-sizing:border-box}
+ body{margin:0;background:var(--bg);color:var(--txt);font-family:'Pretendard Variable','Pretendard','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;font-size:14px;-webkit-font-smoothing:antialiased}
+ .wrap{max-width:1100px;margin:0 auto;padding:26px 22px 40px}
+ .kicker{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent);font-weight:700}
+ h1{font-size:23px;margin:7px 0 5px;font-weight:750;letter-spacing:-.3px}
+ .sub{color:var(--mut);font-size:13.5px;margin-bottom:16px}
+ .badge{display:inline-block;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 14px;margin-bottom:18px;font-size:13px;color:var(--mut)}
+ .badge b{color:var(--txt)}
+ table{border-collapse:separate;border-spacing:0;width:100%;font-size:13px;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+ th,td{border-bottom:1px solid var(--line);padding:9px 11px;text-align:right;white-space:nowrap}
+ tbody tr:last-child td{border-bottom:0}
+ th{color:var(--mut);font-weight:600;position:sticky;top:0;background:var(--panel2);font-size:11.5px;letter-spacing:.3px}
+ tbody tr:hover{background:#1a2029}
+ td.tk{text-align:left;font-weight:750;color:var(--accent)} th:nth-child(2),td:nth-child(2){text-align:left}
  th:nth-child(3),td:nth-child(3),th:nth-child(5),td:nth-child(5){text-align:left}
  td:first-child,th:first-child{text-align:left}
- .mut{color:#5d6470} .mono{font-variant-numeric:tabular-nums}
- .up{color:#3fae6b} .down{color:#e5544b}
- tr.old{opacity:.5} .on{color:#3fae6b;font-weight:700}
- .foot{color:#5d6470;font-size:11px;margin-top:14px}
+ .mut{color:var(--mut2)} .mono{font-variant-numeric:tabular-nums}
+ .up{color:var(--green)} .down{color:var(--red)}
+ tr.old{opacity:.45} .on{color:var(--green);font-weight:700}
+ .foot{color:var(--mut2);font-size:11.5px;margin-top:16px;line-height:1.6}
+ .med{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:8px;vertical-align:1px}
+ .med.gold{background:#e0b94a}.med.silver{background:#b9c2cf}.med.bronze{background:#cf9b6a}
 </style></head><body><div class="wrap">
-<h1>📡 주도주 레이더 · 미국</h1>
+<div class="kicker">RADAR · US EQUITIES</div>
+<h1>주도주 레이더 · 미국</h1>
 <div class="sub">52주 신고가 부근 + 거래량 분출 + 섹터 대장주 신호. 디스코드 알림과 동일 데이터.</div>
-<div class="badge">최종 업데이트 <b>2026-06-12</b> · 오늘 신호 15개 — 🥇 골드 3 · 🥈 실버 8 · 🥉 브론즈 4</div>
-<table><tr><th>등급</th><th>티커</th><th>섹터</th><th>신호일</th><th>종류</th><th>52주거리%</th><th>거래량배수</th><th>7일</th><th>20일</th><th>60일</th><th>상태</th></tr>
+<div class="badge">최종 업데이트 <b>2026-06-12</b> · 오늘 신호 15개 — <span class="med gold"></span>골드 3 · <span class="med silver"></span>실버 8 · <span class="med bronze"></span>브론즈 4</div>
+<table><thead><tr><th>등급</th><th>티커</th><th>섹터</th><th>신호일</th><th>종류</th><th>52주거리%</th><th>거래량배수</th><th>7일</th><th>20일</th><th>60일</th><th>상태</th></tr></thead>
+<tbody>
 <tr class="act">
-          <td>🥇 골드</td><td class="tk">TYL</td>
+          <td><span class="med gold"></span>골드</td><td class="tk">TYL</td>
           <td class="mut">IGV</td>
           <td>2026-06-12</td>
           <td class="mut">fresh</td>
@@ -31,7 +43,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class= on>오늘</span></td></tr><tr class="act">
-          <td>🥇 골드</td><td class="tk">NWL</td>
+          <td><span class="med gold"></span>골드</td><td class="tk">NWL</td>
           <td class="mut">XLY</td>
           <td>2026-06-11</td>
           <td class="mut">watch</td>
@@ -41,7 +53,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class= on>오늘</span></td></tr><tr class="act">
-          <td>🥇 골드</td><td class="tk">ALNY</td>
+          <td><span class="med gold"></span>골드</td><td class="tk">ALNY</td>
           <td class="mut">XBI</td>
           <td>2026-06-11</td>
           <td class="mut">fresh</td>
@@ -51,7 +63,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class= on>오늘</span></td></tr><tr class="act">
-          <td>🥈 실버</td><td class="tk">TSM</td>
+          <td><span class="med silver"></span>실버</td><td class="tk">TSM</td>
           <td class="mut">SMH</td>
           <td>2026-06-12</td>
           <td class="mut">fresh</td>
@@ -61,7 +73,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class= on>오늘</span></td></tr><tr class="act">
-          <td>🥈 실버</td><td class="tk">AVGO</td>
+          <td><span class="med silver"></span>실버</td><td class="tk">AVGO</td>
           <td class="mut">SMH</td>
           <td>2026-06-12</td>
           <td class="mut">watch</td>
@@ -71,7 +83,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class= on>오늘</span></td></tr><tr class="act">
-          <td>🥈 실버</td><td class="tk">COO</td>
+          <td><span class="med silver"></span>실버</td><td class="tk">COO</td>
           <td class="mut">XLV</td>
           <td>2026-06-12</td>
           <td class="mut">fresh</td>
@@ -81,7 +93,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class= on>오늘</span></td></tr><tr class="act">
-          <td>🥈 실버</td><td class="tk">ORLY</td>
+          <td><span class="med silver"></span>실버</td><td class="tk">ORLY</td>
           <td class="mut">XLY</td>
           <td>2026-06-12</td>
           <td class="mut">fresh</td>
@@ -91,7 +103,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class= on>오늘</span></td></tr><tr class="act">
-          <td>🥈 실버</td><td class="tk">QSR</td>
+          <td><span class="med silver"></span>실버</td><td class="tk">QSR</td>
           <td class="mut">XLY</td>
           <td>2026-06-12</td>
           <td class="mut">fresh</td>
@@ -101,7 +113,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class= on>오늘</span></td></tr><tr class="act">
-          <td>🥈 실버</td><td class="tk">035420.KS</td>
+          <td><span class="med silver"></span>실버</td><td class="tk">035420.KS</td>
           <td class="mut">EWY</td>
           <td>2026-06-12</td>
           <td class="mut">watch</td>
@@ -111,7 +123,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class= on>오늘</span></td></tr><tr class="act">
-          <td>🥈 실버</td><td class="tk">INCY</td>
+          <td><span class="med silver"></span>실버</td><td class="tk">INCY</td>
           <td class="mut">XBI</td>
           <td>2026-06-12</td>
           <td class="mut">watch</td>
@@ -121,7 +133,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class= on>오늘</span></td></tr><tr class="act">
-          <td>🥈 실버</td><td class="tk">AVB</td>
+          <td><span class="med silver"></span>실버</td><td class="tk">AVB</td>
           <td class="mut">XLRE</td>
           <td>2026-06-12</td>
           <td class="mut">watch</td>
@@ -131,7 +143,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class= on>오늘</span></td></tr><tr class="act">
-          <td>🥉 브론즈</td><td class="tk">ASML</td>
+          <td><span class="med bronze"></span>브론즈</td><td class="tk">ASML</td>
           <td class="mut">SMH</td>
           <td>2026-06-12</td>
           <td class="mut">fresh</td>
@@ -141,7 +153,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class= on>오늘</span></td></tr><tr class="act">
-          <td>🥉 브론즈</td><td class="tk">CINF</td>
+          <td><span class="med bronze"></span>브론즈</td><td class="tk">CINF</td>
           <td class="mut">XLF</td>
           <td>2026-06-12</td>
           <td class="mut">fresh</td>
@@ -151,7 +163,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class= on>오늘</span></td></tr><tr class="act">
-          <td>🥉 브론즈</td><td class="tk">EXPD</td>
+          <td><span class="med bronze"></span>브론즈</td><td class="tk">EXPD</td>
           <td class="mut">XLI</td>
           <td>2026-06-12</td>
           <td class="mut">fresh</td>
@@ -161,7 +173,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class= on>오늘</span></td></tr><tr class="act">
-          <td>🥉 브론즈</td><td class="tk">PNW</td>
+          <td><span class="med bronze"></span>브론즈</td><td class="tk">PNW</td>
           <td class="mut">XLU</td>
           <td>2026-06-12</td>
           <td class="mut">watch</td>
@@ -171,7 +183,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class= on>오늘</span></td></tr><tr class="old">
-          <td>🥇 골드</td><td class="tk">FISV</td>
+          <td><span class="med gold"></span>골드</td><td class="tk">FISV</td>
           <td class="mut">XLF</td>
           <td>2026-06-08</td>
           <td class="mut">fresh</td>
@@ -181,7 +193,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class=mut>최근</span></td></tr><tr class="old">
-          <td>🥇 골드</td><td class="tk">TEAM</td>
+          <td><span class="med gold"></span>골드</td><td class="tk">TEAM</td>
           <td class="mut">IGV</td>
           <td>2026-06-03</td>
           <td class="mut">fresh</td>
@@ -191,7 +203,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class=mut>최근</span></td></tr><tr class="old">
-          <td>🥇 골드</td><td class="tk">PINS</td>
+          <td><span class="med gold"></span>골드</td><td class="tk">PINS</td>
           <td class="mut">XLC</td>
           <td>2026-06-03</td>
           <td class="mut">fresh</td>
@@ -201,7 +213,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class=mut>최근</span></td></tr><tr class="old">
-          <td>🥇 골드</td><td class="tk">SOFI</td>
+          <td><span class="med gold"></span>골드</td><td class="tk">SOFI</td>
           <td class="mut">XLF</td>
           <td>2026-06-03</td>
           <td class="mut">fresh</td>
@@ -211,7 +223,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class=mut>최근</span></td></tr><tr class="old">
-          <td>🥇 골드</td><td class="tk">GIS</td>
+          <td><span class="med gold"></span>골드</td><td class="tk">GIS</td>
           <td class="mut">XLP</td>
           <td>2026-06-03</td>
           <td class="mut">fresh</td>
@@ -221,7 +233,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class=mut>최근</span></td></tr><tr class="old">
-          <td>🥇 골드</td><td class="tk">LULU</td>
+          <td><span class="med gold"></span>골드</td><td class="tk">LULU</td>
           <td class="mut">XLY</td>
           <td>2026-06-01</td>
           <td class="mut">fresh</td>
@@ -231,7 +243,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class=mut>최근</span></td></tr><tr class="old">
-          <td>🥈 실버</td><td class="tk">WAT</td>
+          <td><span class="med silver"></span>실버</td><td class="tk">WAT</td>
           <td class="mut">XLV</td>
           <td>2026-06-08</td>
           <td class="mut">watch</td>
@@ -241,7 +253,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class=mut>최근</span></td></tr><tr class="old">
-          <td>🥈 실버</td><td class="tk">RCL</td>
+          <td><span class="med silver"></span>실버</td><td class="tk">RCL</td>
           <td class="mut">XLY</td>
           <td>2026-06-08</td>
           <td class="mut">watch</td>
@@ -251,7 +263,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class=mut>최근</span></td></tr><tr class="old">
-          <td>🥈 실버</td><td class="tk">RIVN</td>
+          <td><span class="med silver"></span>실버</td><td class="tk">RIVN</td>
           <td class="mut">XLY</td>
           <td>2026-06-08</td>
           <td class="mut">watch</td>
@@ -261,7 +273,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class=mut>최근</span></td></tr><tr class="old">
-          <td>🥈 실버</td><td class="tk">SPGI</td>
+          <td><span class="med silver"></span>실버</td><td class="tk">SPGI</td>
           <td class="mut">XLF</td>
           <td>2026-06-08</td>
           <td class="mut">watch</td>
@@ -271,7 +283,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class=mut>최근</span></td></tr><tr class="old">
-          <td>🥈 실버</td><td class="tk">IVZ</td>
+          <td><span class="med silver"></span>실버</td><td class="tk">IVZ</td>
           <td class="mut">XLF</td>
           <td>2026-06-08</td>
           <td class="mut">watch</td>
@@ -281,7 +293,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class=mut>최근</span></td></tr><tr class="old">
-          <td>🥈 실버</td><td class="tk">A</td>
+          <td><span class="med silver"></span>실버</td><td class="tk">A</td>
           <td class="mut">XLV</td>
           <td>2026-06-05</td>
           <td class="mut">watch</td>
@@ -291,7 +303,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class=mut>최근</span></td></tr><tr class="old">
-          <td>🥈 실버</td><td class="tk">HPQ</td>
+          <td><span class="med silver"></span>실버</td><td class="tk">HPQ</td>
           <td class="mut">XLK</td>
           <td>2026-06-04</td>
           <td class="mut">watch</td>
@@ -301,7 +313,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class=mut>최근</span></td></tr><tr class="old">
-          <td>🥈 실버</td><td class="tk">HD</td>
+          <td><span class="med silver"></span>실버</td><td class="tk">HD</td>
           <td class="mut">XLY</td>
           <td>2026-06-03</td>
           <td class="mut">watch</td>
@@ -311,7 +323,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class=mut>최근</span></td></tr><tr class="old">
-          <td>🥈 실버</td><td class="tk">AAP</td>
+          <td><span class="med silver"></span>실버</td><td class="tk">AAP</td>
           <td class="mut">XLY</td>
           <td>2026-06-03</td>
           <td class="mut">watch</td>
@@ -321,7 +333,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class=mut>최근</span></td></tr><tr class="old">
-          <td>🥈 실버</td><td class="tk">NDSN</td>
+          <td><span class="med silver"></span>실버</td><td class="tk">NDSN</td>
           <td class="mut">XLI</td>
           <td>2026-06-03</td>
           <td class="mut">watch</td>
@@ -331,7 +343,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class=mut>최근</span></td></tr><tr class="old">
-          <td>🥈 실버</td><td class="tk">AAL</td>
+          <td><span class="med silver"></span>실버</td><td class="tk">AAL</td>
           <td class="mut">XLI</td>
           <td>2026-06-03</td>
           <td class="mut">watch</td>
@@ -341,7 +353,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class=mut>최근</span></td></tr><tr class="old">
-          <td>🥈 실버</td><td class="tk">MCK</td>
+          <td><span class="med silver"></span>실버</td><td class="tk">MCK</td>
           <td class="mut">XLV</td>
           <td>2026-06-01</td>
           <td class="mut">watch</td>
@@ -351,7 +363,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class=mut>최근</span></td></tr><tr class="old">
-          <td>🥈 실버</td><td class="tk">TGT</td>
+          <td><span class="med silver"></span>실버</td><td class="tk">TGT</td>
           <td class="mut">XLY</td>
           <td>2026-06-01</td>
           <td class="mut">watch</td>
@@ -361,7 +373,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class=mut>최근</span></td></tr><tr class="old">
-          <td>🥈 실버</td><td class="tk">ROST</td>
+          <td><span class="med silver"></span>실버</td><td class="tk">ROST</td>
           <td class="mut">XRT</td>
           <td>2026-06-01</td>
           <td class="mut">watch</td>
@@ -371,7 +383,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class=mut>최근</span></td></tr><tr class="old">
-          <td>🥈 실버</td><td class="tk">CPRT</td>
+          <td><span class="med silver"></span>실버</td><td class="tk">CPRT</td>
           <td class="mut">XLI</td>
           <td>2026-06-01</td>
           <td class="mut">watch</td>
@@ -381,7 +393,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class=mut>최근</span></td></tr><tr class="old">
-          <td>🥈 실버</td><td class="tk">DXCM</td>
+          <td><span class="med silver"></span>실버</td><td class="tk">DXCM</td>
           <td class="mut">XLV</td>
           <td>2026-05-29</td>
           <td class="mut">watch</td>
@@ -391,7 +403,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class=mut>최근</span></td></tr><tr class="old">
-          <td>🥈 실버</td><td class="tk">NTNX</td>
+          <td><span class="med silver"></span>실버</td><td class="tk">NTNX</td>
           <td class="mut">XLK</td>
           <td>2026-05-29</td>
           <td class="mut">watch</td>
@@ -401,7 +413,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class=mut>최근</span></td></tr><tr class="old">
-          <td>🥉 브론즈</td><td class="tk">TROW</td>
+          <td><span class="med bronze"></span>브론즈</td><td class="tk">TROW</td>
           <td class="mut">XLF</td>
           <td>2026-06-08</td>
           <td class="mut">watch</td>
@@ -411,7 +423,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class=mut>최근</span></td></tr><tr class="old">
-          <td>🥉 브론즈</td><td class="tk">000660.KS</td>
+          <td><span class="med bronze"></span>브론즈</td><td class="tk">000660.KS</td>
           <td class="mut">EWY</td>
           <td>2026-06-08</td>
           <td class="mut">watch</td>
@@ -421,7 +433,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class=mut>최근</span></td></tr><tr class="old">
-          <td>🥉 브론즈</td><td class="tk">MGM</td>
+          <td><span class="med bronze"></span>브론즈</td><td class="tk">MGM</td>
           <td class="mut">XLY</td>
           <td>2026-06-04</td>
           <td class="mut">watch</td>
@@ -431,7 +443,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class=mut>최근</span></td></tr><tr class="old">
-          <td>🥉 브론즈</td><td class="tk">GFS</td>
+          <td><span class="med bronze"></span>브론즈</td><td class="tk">GFS</td>
           <td class="mut">SMH</td>
           <td>2026-06-03</td>
           <td class="mut">watch</td>
@@ -441,7 +453,7 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class=mut>최근</span></td></tr><tr class="old">
-          <td>🥉 브론즈</td><td class="tk">EQR</td>
+          <td><span class="med bronze"></span>브론즈</td><td class="tk">EQR</td>
           <td class="mut">XLRE</td>
           <td>2026-06-01</td>
           <td class="mut">watch</td>
@@ -451,6 +463,6 @@
           <td class="mono"><span class="mut">—</span></td>
           <td class="mono"><span class="mut">—</span></td>
           <td><span class=mut>최근</span></td></tr>
-</table>
-<div class="foot">투자 판단 보조용. 자동 생성(매일). · grade=섹터내 강도(골드>실버>브론즈), 52주거리=고점대비%, 거래량배수=평소대비</div>
+</tbody></table>
+<div class="foot">투자 판단 보조용 · 자동 생성(매일). 등급=섹터내 강도(골드>실버>브론즈), 52주거리=고점대비%, 거래량배수=평소대비.</div>
 </div></body></html>
