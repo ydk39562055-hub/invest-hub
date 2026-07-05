@@ -1,0 +1,88 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>카드·결제망 — 산업 사이클 상세</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--ink:#d6dae1;--mut:#828b99;--line:#272c35;--bg:#13161b;--card:#191d24;--gr:#5fa07a;--or:#c9a94a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Pretendard Variable',system-ui,sans-serif;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:22px 20px 60px}
+.head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+.head h1{font-size:24px;margin:0;font-weight:800}
+.sec{color:var(--mut);font-size:14px}
+.sub{color:var(--mut);font-size:13px;margin-bottom:18px}
+.grid{display:grid;grid-template-columns:1.05fr .95fr;gap:18px}
+@media(max-width:880px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:16px}
+.scorebox{display:flex;align-items:center;gap:18px;margin-bottom:8px}
+.bignum{font-size:54px;font-weight:850;line-height:1}
+.stage{font-size:15px;font-weight:800;color:#fff;padding:5px 14px;border-radius:999px}
+.delta{font-size:13px;color:var(--mut)}.delta.up{color:#c0392b}.delta.dn{color:#2d7d46}
+h3{font-size:14px;color:var(--mut);margin:18px 0 10px;font-weight:700;letter-spacing:.3px}
+.cbar{display:flex;align-items:center;gap:10px;margin:7px 0}
+.cl{width:92px;font-size:13px;color:#b9c0c9;flex:none}
+.ctrack{flex:1;height:16px;background:#11141a;border-radius:6px;overflow:hidden}
+.cfill{height:100%;border-radius:6px}
+.cv{width:28px;text-align:right;font-weight:800;font-size:13px;flex:none;color:#c4cad3}
+.baserate{background:#1b2129;border:1px solid #2c3340;border-radius:10px;padding:11px 14px;font-size:13.5px;margin-top:14px;color:#b3bcc8}
+ul{margin:6px 0;padding-left:18px}li{margin:5px 0;font-size:13.5px}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}
+td{border-top:1px solid var(--line);padding:6px 8px}td.n{color:var(--mut)}
+td.p{color:#2d7d46}td.m{color:#c0392b}
+.sup{display:flex;align-items:center;gap:9px;padding:8px 4px;font-size:14px;border-top:1px solid var(--line)}
+.sup .dot{width:9px;height:9px;border-radius:50%}
+.sup.up .dot{background:var(--gr)}.sup.down .dot{background:#c0392b}
+.sup.up .st{color:var(--gr)}.sup.down .st{color:#c0392b}
+.sup .st{margin-left:auto;font-weight:700;font-size:13px}
+.spark{width:100%;height:120px;display:block;margin-top:8px}
+.foot{color:var(--mut);font-size:12px;margin-top:24px;border-top:1px solid var(--line);padding-top:14px}
+.tag{display:inline-block;background:#1e232b;color:#9aa3b0;border-radius:6px;padding:2px 8px;font-size:11.5px;margin-right:6px}
+.bignum{color:#eef1f5} h1{color:#eef1f5} td b{color:#e3e7ec}
+</style></head><body><div class="wrap">
+
+<div class="head"><h1>카드·결제망</h1><span class="sec">섹터 · 금융</span></div>
+<div class="sub">결제 네트워크 → 거래량 수수료 &nbsp;|&nbsp; 해자: 네트워크 효과=강한 해자. 거래량=소비 대리.</div>
+
+<div class="grid">
+ <div>
+  <div class="card">
+   <div class="scorebox">
+     <div class="bignum">59</div>
+     <div><div class="stage" style="background:#c9a94a">과열</div>
+          <div style="margin-top:7px"><span class='delta up'>▲4점 (전주 대비)</span></div></div>
+   </div>
+   <div style="color:var(--mut);font-size:13px">사이클 점수 = 6요소 가중합(현재 동일가중) · 0 차가움 ~ 100 뜨거움</div>
+   <h3>점수를 만든 6요소</h3>
+   <div class='cbar'><span class='cl'>가격 모멘텀</span><div class='ctrack'><div class='cfill' style='width:84%;background:#c9a94a'></div></div><span class='cv'>84</span></div><div class='cbar'><span class='cl'>KPI 추세</span><div class='ctrack'><div class='cfill' style='width:81%;background:#c9a94a'></div></div><span class='cv'>81</span></div><div class='cbar'><span class='cl'>52주 위치</span><div class='ctrack'><div class='cfill' style='width:56%;background:#5fa07a'></div></div><span class='cv'>56</span></div><div class='cbar'><span class='cl'>보고서 톤</span><div class='ctrack'><div class='cfill' style='width:50%;background:#5fa07a'></div></div><span class='cv'>50</span></div><div class='cbar'><span class='cl'>수급 뉴스 톤</span><div class='ctrack'><div class='cfill' style='width:50%;background:#5fa07a'></div></div><span class='cv'>50</span></div><div class='cbar'><span class='cl'>밸류에이션</span><div class='ctrack'><div class='cfill' style='width:33%;background:#5fa07a'></div></div><span class='cv'>33</span></div>
+   <div class="baserate">스테이지 전이 base rate — <b>'과열' 4주 뒤</b> (과거 12회): 확장 50% · 과열 25% · 둔화 17% · 바닥 8%</div>
+  </div>
+
+  <div class="card">
+   <h3>CEO·컨퍼런스콜 발언</h3>
+   <ul></ul>
+   <h3>기업 운영 KPI</h3>
+   <table><tr><td>매출 YoY</td><td><b>+17%</b></td><td class='n'>V</td></tr><tr><td>매출 YoY</td><td><b>+16%</b></td><td class='n'>MA</td></tr><tr><td>매출 YoY</td><td><b>+9%</b></td><td class='n'>AXP</td></tr><tr><td>매출 YoY</td><td><b>+7%</b></td><td class='n'>PYPL</td></tr></table>
+  </div>
+ </div>
+
+ <div>
+  <div class="card">
+   <h3>품목별 수급 현황 (초록=공급부족 · 빨강=공급과잉/약세)</h3>
+   
+  </div>
+  <div class="card">
+   <h3>산업 가격 지수 (대표 종목 동일가중, 최근 2년 주간)</h3>
+   <svg viewBox='0 0 560 120' class='spark' preserveAspectRatio='none'><polyline points='0.0,116.2 5.4,117.3 10.8,116.9 16.2,120.0 21.5,112.8 26.9,109.7 32.3,95.4 37.7,90.6 43.1,80.7 48.5,91.6 53.8,78.3 59.2,66.0 64.6,66.7 70.0,60.9 75.4,58.1 80.8,50.3 86.2,57.4 91.5,58.8 96.9,36.2 102.3,32.5 107.7,25.6 113.1,20.5 118.5,18.5 123.8,16.1 129.2,22.2 134.6,20.9 140.0,21.9 145.4,37.3 150.8,10.3 156.2,5.8 161.5,0.0 166.9,13.3 172.3,12.0 177.7,25.0 183.1,20.5 188.5,42.7 193.8,55.7 199.2,49.2 204.6,55.4 210.0,95.7 215.4,72.8 220.8,74.9 226.2,58.5 231.5,42.4 236.9,31.8 242.3,16.4 247.7,32.8 253.1,20.9 258.5,10.6 263.8,30.8 269.2,38.3 274.6,19.5 280.0,4.1 285.4,21.9 290.8,21.2 296.2,8.9 301.5,38.3 306.9,34.2 312.3,25.0 317.7,13.7 323.1,9.2 328.5,18.8 333.8,22.9 339.2,13.7 344.6,19.8 350.0,14.4 355.4,24.6 360.8,16.8 366.2,5.1 371.5,10.9 376.9,14.0 382.3,26.3 387.7,32.5 393.1,20.9 398.5,21.5 403.8,7.5 409.2,12.0 414.6,6.8 420.0,18.1 425.4,14.0 430.8,33.2 436.2,38.3 441.5,46.2 446.9,56.4 452.3,75.9 457.7,66.7 463.1,75.9 468.5,77.6 473.8,88.9 479.2,94.0 484.6,100.2 490.0,90.6 495.4,83.8 500.8,60.2 506.2,73.2 511.5,66.7 516.9,78.6 522.3,78.6 527.7,77.6 533.1,76.9 538.5,85.5 543.8,80.0 549.2,72.5 554.6,64.3 560.0,47.9' fill='none' stroke='#7b52d6' stroke-width='2'/></svg>
+   <h3>구성 종목</h3>
+   <table><tr><td><b>종목</b></td><td><b>가격</b></td><td><b>52주위치</b></td>
+   <td><b>모멘텀</b></td><td><b>후행PER</b></td></tr><tr><td>V</td><td>$355.18</td><td>98</td><td class='p'>+16.0%</td><td>31.0</td></tr><tr><td>MA</td><td>$528.44</td><td>46</td><td class='p'>+9.7%</td><td>30.6</td></tr><tr><td>AXP</td><td>$348.89</td><td>63</td><td class='p'>+16.2%</td><td>21.8</td></tr><tr><td>PYPL</td><td>$45.15</td><td>16</td><td class='p'>+3.1%</td><td>8.5</td></tr></table>
+  </div>
+ </div>
+</div>
+
+<div class="foot">
+ <span class="tag">밸류=PER</span><span class="tag">auto:EDGAR 매출 YoY</span><span class="tag">seed</span><br>
+ 생성일 2026-07-02 · 정량 절반=yfinance 실데이터 · 정성 절반=모자이크 매크로(EDGAR+어닝콜).
+ 단일 점수로 끝내지 않고 그 점수가 어떤 사실 위에 서 있는지 같이 본다. 매수·매도 권유 아님.
+</div>
+</div></body></html>

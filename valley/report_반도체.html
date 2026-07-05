@@ -1,0 +1,105 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>[3] AI 반도체 — 산업 보고서  (AI축) — 산업 보고서</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--ink:#d6dae1;--mut:#828b99;--line:#272c35;--bg:#13161b;--card:#191d24;--accent:#6f93c4;
+ --up:#5fa07a;--down:#b5615a;--mid:#c08948}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+ font-family:'Pretendard Variable',system-ui,sans-serif;line-height:1.85;font-size:16px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:880px;margin:0 auto;padding:0 0 70px}
+header{background:linear-gradient(135deg,#16202e,#1d2c40);padding:30px 44px 26px;border-bottom:1px solid var(--line)}
+.kick{font-size:11px;letter-spacing:2.5px;color:#7fa8d8;font-weight:700}
+h1{margin:8px 0 4px;font-size:30px;font-weight:850;letter-spacing:-.5px;color:#eef1f5}
+.meta{color:#9db6d6;font-size:13px;margin-top:8px}
+.badges{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.stage{color:#fff;font-weight:800;padding:5px 14px;border-radius:999px;font-size:13px}
+.bdg{border:1px solid #2f4d72;color:#aecbe9;border-radius:999px;padding:4px 12px;font-size:12.5px}
+main{padding:6px 44px}
+h2{font-size:21px;margin:34px 0 10px;padding-bottom:8px;border-bottom:1px solid var(--line);font-weight:750;color:#eef1f5}
+h3{font-size:17px;margin:22px 0 8px;color:#dfe3e9}
+h4{font-size:14px;color:var(--mut);margin:14px 0 5px}
+p{margin:10px 0}strong{color:#fff}
+ul{margin:8px 0;padding-left:22px}li{margin:6px 0}
+hr{border:0;border-top:1px solid var(--line);margin:22px 0}
+a{color:var(--accent);text-decoration:none;border-bottom:1px solid #2f4d72}
+code{background:#0e1f33;color:#cfe0f2;padding:1px 6px;border-radius:5px;font-size:14px}
+table{border-collapse:collapse;width:100%;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+th{background:#1c2029;font-weight:700;color:#dfe3e9}
+blockquote{margin:13px 0;padding:12px 16px;border-radius:9px;border-left:4px solid var(--mut);background:#1b2129;color:#c2c9d2}
+blockquote.warn{border-left-color:var(--mid);background:#221b12}
+blockquote.danger{border-left-color:var(--down);background:#221416}
+blockquote.info{border-left-color:var(--accent);background:#15233a}
+.lead{font-size:18px;background:#15233a;border-left:4px solid var(--accent);padding:15px 19px;border-radius:10px;margin:16px 0}
+.km{background:#221b12;border:1px solid #3a2e18;border-left:5px solid var(--mid);border-radius:11px;padding:13px 18px;margin:10px 0 18px}
+.kmlabel{font-weight:800;color:var(--mid);font-size:11.5px;letter-spacing:1.5px;margin-bottom:5px}
+.nav{padding:14px 44px;border-bottom:1px solid var(--line);font-size:13px}
+.nav a{margin-right:16px}
+footer{padding:22px 44px 40px;color:var(--mut);font-size:12.5px;border-top:1px solid var(--line);margin-top:30px}
+</style></head><body><div class="wrap">
+<header><div class="kick">INDUSTRY DEEP-DIVE · 산업 보고서</div>
+ <h1>[3] AI 반도체 — 산업 보고서  (AI축)</h1>
+ <div class="meta">밸류체인 → 병목 → 해자 → KPI → 가격 검증 → 촉매 → 투자포인트 → 컨콜 행간</div>
+ <div class="badges"><span class='stage' style='background:#c9a94a'>과열</span><span class='bdg'>사이클 점수 80</span><span class='bdg'>52주 위치 60 · 모멘텀 +29%</span></div></header>
+<div class="nav"><a href="index.html">← 대시보드 허브</a><a href="board.html">전 산업 보드</a>
+ <a href="dashboard_반도체.html">이 산업 사이클 상세 →</a>
+ <span style="color:#5d6470;float:right">출처 · 모자이크 매크로 실어닝콜(ai_semi)</span></div>
+<main><div class='lead'>AI 투자는 공급망 전체(장비→위탁생산→칩설계→고객→실매출)가 *진짜 현금*으로 맞물려 강세이고 고객 3사 모두 "수요가 공급보다 많다"고 말한다 — 다만 무게중심이 점점 <strong>소수의 '돌려막기' 거대 계약</strong>(마이크로소프트↔오픈AI 2,500억 달러 등)으로 옮겨가고 있고, 고객들의 자체 칩(트레이니엄 2,250억 달러 약정·TPU 외부판매)이 엔비디아를 잠식하기 시작했으며, 중국 수출통제로 엔비디아는 약 500억 달러 시장을 통째로 잃었다.</div><p>기준일: 2026-06-11 · 데이터: 2026 Q1 어닝콜 전체 원문(Alpha Vantage) + SEC 공시</p>
+<p>대상(공급망 순서): 장비(어플라이드·램리서치·ASML) → 위탁생산(TSMC) → 칩 설계(엔비디아·AMD) → 고객(마이크로소프트·메타·구글·아마존)</p>
+<p>※ 이번 판은 어닝콜 *전체 원문*으로 기존 2차 출처 수치를 전부 대조·교체함. 회계연도가 회사마다 달라 "Q1"의 실제 분기 시점은 회사별로 다름(발언자·수치는 각사 최신 콜 기준).</p>
+<hr>
+<h2>0. 한 문장 요약</h2>
+<blockquote class='info'><strong>쉽게:</strong> AI에 쓰는 돈은 진짜다. 칩 만드는 장비부터 칩을 사는 클라우드 회사까지 줄줄이 실제 현금이 돌고, 클라우드 3사가 전부 "물건이 모자라 못 판다"고 한다. 다만 (1) 클라우드가 AI 회사에 투자하고 그 AI 회사가 다시 클라우드에 초대형 사용 약정을 맺는 '돌려막기' 구조가 공시 숫자로 확인되기 시작했고, (2) 큰 고객들이 자체 칩으로 엔비디아 몫을 갉기 시작했으며, (3) 중국 시장은 수출통제로 닫혔다.</blockquote>
+<hr>
+<h2>핵심 모순 (이 산업에서 가장 중요한 지점)</h2>
+<p>AI 수요 자체는 진짜다 — 공급망 전체에 실제 현금이 돌고, 고객 3사 모두 "공급이 수요를 못 따라간다"고 직접 말했다. <strong>그런데 두 가지가 걸린다.</strong></p>
+<p>(1) <strong>'돌려막기' 의심</strong>: 새로 늘어나는 약정의 상당분이, 클라우드가 AI 회사에 투자 → 그 AI 회사가 다시 클라우드에 초대형 사용 약정, 식으로 한 바퀴 도는 구조에서 나온다. 마이크로소프트는 오픈AI 지분 투자 손실(분기 41억 달러)을 떠안으면서 동시에 오픈AI한테서 애저 2,500억 달러 추가 약정을 받았고, 아마존도 앤트로픽한테서 1,000억 달러 넘는 약정을 받았다. 자기 매출의 수십 배를 약정한 AI 회사들이 그 돈을 실제로 낼 수 있을지가 관건이다.</p>
+<p>(2) <strong>고객이 등 돌리기 시작</strong>: 클라우드들의 수주잔고(앞으로 받을 주문)는 합쳐서 1조 2천억 달러를 넘는 사상 최대인데, 정작 큰 고객들이 자체 칩을 양산 단계로 올렸다 — 아마존 트레이니엄은 2,250억 달러 약정에 매진, 구글은 TPU를 *남의 데이터센터에 파는* 사업까지 시작, 메타는 1기가와트 넘는 자체 칩을 깐다. 즉 'AI 수요가 강하다'와 '엔비디아가 그 수요를 다 먹는다'는 별개의 얘기다.</p>
+<hr>
+<h2>1층 · 이 산업은 무엇을 하는 곳인가</h2>
+<p>AI 반도체는 AI 투자의 공급망 전체다(반도체 장비 → 위탁생산 → 칩 설계 → 이를 사들이는 클라우드 고객). 지금 경제에서 *유일하게 강한 성장 다리*라 일부러 'AI축'으로 떼어내 추적한다.</p>
+<p><strong>왜 믿을 만한가:</strong> 공급망 각 단계가 *자기 돈 수백억 달러를 여러 해짜리 수요에 거는 행동*(설비투자 집행, 공장 증설, 공시된 약정)으로 일치한다 — 말이 아니라 현금이다. <strong>단, 핵심 함정:</strong> 마이크로소프트가 오픈AI에 투자하고 오픈AI가 다시 애저를 쓰는 식의 <strong>돈이 한 바퀴 도는 구조</strong>에서는 "고객이 확인해주니 믿을 만하다"는 원칙이 오염된다. 그래서 독립적인 수요와 '돌려막기' 수요를 반드시 갈라서 본다(아래 ① 자른선).</p>
+<hr>
+<h2>2층 · 공통 전망 (신뢰점수 높은 순)</h2>
+<blockquote class='info'>신뢰점수 기준: <strong>9~10</strong> = 이해관계 다른 3곳 이상 일치 + 물증(자기에게 불리한 증언 가점) / <strong>7~8</strong> = 다수 일치 또는 강한 물증, 일부 불확실 / <strong>5~6</strong> = 한 곳·해석 갈림·신호 미실현.</blockquote>
+<h3>전망 A — AI 수요는 공급망 전체에서 '진짜 현금'으로 확인된다  [9/10 · 신뢰 높음]</h3>
+<ul><li><strong>무슨 말이냐:</strong> 투자가 말이 아니라 실제 집행된 돈으로 공급망 각 단계에서 일치한다.</li><li><strong>방향 / 시점 / 규모:</strong> 강세 [확실] / 현재 [확실] / 큼 [확실]</li><li><strong>근거(이해관계 다른 공급망 전체 일치):</strong> 장비사 자체 설비투자 +90%대(어플라이드 +90%·램 +91%, SEC 공시) + ASML이 연매출 전망을 360~400억 유로로 *올려* 좁힘(다선 CFO) + "메모리 고객은 2026년 물량 매진"(푸케 ASML CEO) → 위탁생산 TSMC가 *원래 안 늘리던 다 찬 공정(N3)에 새 팹 3개를 증설*(웨이 회장)·2026년 설비투자 520~560억 달러 상단(황 CFO) → 칩설계 엔비디아 데이터센터 매출 390억 달러 +73%(크레스 CFO), 최신 분기 총매출 +85%(SEC) → 고객 빅4 설비투자 +45~87%(MS +45%·아마존 +62%·구글 +74%·메타 +87%, SEC) — 셋 다 연간 가이던스를 *상향*(메타 1,250~1,450억, 구글 1,800~1,900억+2027년 "대폭 증가") → 실매출 애저 +40%·구글클라우드 +63%(생성형AI 제품 매출 약 +800%, 피차이 CEO). <strong>이해관계가 다른 5단계가 현금으로 일치.</strong></li><li><strong>말 vs 행동: 일치(최강)</strong> — 특히 TSMC는 "목표만큼 다 찬 공정엔 원래 증설 안 한다"는 자기 원칙을 깨고 N3 새 팹 3개(대만 2027 상반기·애리조나 2027 하반기·일본 2028)를 박았다 = 되돌리기 어려운 다년 베팅. 게다가 고객 3사 모두 "수요>공급"을 명시: 애저 "회계연도 말까지 공급 제약"(후드 CFO), 구글 "공급만 됐으면 클라우드 매출이 더 컸다"(피차이 CEO), 메타 "컴퓨트 수요를 계속 과소평가해 왔다"(리 CFO). 빅4 설비투자는 광고·클라우드에서 번 돈으로 자체 충당(독립 수요).</li><li><strong>거짓 가능성:</strong> 매우 낮음(거대한 설비투자는 되돌리기 어려운 물증). <strong>화물·소비의 약세와 정반대.</strong></li></ul>
+<h3>전망 B — 토대 수요(빅4)는 독립이나, '증분 수요'는 돌려막기 고리다  [8/10 · 신뢰 높음]  ★①자른선</h3>
+<ul><li><strong>무슨 말이냐:</strong> 수요의 토대(빅4)는 독립적이고 튼튼하지만, 새로 늘어나는 약정의 상당 부분이 '돈이 한 바퀴 도는' 고리에서 나온다.</li><li><strong>방향 / 시점 / 규모:</strong> 돌려막기 존재 [확실] / 비중 [불확실] / 지속 여부 [불확실]</li><li><strong>근거(이번엔 1차 원문으로 직접 확인):</strong> 마이크로소프트가 오픈AI 투자 손실 41억 달러를 분기에 지분법으로 떠안으면서("전부 오픈AI 손실 지분" — 후드 CFO) 동시에 오픈AI한테서 애저 2,500억 달러 *추가* 약정 수주(나델라 CEO, "투자를 이미 약 10배로 불렸다"). 수주(계약) +112% 급증의 주동력도 오픈AI 약정(후드 CFO). 아마존도 앤트로픽 1,000억 달러+ 약정(재시 CEO) + 오픈AI·앤트로픽 두 곳에서 멀티기가와트 트레이니엄 학습 약정. 엔비디아 쪽에서도 "마이크로소프트 블랙웰 배치의 핵심 고객이 오픈AI"(크레스 CFO) — 칩→클라우드→AI 회사→다시 칩으로 닿는 고리.</li><li><strong>말 vs 행동: 어긋남(주의)</strong> — 애널리스트가 콜에서 직접 짚었다: "자기 매출의 20배짜리 약정을 맺는 AI 회사들"(머피, JP모건). 약정 자체는 이제 공시(RPO)에 잡히지만, <strong>그 약정을 갚을 매출이 AI 회사들엔 아직 없고 손실은 클라우드가 흡수 중</strong>이라는 게 같은 공시로 확인된다. 나델라 CEO 스스로 "너무 집중된 수요엔 No 한다"고 헤지. 빅4 투자는 신뢰하되, AI 회사발 초대형 약정은 <strong>따로 할인</strong>해서 본다.</li><li><strong>거짓 가능성:</strong> 중간(돌려막기 구조에서는 '고객 확인'이 오염). 이 보고서에서 가장 중요한 구분선.</li></ul>
+<h3>전망 C — 중국 수출통제: 엔비디아는 약 500억 달러 시장을 잃었다 (신규)  [8/10 · 신뢰 높음]</h3>
+<ul><li><strong>무슨 말이냐:</strong> 4월 신규 수출통제로 엔비디아의 중국용 칩(H20)이 막혔고, 회사가 손실을 회계로 인정했다.</li><li><strong>방향 / 시점 / 규모:</strong> 시장 상실 [확실] / 이미 발생 [확실] / 회복 여부 [불확실]</li><li><strong>근거:</strong> 재고·구매약정 45억 달러 상각 집행 + 2분기 매출 약 80억 달러 증발 + "중국 AI 가속기 시장 약 500억 달러를 통째로 못 먹는다, 중대한 악영향"(크레스 CFO) — 자기에게 불리한 증언+집행된 손실이라 신뢰 가점. 황 CEO는 "중국이 AI 칩을 못 만든다는 가정은 명백히 틀렸다"고 경쟁 격화까지 인정. 장비 쪽도 같은 방향: 램은 2026년 중국 매출 비중 30% 미만으로 하락 전망 + 규제로 약 6억 달러 영향(베팅어 CFO).</li><li><strong>말 vs 행동: 일치(불리한 방향으로)</strong> — 손실 상각은 부풀릴 유인이 없는 물증. 단, 엔비디아 전체 실적은 중국 빼고도 가이던스를 넘김(2분기 450억 달러 제시) = AI축 전체 신호를 꺾는 단서는 아직 아님.</li><li><strong>거짓 가능성:</strong> 낮음. 단 정책 변수라 향후 경로는 4층 C등급.</li></ul>
+<h3>전망 D — 투자금 회수는 시작됐으나 '시점'은 베팅 영역이다  [7/10 · 신뢰 높음]</h3>
+<ul><li><strong>무슨 말이냐:</strong> AI 지출이 매출로 돌아오기 시작한 건 사실이나, 투자 대비 회수가 언제 본격화될지는 불확실하다.</li><li><strong>방향 / 시점 / 규모:</strong> 회수 시작 [확실] / 회수 시점 [불확실] / 규모 [불확실]</li><li><strong>근거:</strong> 애저 +40%·코파일럿류 월사용자 1.5억 명(나델라 CEO), 구글 생성형AI 제품 매출 +800%·유료구독 3.5억 건, 클라우드 영업이익률 17.8%→32.9% 급등(아쉬케나지 CFO) = 회수 시작(물증). 단 현금흐름 압착도 물증: 구글 분기 잉여현금 101억 달러(설비투자 357억), 메타 124억(설비투자 198억). 아마존 CFO는 "고성장기엔 설비투자가 매출 증가를 앞질러 초기 잉여현금이 눌린다"고 *스스로* 인정(불리한 증언, 신뢰+).</li><li><strong>말 vs 행동: 일치(회수 시작), 시점 불확실</strong> — ✅ <strong>마이크로소프트의 감가상각 투명성은 신뢰에 +</strong>: 분기 설비투자 349억 달러 중 *약 절반이 수명 짧은 GPU·CPU*라고 명시하고, 그 자산 수명이 계약 기간과 맞물린다고 설명(후드 CFO). 수명을 길게 잡아 이익을 부풀리는 꼼수가 아니라 비용을 정직하게 인정. 메타의 "필요 없으면 천천히 들이거나 줄이면 된다"(리 CFO)는 유연성 강조 = 경영진 헤지 언어로 기록.</li><li><strong>거짓 가능성:</strong> 낮음(감가상각 투명). 시점 해석이 갈려 4층 B등급.</li></ul>
+<h3>전망 E — 수주잔고 사상 최대 vs 고객 자체 칩의 잠식  [7/10 · 신뢰 높음]</h3>
+<ul><li><strong>무슨 말이냐:</strong> 수요(수주잔고)는 확실하지만, 그중 엔비디아가 가져갈 몫은 고객들의 자체 칩에 잠식될 수 있다.</li><li><strong>방향 / 시점 / 규모:</strong> 잠식 진행 [확실해짐] / 속도 [불확실] / 규모 [불확실]</li><li><strong>근거(양쪽 다 1차 물증):</strong> 수요 쪽 — 클라우드 수주잔고 합산 1조 2천억 달러+(MS 약 4,000억·구글 4,620억으로 분기 만에 배증·아마존 3,640억+앤트로픽 1,000억+), 엔비디아 "GTC 때보다 주문이 더 많다"(황 CEO)·하이퍼스케일러들이 주당 1,000랙(GPU 7.2만 개)씩 배치. 잠식 쪽 — 아마존 트레이니엄 약정 2,250억 달러·2세대 매진·3세대 거의 완판(재시 CEO), 구글 8세대 TPU + *고객 데이터센터에 TPU 하드웨어 직접 판매* 개시, 메타 브로드컴 자체 칩 1기가와트+ 및 AMD 칩 대량 도입(저커버그 CEO). 엔비디아도 NVLink Fusion으로 반(半)커스텀 칩 생태계를 끌어안기 시작 = 잠식을 사실상 인정하는 대응 물증.</li><li><strong>말 vs 행동: 양방향 물증 동시</strong> — 수요 강세와 엔비디아 이탈이 같은 분기에 진행. 아마존은 "엔비디아와 깊은 파트너, 계속 대량 주문"이라면서 동시에 "트레이니엄으로 매년 수백억 달러 설비투자를 아낀다"고 말한다. '전체 수요'와 '엔비디아 몫'을 분리해야 한다.</li><li><strong>거짓 가능성:</strong> 낮음(양쪽 다 물증). 단 해석이 갈림.</li></ul>
+<hr>
+<h2>3층 · 교차 검증</h2>
+<h3>강한 합의 (★ 이 보고서의 핵심)</h3>
+<p><strong>공급망 전체가 진짜 현금으로 일치한다:</strong> 장비(자체 설비투자 +90%대, ASML "공급이 수요를 못 따라간다") → 위탁생산(TSMC 이례적 N3 팹 3개 증설 + "2027년까지 공급 빠듯") → 칩설계(엔비디아 데이터센터 +73%, 최신 분기 매출 +85%) → 고객(빅4 설비투자 +45~87%·3사 가이던스 상향, 자체 충당=독립) → 실매출(애저 +40%, 구글클라우드 +63%). 이해관계가 다른 5단계가 *집행된 돈*으로 한 방향 — <strong>화물·소비의 "나머지 약세"와 정반대다.</strong> TSMC 웨이 회장은 "고객의 고객(클라우드들)한테까지 더블체크했고 매우 긍정적 답을 받았다"고 삼각측량을 직접 언급했다.</p>
+<h3>⚠ 돌려막기 자른선 (오염 주의 — 최우선)</h3>
+<ul><li><strong>토대 수요(빅4: 마이크로소프트·메타·구글·아마존)</strong>: 광고·클라우드에서 번 돈으로 자체 충당하는 독립적·이익 동기 고객 → <strong>신뢰.</strong></li><li><strong>증분 수요</strong>: 마이크로소프트 → 오픈AI 투자(분기 손실 41억 달러 흡수) ↔ 오픈AI → 애저 2,500억 달러 약정, 아마존 ↔ 앤트로픽 1,000억 달러+ 약정 = <strong>돈이 한 바퀴 도는 고리.</strong> 약정은 공시에 잡히지만 갚을 매출이 아직 없는 회사들의 약정이라 <strong>따로 할인.</strong> 수주잔고 급증분의 상당량이 이 고리에서 나온 게 이번 원문으로 확인됨 — 무게중심이 점점 이 고리로 옮겨가는 게 핵심 경계.</li></ul>
+<h3>⚠ 모순 (가장 눈에 띄게)</h3>
+<p><strong>수주잔고 사상 최대 vs 자체 칩 잠식.</strong> 수요 자체는 확실하나, 고객들이 자체 칩(트레이니엄 2,250억 달러 약정·TPU 외부판매·메타 1기가와트+)으로 엔비디아를 잠식 중 — "AI 수요 강세"와 "엔비디아 몫 불확실"은 다른 얘기다. <strong>부가 모순(신규):</strong> AI가 메모리를 빨아들여 부품값이 뛰자, 메타는 설비투자 상향분의 대부분을 "부품값(특히 메모리) 상승"이라 했고 TSMC는 "메모리 값 때문에 PC·스마트폰 시장이 약해졌다"고 했다 = AI축이 나머지 경제(소비 가전)를 *밀어내는* 신호가 같은 분기 원문에 동시 등장.</p>
+<h3>말 ↔ 행동(물증) 맞춰보기</h3>
+<table><thead><tr><th>주체</th><th>말(증언)</th><th>행동(물증)</th><th>판정</th></tr></thead><tbody><tr><td>TSMC</td><td>AI 수요 "극도로 견조", 2026 매출 +30% 이상</td><td>자기 원칙 깨고 N3 팹 3개 증설·설비투자 520~560억 달러 상단</td><td><strong>일치(최강, 다년 베팅)</strong></td></tr><tr><td>엔비디아</td><td>"GTC 때보다 주문 더 많다" + 다변화</td><td>데이터센터 +73% / H20 상각 45억 달러·중국 500억 달러 상실 *인정*</td><td><strong>일치 + 불리한 증언(신뢰+)</strong></td></tr><tr><td>마이크로소프트</td><td>수요>공급, 회수 자신</td><td>수주잔고 약 4,000억(+51%)·설비투자 349억 / 오픈AI 손실 41억 흡수 + 2,500억 약정 수주</td><td><strong>일치 + 돌려막기 고리(할인)</strong></td></tr><tr><td>아마존·구글·메타</td><td>"엔비디아와 깊은 파트너"</td><td>트레이니엄 2,250억 약정·TPU 외부판매·자체칩 1GW+</td><td><strong>말 따로 행동 따로(잠식 진행)</strong></td></tr></tbody></table>
+<hr>
+<h2>4층 · 알 수 있는 것 / 없는 것</h2>
+<p><strong>A등급 (알 수 있음):</strong></p>
+<ul><li>공시된 약정·수주잔고: MS 약 4,000억(평균 잔여기간 약 2년), 구글 4,620억(절반 이상이 24개월 내 매출화), 아마존 3,640억+앤트로픽 1,000억+, 트레이니엄 2,250억.</li><li>TSMC 신규 팹 일정(대만 2027 상반기·애리조나 2027 하반기·일본 2028)과 "2027년까지 공급 빠듯", 빅4 설비투자 집행(SEC 공시), 엔비디아 H20 상각(집행 완료).</li></ul>
+<p><strong>B등급 (시나리오로만):</strong> 설비투자 사이클 지속성·규모 + AI 매출 회수 시점</p>
+<ul><li>낙관: 공시된 약정이 그대로 매출화, 회수 가속(클라우드 마진 개선 추세 연장).</li><li>기준: 투자는 지속하나 잉여현금 압착을 몇 년 감내(아마존 CFO의 "초기엔 눌린다" 경로).</li><li>비관: AI 회사들(오픈AI·앤트로픽)의 자금조달이 끊겨 초대형 약정이 부도 → 수주잔고가 허수로 판명 → 설비투자 가이던스 연쇄 하향.</li></ul>
+<p><strong>C등급 (원리상 못 맞힘 — 관찰만, 예측 금지) — ①돌려막기 자른선 최우선:</strong></p>
+<ul><li><strong>돌려막기 고리(AI 회사들의 자금조달)가 언제 끊기나</strong> ← 최우선 관찰.</li><li>수출통제의 다음 수(추가 강화/완화)와 중국 자체 칩의 추격 속도.</li><li>고객 자체 칩(트레이니엄·TPU·메타 자체칩)의 엔비디아 잠식 속도.</li><li>중동 정세발 소재·에너지 충격(TSMC가 화학·가스 가격 리스크로 직접 언급).</li></ul>
+<hr>
+<h2>종합 판단 (AI 반도체)</h2>
+<ul><li><strong>확실:</strong> AI 다리는 진짜이고 현금이 들어가 있어 단단하다 — 공급망 전체 물증 일치 + 고객 3사 "수요>공급" 명시(9/10).</li><li><strong>가능성 높음:</strong> 투자금 회수는 시작됐으나 그 *시점*은 베팅 영역이며, 엔비디아 몫은 자체 칩에 잠식 중이고 중국 시장은 이미 잃었다.</li><li><strong>가장 주시할 한 가지(약점 셋):</strong> ① 증분 수요 중 돌려막기 비중(오픈AI·앤트로픽 약정의 실현 여부) ② AI 매출 회수 시점(잉여현금 압착을 얼마나 견디나) ③ 자체 칩의 엔비디아 잠식. <strong>경제가 이 한 다리에 크게 기대는데, 다리 자체는 튼튼하나 무게중심이 점점 소수 돌려막기 고리로 옮겨가는 중</strong>이라는 게 핵심 — 이번 원문 대조로 그 고리가 추정이 아니라 공시 숫자로 확인됐다.</li></ul>
+<hr>
+<h2>부록</h2>
+<ul><li><strong>1차 출처(어닝콜 전체 원문, Alpha Vantage):</strong> 엔비디아(콜레트 크레스 CFO·젠슨 황 CEO), TSMC(웨이저자 회장·황원덕 CFO), ASML(크리스토프 푸케 CEO·로저 다선 CFO), 램리서치(팀 아처 CEO·더그 베팅어 CFO), 어플라이드(게리 디커슨 CEO·브라이스 힐 CFO), 마이크로소프트(사티아 나델라 CEO·에이미 후드 CFO), 메타(마크 저커버그 CEO·수전 리 CFO), 알파벳(순다르 피차이 CEO·아낫 아쉬케나지 CFO), 아마존(앤디 재시 CEO) · SEC EDGAR(매출·설비투자 증가율).</li><li><strong>정정 기록(2차→1차 대조):</strong> 엔비디아 '수주잔고 1조 달러'·'코어위브 20억 달러 투자'·'데이터센터 +92%'·마이크로소프트 'AI 연환산 370억 달러'·'GPU가 설비투자의 2/3' 등 2차 출처 수치는 원문에서 확인 불가 → 위 1차 수치로 교체.</li><li><strong>용어:</strong> 칩설계(팹리스, 설계만 하고 생산은 위탁) · 위탁생산(파운드리) · 대형 클라우드(마이크로소프트·메타·구글·아마존) · 수주잔고/RPO(앞으로 받을 주문·계약 누적) · 자체 칩(고객이 직접 설계한 AI 칩, 트레이니엄·TPU 등) · 지분법(투자한 회사의 손실을 지분만큼 내 장부에 반영) · 감가상각(설비 비용을 수명 동안 나눠 떠는 회계) · H20(엔비디아의 중국 수출용 칩).</li></ul>
+<hr><div class='lead' style='border-left-color:var(--mid);background:#221b12'><b>SIGNAL</b> · 산업=AI반도체 · 순신호=강세(공급망 전체 물증 일치, 고객 3사 수요>공급 명시) · 신뢰=9 · 축=AI · 변곡선=빅4 설비투자 가이던스 꺾임 / AI 회사(오픈AI·앤트로픽) 자금조달 균열=돌려막기 고리 절단 / 자체 칩의 엔비디아 잠식 / 수출통제 추가 확대</div></main>
+<footer>Aurum/Valley AI 산업 분석 논리를 따른 딥다이브. 어닝콜·공시·USGS 등 공개 자료 기반.
+회사의 '말'(발언)과 '행동'(숫자·계약)을 맞춰보고, 어긋남을 본다. 매수·매도 권유 아님.
+생성일 2026-07-04.</footer>
+</div></body></html>

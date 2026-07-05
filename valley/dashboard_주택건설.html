@@ -1,0 +1,88 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>주택건설 — 산업 사이클 상세</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--ink:#d6dae1;--mut:#828b99;--line:#272c35;--bg:#13161b;--card:#191d24;--gr:#5fa07a;--or:#c9a94a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Pretendard Variable',system-ui,sans-serif;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:22px 20px 60px}
+.head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+.head h1{font-size:24px;margin:0;font-weight:800}
+.sec{color:var(--mut);font-size:14px}
+.sub{color:var(--mut);font-size:13px;margin-bottom:18px}
+.grid{display:grid;grid-template-columns:1.05fr .95fr;gap:18px}
+@media(max-width:880px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:16px}
+.scorebox{display:flex;align-items:center;gap:18px;margin-bottom:8px}
+.bignum{font-size:54px;font-weight:850;line-height:1}
+.stage{font-size:15px;font-weight:800;color:#fff;padding:5px 14px;border-radius:999px}
+.delta{font-size:13px;color:var(--mut)}.delta.up{color:#c0392b}.delta.dn{color:#2d7d46}
+h3{font-size:14px;color:var(--mut);margin:18px 0 10px;font-weight:700;letter-spacing:.3px}
+.cbar{display:flex;align-items:center;gap:10px;margin:7px 0}
+.cl{width:92px;font-size:13px;color:#b9c0c9;flex:none}
+.ctrack{flex:1;height:16px;background:#11141a;border-radius:6px;overflow:hidden}
+.cfill{height:100%;border-radius:6px}
+.cv{width:28px;text-align:right;font-weight:800;font-size:13px;flex:none;color:#c4cad3}
+.baserate{background:#1b2129;border:1px solid #2c3340;border-radius:10px;padding:11px 14px;font-size:13.5px;margin-top:14px;color:#b3bcc8}
+ul{margin:6px 0;padding-left:18px}li{margin:5px 0;font-size:13.5px}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}
+td{border-top:1px solid var(--line);padding:6px 8px}td.n{color:var(--mut)}
+td.p{color:#2d7d46}td.m{color:#c0392b}
+.sup{display:flex;align-items:center;gap:9px;padding:8px 4px;font-size:14px;border-top:1px solid var(--line)}
+.sup .dot{width:9px;height:9px;border-radius:50%}
+.sup.up .dot{background:var(--gr)}.sup.down .dot{background:#c0392b}
+.sup.up .st{color:var(--gr)}.sup.down .st{color:#c0392b}
+.sup .st{margin-left:auto;font-weight:700;font-size:13px}
+.spark{width:100%;height:120px;display:block;margin-top:8px}
+.foot{color:var(--mut);font-size:12px;margin-top:24px;border-top:1px solid var(--line);padding-top:14px}
+.tag{display:inline-block;background:#1e232b;color:#9aa3b0;border-radius:6px;padding:2px 8px;font-size:11.5px;margin-right:6px}
+.bignum{color:#eef1f5} h1{color:#eef1f5} td b{color:#e3e7ec}
+</style></head><body><div class="wrap">
+
+<div class="head"><h1>주택건설</h1><span class="sec">섹터 · 임의소비재</span></div>
+<div class="sub">택지 → 신규주택 분양 &nbsp;|&nbsp; 해자: 금리 민감 최일선. 모기지 lock-in이 핵심 변수.</div>
+
+<div class="grid">
+ <div>
+  <div class="card">
+   <div class="scorebox">
+     <div class="bignum">52</div>
+     <div><div class="stage" style="background:#5786a8">확장</div>
+          <div style="margin-top:7px"><span class='delta dn'>▼4점 (전주 대비)</span></div></div>
+   </div>
+   <div style="color:var(--mut);font-size:13px">사이클 점수 = 6요소 가중합(현재 동일가중) · 0 차가움 ~ 100 뜨거움</div>
+   <h3>점수를 만든 6요소</h3>
+   <div class='cbar'><span class='cl'>가격 모멘텀</span><div class='ctrack'><div class='cfill' style='width:77%;background:#c9a94a'></div></div><span class='cv'>77</span></div><div class='cbar'><span class='cl'>밸류에이션</span><div class='ctrack'><div class='cfill' style='width:59%;background:#5fa07a'></div></div><span class='cv'>59</span></div><div class='cbar'><span class='cl'>52주 위치</span><div class='ctrack'><div class='cfill' style='width:52%;background:#5fa07a'></div></div><span class='cv'>52</span></div><div class='cbar'><span class='cl'>보고서 톤</span><div class='ctrack'><div class='cfill' style='width:50%;background:#5fa07a'></div></div><span class='cv'>50</span></div><div class='cbar'><span class='cl'>수급 뉴스 톤</span><div class='ctrack'><div class='cfill' style='width:50%;background:#5fa07a'></div></div><span class='cv'>50</span></div><div class='cbar'><span class='cl'>KPI 추세</span><div class='ctrack'><div class='cfill' style='width:25%;background:#5fa07a'></div></div><span class='cv'>25</span></div>
+   <div class="baserate">스테이지 전이 base rate — <b>'확장' 4주 뒤</b> (과거 14회): 확장 36% · 과열 29% · 바닥 21% · 둔화 14%</div>
+  </div>
+
+  <div class="card">
+   <h3>CEO·컨퍼런스콜 발언</h3>
+   <ul></ul>
+   <h3>기업 운영 KPI</h3>
+   <table><tr><td>매출 YoY</td><td><b>-2%</b></td><td class='n'>DHI</td></tr><tr><td>매출 YoY</td><td><b>-5%</b></td><td class='n'>LEN</td></tr><tr><td>매출 YoY</td><td><b>-12%</b></td><td class='n'>PHM</td></tr><tr><td>매출 YoY</td><td><b>-22%</b></td><td class='n'>NVR</td></tr><tr><td>매출 YoY</td><td><b>-8%</b></td><td class='n'>TOL</td></tr></table>
+  </div>
+ </div>
+
+ <div>
+  <div class="card">
+   <h3>품목별 수급 현황 (초록=공급부족 · 빨강=공급과잉/약세)</h3>
+   
+  </div>
+  <div class="card">
+   <h3>산업 가격 지수 (대표 종목 동일가중, 최근 2년 주간)</h3>
+   <svg viewBox='0 0 560 120' class='spark' preserveAspectRatio='none'><polyline points='0.0,92.6 5.4,65.2 10.8,45.3 16.2,35.7 21.5,39.2 26.9,47.8 32.3,43.9 37.7,17.2 43.1,23.4 48.5,28.8 53.8,13.0 59.2,13.2 64.6,7.9 70.0,16.7 75.4,18.6 80.8,0.0 86.2,26.0 91.5,35.0 96.9,26.2 102.3,35.3 107.7,32.3 113.1,21.6 118.5,39.0 123.8,59.2 129.2,77.1 134.6,77.5 140.0,78.7 145.4,85.4 150.8,65.5 156.2,70.3 161.5,72.6 166.9,91.2 172.3,90.8 177.7,102.1 183.1,101.2 188.5,94.9 193.8,104.7 199.2,104.9 204.6,107.2 210.0,107.9 215.4,120.0 220.8,119.5 226.2,112.1 231.5,107.0 236.9,110.5 242.3,104.2 247.7,114.9 253.1,114.4 258.5,110.5 263.8,108.2 269.2,108.6 274.6,100.0 280.0,94.2 285.4,87.5 290.8,96.3 296.2,81.2 301.5,79.8 306.9,71.5 312.3,56.9 317.7,48.7 323.1,50.8 328.5,33.9 333.8,40.6 339.2,53.2 344.6,55.7 350.0,45.5 355.4,76.1 360.8,66.2 366.2,66.4 371.5,73.6 376.9,76.1 382.3,78.9 387.7,74.5 393.1,60.1 398.5,63.1 403.8,65.7 409.2,76.1 414.6,78.2 420.0,80.8 425.4,59.7 430.8,60.8 436.2,67.5 441.5,69.2 446.9,54.1 452.3,41.5 457.7,47.4 463.1,52.9 468.5,73.8 473.8,90.1 479.2,98.6 484.6,98.2 490.0,93.1 495.4,87.3 500.8,76.4 506.2,75.0 511.5,89.1 516.9,92.4 522.3,109.8 527.7,95.4 533.1,90.8 538.5,90.8 543.8,80.5 549.2,73.3 554.6,58.5 560.0,69.2' fill='none' stroke='#7b52d6' stroke-width='2'/></svg>
+   <h3>구성 종목</h3>
+   <table><tr><td><b>종목</b></td><td><b>가격</b></td><td><b>52주위치</b></td>
+   <td><b>모멘텀</b></td><td><b>후행PER</b></td></tr><tr><td>DHI</td><td>$157.84</td><td>55</td><td class='p'>+11.3%</td><td>14.8</td></tr><tr><td>LEN</td><td>$87.95</td><td>10</td><td class='p'>+0.3%</td><td>13.8</td></tr><tr><td>PHM</td><td>$133.47</td><td>76</td><td class='p'>+14.1%</td><td>12.9</td></tr><tr><td>NVR</td><td>$6648.02</td><td>36</td><td class='p'>+4.2%</td><td>16.2</td></tr><tr><td>TOL</td><td>$157.66</td><td>84</td><td class='p'>+15.5%</td><td>12.0</td></tr></table>
+  </div>
+ </div>
+</div>
+
+<div class="foot">
+ <span class="tag">밸류=PER</span><span class="tag">auto:EDGAR 매출 YoY</span><span class="tag">seed</span><br>
+ 생성일 2026-07-02 · 정량 절반=yfinance 실데이터 · 정성 절반=모자이크 매크로(EDGAR+어닝콜).
+ 단일 점수로 끝내지 않고 그 점수가 어떤 사실 위에 서 있는지 같이 본다. 매수·매도 권유 아님.
+</div>
+</div></body></html>
