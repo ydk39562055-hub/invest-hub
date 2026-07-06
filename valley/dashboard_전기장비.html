@@ -3,7 +3,7 @@
 <title>전기장비 — 산업 사이클 상세</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
 <style>
-:root{--ink:#d6dae1;--mut:#828b99;--line:#272c35;--bg:#13161b;--card:#191d24;--gr:#5fa07a;--or:#c08948}
+:root{--ink:#f2ebe0;--mut:#a08f7d;--line:#2b231c;--bg:#1a1512;--card:#221b15;--gr:#8fb381;--or:#cfa75e}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:'Pretendard Variable',system-ui,sans-serif;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
 .wrap{max-width:1180px;margin:0 auto;padding:22px 20px 60px}
@@ -15,29 +15,30 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:'Pretendard Vari
 @media(max-width:880px){.grid{grid-template-columns:1fr}}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:16px}
 .scorebox{display:flex;align-items:center;gap:18px;margin-bottom:8px}
-.bignum{font-size:54px;font-weight:850;line-height:1}
-.stage{font-size:15px;font-weight:800;color:#fff;padding:5px 14px;border-radius:999px}
-.delta{font-size:13px;color:var(--mut)}.delta.up{color:#c0392b}.delta.dn{color:#2d7d46}
+.bignum{font-size:58px;font-weight:850;line-height:1;font-variant-numeric:tabular-nums}
+.stage{font-size:15px;font-weight:800;color:#f2ebe0;padding:5px 14px;border-radius:999px}
+.delta{font-size:13px;color:var(--mut)}.delta.up{color:#c97a62}.delta.dn{color:#8fb381}
 h3{font-size:14px;color:var(--mut);margin:18px 0 10px;font-weight:700;letter-spacing:.3px}
 .cbar{display:flex;align-items:center;gap:10px;margin:7px 0}
-.cl{width:92px;font-size:13px;color:#b9c0c9;flex:none}
-.ctrack{flex:1;height:16px;background:#11141a;border-radius:6px;overflow:hidden}
+.cl{width:92px;font-size:13px;color:#cfc2b0;flex:none}
+.ctrack{flex:1;height:16px;background:#151009;border-radius:6px;overflow:hidden}
 .cfill{height:100%;border-radius:6px}
-.cv{width:28px;text-align:right;font-weight:800;font-size:13px;flex:none;color:#c4cad3}
-.baserate{background:#1b2129;border:1px solid #2c3340;border-radius:10px;padding:11px 14px;font-size:13.5px;margin-top:14px;color:#b3bcc8}
+.cv{width:28px;text-align:right;font-weight:800;font-size:13px;flex:none;color:#cfc2b0;font-variant-numeric:tabular-nums}
+.baserate{background:#2a2016;border:1px solid #3d2f21;border-radius:10px;padding:11px 14px;font-size:13.5px;margin-top:14px;color:#cfc2b0}
 ul{margin:6px 0;padding-left:18px}li{margin:5px 0;font-size:13.5px}
 table{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}
 td{border-top:1px solid var(--line);padding:6px 8px}td.n{color:var(--mut)}
-td.p{color:#2d7d46}td.m{color:#c0392b}
+td.p{color:#8fb381}td.m{color:#c97a62}
 .sup{display:flex;align-items:center;gap:9px;padding:8px 4px;font-size:14px;border-top:1px solid var(--line)}
 .sup .dot{width:9px;height:9px;border-radius:50%}
-.sup.up .dot{background:var(--gr)}.sup.down .dot{background:#c0392b}
-.sup.up .st{color:var(--gr)}.sup.down .st{color:#c0392b}
+.sup.up .dot{background:var(--gr)}.sup.down .dot{background:#c97a62}
+.sup.up .st{color:var(--gr)}.sup.down .st{color:#c97a62}
 .sup .st{margin-left:auto;font-weight:700;font-size:13px}
+.supempty{border:1px dashed #3d3125;border-radius:10px;padding:20px 16px;text-align:center;color:#8a7a68;font-size:13px}
 .spark{width:100%;height:120px;display:block;margin-top:8px}
 .foot{color:var(--mut);font-size:12px;margin-top:24px;border-top:1px solid var(--line);padding-top:14px}
-.tag{display:inline-block;background:#1e232b;color:#9aa3b0;border-radius:6px;padding:2px 8px;font-size:11.5px;margin-right:6px}
-.bignum{color:#eef1f5} h1{color:#eef1f5} td b{color:#e3e7ec}
+.tag{display:inline-block;background:#241c15;color:#a08f7d;border-radius:6px;padding:2px 8px;font-size:11.5px;margin-right:6px}
+.bignum{color:#f2ebe0} h1{color:#f2ebe0} td b{color:#e8dcc8}
 </style></head><body><div class="wrap">
 
 <div class="head"><h1>전기장비</h1><span class="sec">섹터 · 산업재</span></div>
@@ -47,13 +48,13 @@ td.p{color:#2d7d46}td.m{color:#c0392b}
  <div>
   <div class="card">
    <div class="scorebox">
-     <div class="bignum">69</div>
-     <div><div class="stage" style="background:#c9a94a">과열</div>
-          <div style="margin-top:7px"><span class='delta dn'>▼2점 (전주 대비)</span></div></div>
+     <div class="bignum">73</div>
+     <div><div class="stage" style="background:#cfa75e">과열</div>
+          <div style="margin-top:7px"><span class='delta up'>▲4점 (전주 대비)</span></div></div>
    </div>
    <div style="color:var(--mut);font-size:13px">사이클 점수 = 6요소 가중합(현재 동일가중) · 0 차가움 ~ 100 뜨거움</div>
    <h3>점수를 만든 6요소</h3>
-   <div class='cbar'><span class='cl'>밸류에이션</span><div class='ctrack'><div class='cfill' style='width:92%;background:#c9a94a'></div></div><span class='cv'>92</span></div><div class='cbar'><span class='cl'>KPI 추세</span><div class='ctrack'><div class='cfill' style='width:80%;background:#c9a94a'></div></div><span class='cv'>80</span></div><div class='cbar'><span class='cl'>가격 모멘텀</span><div class='ctrack'><div class='cfill' style='width:74%;background:#5fa07a'></div></div><span class='cv'>74</span></div><div class='cbar'><span class='cl'>52주 위치</span><div class='ctrack'><div class='cfill' style='width:69%;background:#5fa07a'></div></div><span class='cv'>69</span></div><div class='cbar'><span class='cl'>보고서 톤</span><div class='ctrack'><div class='cfill' style='width:50%;background:#5fa07a'></div></div><span class='cv'>50</span></div><div class='cbar'><span class='cl'>수급 뉴스 톤</span><div class='ctrack'><div class='cfill' style='width:50%;background:#5fa07a'></div></div><span class='cv'>50</span></div>
+   <div class='cbar'><span class='cl'>밸류에이션</span><div class='ctrack'><div class='cfill' style='width:94%;background:#cfa75e'></div></div><span class='cv'>94</span></div><div class='cbar'><span class='cl'>가격 모멘텀</span><div class='ctrack'><div class='cfill' style='width:85%;background:#cfa75e'></div></div><span class='cv'>85</span></div><div class='cbar'><span class='cl'>KPI 추세</span><div class='ctrack'><div class='cfill' style='width:80%;background:#cfa75e'></div></div><span class='cv'>80</span></div><div class='cbar'><span class='cl'>52주 위치</span><div class='ctrack'><div class='cfill' style='width:78%;background:#cfa75e'></div></div><span class='cv'>78</span></div><div class='cbar'><span class='cl'>보고서 톤</span><div class='ctrack'><div class='cfill' style='width:50%;background:#84a877'></div></div><span class='cv'>50</span></div><div class='cbar'><span class='cl'>수급 뉴스 톤</span><div class='ctrack'><div class='cfill' style='width:50%;background:#84a877'></div></div><span class='cv'>50</span></div>
    <div class="baserate">스테이지 전이 base rate — <b>'과열' 4주 뒤</b> (과거 42회): 과열 90% · 확장 5% · 둔화 5%</div>
   </div>
 
@@ -68,14 +69,14 @@ td.p{color:#2d7d46}td.m{color:#c0392b}
  <div>
   <div class="card">
    <h3>품목별 수급 현황 (초록=공급부족 · 빨강=공급과잉/약세)</h3>
-   
+   <div class='supempty'>품목별 수급 데이터가 아직 없다 — 어닝콜·공시 수집 후 채워진다.</div>
   </div>
   <div class="card">
    <h3>산업 가격 지수 (대표 종목 동일가중, 최근 2년 주간)</h3>
-   <svg viewBox='0 0 560 120' class='spark' preserveAspectRatio='none'><polyline points='0.0,116.3 5.4,113.1 10.8,116.6 16.2,115.9 21.5,120.0 26.9,118.2 32.3,117.3 37.7,116.0 43.1,113.3 48.5,117.8 53.8,111.9 59.2,107.7 64.6,106.2 70.0,104.4 75.4,102.4 80.8,101.6 86.2,101.0 91.5,101.6 96.9,91.7 102.3,93.6 107.7,89.2 113.1,89.9 118.5,89.2 123.8,91.6 129.2,94.0 134.6,94.8 140.0,93.0 145.4,93.7 150.8,87.9 156.2,83.4 161.5,91.8 166.9,94.3 172.3,94.4 177.7,99.2 183.1,99.4 188.5,105.7 193.8,105.6 199.2,103.7 204.6,108.4 210.0,117.1 215.4,108.6 220.8,109.4 226.2,101.3 231.5,98.1 236.9,94.2 242.3,87.1 247.7,84.8 253.1,83.3 258.5,80.3 263.8,81.9 269.2,79.6 274.6,73.9 280.0,71.3 285.4,69.5 290.8,63.5 296.2,55.2 301.5,57.2 306.9,61.0 312.3,63.2 317.7,63.3 323.1,63.8 328.5,66.5 333.8,61.0 339.2,60.7 344.6,64.4 350.0,64.2 355.4,65.9 360.8,64.1 366.2,63.9 371.5,60.4 376.9,63.1 382.3,65.2 387.7,68.3 393.1,61.4 398.5,57.6 403.8,53.9 409.2,57.2 414.6,55.3 420.0,53.4 425.4,56.3 430.8,48.2 436.2,51.3 441.5,43.8 446.9,36.2 452.3,35.0 457.7,32.8 463.1,28.4 468.5,43.2 473.8,42.9 479.2,39.3 484.6,39.4 490.0,32.9 495.4,17.0 500.8,14.3 506.2,1.1 511.5,10.9 516.9,11.4 522.3,12.7 527.7,13.5 533.1,18.3 538.5,22.6 543.8,20.8 549.2,0.0 554.6,7.9 560.0,4.2' fill='none' stroke='#7b52d6' stroke-width='2'/></svg>
+   <svg viewBox='0 0 560 120' class='spark' preserveAspectRatio='none'><polyline points='0.0,113.3 5.4,116.7 10.8,116.0 16.2,120.0 21.5,118.3 26.9,117.4 32.3,116.2 37.7,113.5 43.1,117.9 48.5,112.3 53.8,108.1 59.2,106.7 64.6,105.0 70.0,103.1 75.4,102.3 80.8,101.7 86.2,102.3 91.5,92.8 96.9,94.6 102.3,90.3 107.7,91.1 113.1,90.3 118.5,92.6 123.8,94.9 129.2,95.7 134.6,94.1 140.0,94.7 145.4,89.2 150.8,84.7 156.2,92.9 161.5,95.3 166.9,95.3 172.3,99.9 177.7,100.2 183.1,106.2 188.5,106.1 193.8,104.3 199.2,108.9 204.6,117.3 210.0,109.0 215.4,109.8 220.8,102.1 226.2,98.9 231.5,95.1 236.9,88.3 242.3,86.1 247.7,84.6 253.1,81.7 258.5,83.3 263.8,81.1 269.2,75.6 274.6,73.2 280.0,71.3 285.4,65.6 290.8,57.5 296.2,59.5 301.5,63.2 306.9,65.3 312.3,65.3 317.7,65.9 323.1,68.4 328.5,63.2 333.8,62.9 339.2,66.4 344.6,66.2 350.0,67.9 355.4,66.2 360.8,66.0 366.2,62.6 371.5,65.2 376.9,67.1 382.3,70.2 387.7,63.6 393.1,59.8 398.5,56.4 403.8,59.5 409.2,57.7 414.6,55.8 420.0,58.6 425.4,50.8 430.8,53.8 436.2,46.6 441.5,39.2 446.9,38.1 452.3,36.0 457.7,31.8 463.1,46.1 468.5,45.8 473.8,42.3 479.2,42.5 484.6,36.2 490.0,20.9 495.4,18.3 500.8,5.6 506.2,15.0 511.5,15.4 516.9,16.6 522.3,17.4 527.7,22.0 533.1,26.2 538.5,24.4 543.8,4.4 549.2,12.0 554.6,8.5 560.0,0.0' fill='none' stroke='#c89468' stroke-width='2'/></svg>
    <h3>구성 종목</h3>
    <table><tr><td><b>종목</b></td><td><b>가격</b></td><td><b>52주위치</b></td>
-   <td><b>모멘텀</b></td><td><b>후행PER</b></td></tr><tr><td>ETN</td><td>$398.52</td><td>69</td><td class='p'>+2.6%</td><td>39.1</td></tr><tr><td>EMR</td><td>$139.05</td><td>43</td><td class='p'>+2.4%</td><td>32.2</td></tr><tr><td>ROK</td><td>$471.7</td><td>86</td><td class='p'>+15.9%</td><td>49.0</td></tr><tr><td>GEV</td><td>$1113.11</td><td>91</td><td class='p'>+20.0%</td><td>32.6</td></tr><tr><td>HUBB</td><td>$487.1</td><td>55</td><td class='m'>-0.3%</td><td>28.8</td></tr></table>
+   <td><b>모멘텀</b></td><td><b>후행PER</b></td></tr><tr><td>ETN</td><td>$417.19</td><td>85</td><td class='p'>+7.3%</td><td>40.9</td></tr><tr><td>EMR</td><td>$140.52</td><td>47</td><td class='p'>+2.6%</td><td>32.5</td></tr><tr><td>ROK</td><td>$487.13</td><td>95</td><td class='p'>+19.2%</td><td>50.6</td></tr><tr><td>GEV</td><td>$1182.96</td><td>100</td><td class='p'>+27.4%</td><td>34.6</td></tr><tr><td>HUBB</td><td>$496.27</td><td>61</td><td class='p'>+1.0%</td><td>29.4</td></tr></table>
   </div>
  </div>
 </div>

@@ -3,7 +3,7 @@
 <title>제지 — 산업 사이클 상세</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
 <style>
-:root{--ink:#d6dae1;--mut:#828b99;--line:#272c35;--bg:#13161b;--card:#191d24;--gr:#5fa07a;--or:#c08948}
+:root{--ink:#f2ebe0;--mut:#a08f7d;--line:#2b231c;--bg:#1a1512;--card:#221b15;--gr:#8fb381;--or:#cfa75e}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:'Pretendard Variable',system-ui,sans-serif;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
 .wrap{max-width:1180px;margin:0 auto;padding:22px 20px 60px}
@@ -15,29 +15,30 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:'Pretendard Vari
 @media(max-width:880px){.grid{grid-template-columns:1fr}}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:16px}
 .scorebox{display:flex;align-items:center;gap:18px;margin-bottom:8px}
-.bignum{font-size:54px;font-weight:850;line-height:1}
-.stage{font-size:15px;font-weight:800;color:#fff;padding:5px 14px;border-radius:999px}
-.delta{font-size:13px;color:var(--mut)}.delta.up{color:#c0392b}.delta.dn{color:#2d7d46}
+.bignum{font-size:58px;font-weight:850;line-height:1;font-variant-numeric:tabular-nums}
+.stage{font-size:15px;font-weight:800;color:#f2ebe0;padding:5px 14px;border-radius:999px}
+.delta{font-size:13px;color:var(--mut)}.delta.up{color:#c97a62}.delta.dn{color:#8fb381}
 h3{font-size:14px;color:var(--mut);margin:18px 0 10px;font-weight:700;letter-spacing:.3px}
 .cbar{display:flex;align-items:center;gap:10px;margin:7px 0}
-.cl{width:92px;font-size:13px;color:#b9c0c9;flex:none}
-.ctrack{flex:1;height:16px;background:#11141a;border-radius:6px;overflow:hidden}
+.cl{width:92px;font-size:13px;color:#cfc2b0;flex:none}
+.ctrack{flex:1;height:16px;background:#151009;border-radius:6px;overflow:hidden}
 .cfill{height:100%;border-radius:6px}
-.cv{width:28px;text-align:right;font-weight:800;font-size:13px;flex:none;color:#c4cad3}
-.baserate{background:#1b2129;border:1px solid #2c3340;border-radius:10px;padding:11px 14px;font-size:13.5px;margin-top:14px;color:#b3bcc8}
+.cv{width:28px;text-align:right;font-weight:800;font-size:13px;flex:none;color:#cfc2b0;font-variant-numeric:tabular-nums}
+.baserate{background:#2a2016;border:1px solid #3d2f21;border-radius:10px;padding:11px 14px;font-size:13.5px;margin-top:14px;color:#cfc2b0}
 ul{margin:6px 0;padding-left:18px}li{margin:5px 0;font-size:13.5px}
 table{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}
 td{border-top:1px solid var(--line);padding:6px 8px}td.n{color:var(--mut)}
-td.p{color:#2d7d46}td.m{color:#c0392b}
+td.p{color:#8fb381}td.m{color:#c97a62}
 .sup{display:flex;align-items:center;gap:9px;padding:8px 4px;font-size:14px;border-top:1px solid var(--line)}
 .sup .dot{width:9px;height:9px;border-radius:50%}
-.sup.up .dot{background:var(--gr)}.sup.down .dot{background:#c0392b}
-.sup.up .st{color:var(--gr)}.sup.down .st{color:#c0392b}
+.sup.up .dot{background:var(--gr)}.sup.down .dot{background:#c97a62}
+.sup.up .st{color:var(--gr)}.sup.down .st{color:#c97a62}
 .sup .st{margin-left:auto;font-weight:700;font-size:13px}
+.supempty{border:1px dashed #3d3125;border-radius:10px;padding:20px 16px;text-align:center;color:#8a7a68;font-size:13px}
 .spark{width:100%;height:120px;display:block;margin-top:8px}
 .foot{color:var(--mut);font-size:12px;margin-top:24px;border-top:1px solid var(--line);padding-top:14px}
-.tag{display:inline-block;background:#1e232b;color:#9aa3b0;border-radius:6px;padding:2px 8px;font-size:11.5px;margin-right:6px}
-.bignum{color:#eef1f5} h1{color:#eef1f5} td b{color:#e3e7ec}
+.tag{display:inline-block;background:#241c15;color:#a08f7d;border-radius:6px;padding:2px 8px;font-size:11.5px;margin-right:6px}
+.bignum{color:#f2ebe0} h1{color:#f2ebe0} td b{color:#e8dcc8}
 </style></head><body><div class="wrap">
 
 <div class="head"><h1>제지</h1><span class="sec">섹터 · 소재</span></div>
@@ -47,13 +48,13 @@ td.p{color:#2d7d46}td.m{color:#c0392b}
  <div>
   <div class="card">
    <div class="scorebox">
-     <div class="bignum">51</div>
-     <div><div class="stage" style="background:#5fa07a">회복</div>
+     <div class="bignum">50</div>
+     <div><div class="stage" style="background:#84a877">회복</div>
           <div style="margin-top:7px"><span class='delta dn'>▼1점 (전주 대비)</span></div></div>
    </div>
    <div style="color:var(--mut);font-size:13px">사이클 점수 = 6요소 가중합(현재 동일가중) · 0 차가움 ~ 100 뜨거움</div>
    <h3>점수를 만든 6요소</h3>
-   <div class='cbar'><span class='cl'>가격 모멘텀</span><div class='ctrack'><div class='cfill' style='width:67%;background:#5fa07a'></div></div><span class='cv'>67</span></div><div class='cbar'><span class='cl'>KPI 추세</span><div class='ctrack'><div class='cfill' style='width:52%;background:#5fa07a'></div></div><span class='cv'>52</span></div><div class='cbar'><span class='cl'>보고서 톤</span><div class='ctrack'><div class='cfill' style='width:50%;background:#5fa07a'></div></div><span class='cv'>50</span></div><div class='cbar'><span class='cl'>밸류에이션</span><div class='ctrack'><div class='cfill' style='width:50%;background:#5fa07a'></div></div><span class='cv'>50</span></div><div class='cbar'><span class='cl'>수급 뉴스 톤</span><div class='ctrack'><div class='cfill' style='width:50%;background:#5fa07a'></div></div><span class='cv'>50</span></div><div class='cbar'><span class='cl'>52주 위치</span><div class='ctrack'><div class='cfill' style='width:39%;background:#5fa07a'></div></div><span class='cv'>39</span></div>
+   <div class='cbar'><span class='cl'>가격 모멘텀</span><div class='ctrack'><div class='cfill' style='width:62%;background:#84a877'></div></div><span class='cv'>62</span></div><div class='cbar'><span class='cl'>KPI 추세</span><div class='ctrack'><div class='cfill' style='width:52%;background:#84a877'></div></div><span class='cv'>52</span></div><div class='cbar'><span class='cl'>보고서 톤</span><div class='ctrack'><div class='cfill' style='width:50%;background:#84a877'></div></div><span class='cv'>50</span></div><div class='cbar'><span class='cl'>밸류에이션</span><div class='ctrack'><div class='cfill' style='width:50%;background:#84a877'></div></div><span class='cv'>50</span></div><div class='cbar'><span class='cl'>수급 뉴스 톤</span><div class='ctrack'><div class='cfill' style='width:50%;background:#84a877'></div></div><span class='cv'>50</span></div><div class='cbar'><span class='cl'>52주 위치</span><div class='ctrack'><div class='cfill' style='width:37%;background:#84a877'></div></div><span class='cv'>37</span></div>
    <div class="baserate">스테이지 전이 base rate — <b>'회복' 4주 뒤</b> (과거 11회): 바닥 36% · 회복 36% · 확장 18% · 과열 9%</div>
   </div>
 
@@ -68,14 +69,14 @@ td.p{color:#2d7d46}td.m{color:#c0392b}
  <div>
   <div class="card">
    <h3>품목별 수급 현황 (초록=공급부족 · 빨강=공급과잉/약세)</h3>
-   
+   <div class='supempty'>품목별 수급 데이터가 아직 없다 — 어닝콜·공시 수집 후 채워진다.</div>
   </div>
   <div class="card">
    <h3>산업 가격 지수 (대표 종목 동일가중, 최근 2년 주간)</h3>
-   <svg viewBox='0 0 560 120' class='spark' preserveAspectRatio='none'><polyline points='0.0,72.6 5.4,66.2 10.8,67.3 16.2,63.9 21.5,79.6 26.9,82.7 32.3,66.7 37.7,55.2 43.1,56.6 48.5,65.3 53.8,61.1 59.2,58.9 64.6,47.4 70.0,53.3 75.4,61.7 80.8,65.9 86.2,53.6 91.5,28.0 96.9,23.0 102.3,18.2 107.7,5.3 113.1,10.9 118.5,13.2 123.8,21.3 129.2,26.6 134.6,21.9 140.0,28.3 145.4,27.8 150.8,16.8 156.2,0.0 161.5,14.9 166.9,16.8 172.3,15.7 177.7,20.7 183.1,24.7 188.5,45.4 193.8,53.3 199.2,53.0 204.6,50.7 210.0,74.6 215.4,76.5 220.8,75.7 226.2,70.4 231.5,76.5 236.9,79.3 242.3,50.2 247.7,61.7 253.1,68.7 258.5,61.4 263.8,65.9 269.2,68.4 274.6,64.5 280.0,44.6 285.4,47.4 290.8,56.4 296.2,32.0 301.5,63.6 306.9,55.2 312.3,59.2 317.7,47.7 323.1,44.0 328.5,48.2 333.8,61.4 339.2,60.8 344.6,69.8 350.0,63.4 355.4,76.5 360.8,71.8 366.2,60.8 371.5,97.9 376.9,102.6 382.3,106.5 387.7,106.5 393.1,98.4 398.5,95.9 403.8,96.4 409.2,91.1 414.6,87.5 420.0,82.7 425.4,68.1 430.8,67.9 436.2,64.2 441.5,79.6 446.9,57.2 452.3,21.3 457.7,33.4 463.1,40.7 468.5,67.6 473.8,83.3 479.2,104.6 484.6,91.7 490.0,91.4 495.4,85.5 500.8,81.3 506.2,101.8 511.5,108.5 516.9,99.5 522.3,120.0 527.7,114.4 533.1,103.7 538.5,103.2 543.8,92.2 549.2,87.2 554.6,82.7 560.0,83.6' fill='none' stroke='#7b52d6' stroke-width='2'/></svg>
+   <svg viewBox='0 0 560 120' class='spark' preserveAspectRatio='none'><polyline points='0.0,66.4 5.4,67.2 10.8,64.2 16.2,79.4 21.5,81.9 26.9,66.4 32.3,55.0 37.7,56.7 43.1,65.0 48.5,60.8 53.8,58.9 59.2,47.2 64.6,52.8 70.0,61.4 75.4,65.6 80.8,53.1 86.2,28.1 91.5,23.1 96.9,18.1 102.3,5.6 107.7,11.1 113.1,13.1 118.5,21.4 123.8,26.9 129.2,21.9 134.6,28.3 140.0,27.8 145.4,16.7 150.8,0.0 156.2,14.4 161.5,16.7 166.9,15.6 172.3,20.8 177.7,24.7 183.1,45.3 188.5,53.1 193.8,52.5 199.2,50.6 204.6,74.4 210.0,76.4 215.4,75.3 220.8,70.3 226.2,76.4 231.5,79.2 236.9,50.0 242.3,61.7 247.7,68.9 253.1,61.1 258.5,65.3 263.8,68.1 269.2,64.2 274.6,44.4 280.0,47.5 285.4,56.1 290.8,32.2 296.2,63.6 301.5,54.7 306.9,58.6 312.3,47.2 317.7,43.9 323.1,48.1 328.5,61.4 333.8,60.6 339.2,69.4 344.6,62.8 350.0,76.4 355.4,71.7 360.8,60.6 366.2,97.5 371.5,101.9 376.9,105.8 382.3,105.8 387.7,97.8 393.1,95.0 398.5,96.1 403.8,90.6 409.2,86.9 414.6,82.2 420.0,67.8 425.4,67.5 430.8,63.9 436.2,79.4 441.5,56.9 446.9,20.8 452.3,32.8 457.7,39.7 463.1,66.9 468.5,82.5 473.8,103.6 479.2,91.1 484.6,90.6 490.0,85.3 495.4,80.8 500.8,101.4 506.2,108.3 511.5,99.4 516.9,120.0 522.3,114.2 527.7,103.9 533.1,103.3 538.5,92.5 543.8,87.5 549.2,83.6 554.6,84.2 560.0,87.2' fill='none' stroke='#c89468' stroke-width='2'/></svg>
    <h3>구성 종목</h3>
    <table><tr><td><b>종목</b></td><td><b>가격</b></td><td><b>52주위치</b></td>
-   <td><b>모멘텀</b></td><td><b>후행PER</b></td></tr><tr><td>IP</td><td>$38.79</td><td>41</td><td class='p'>+14.6%</td><td>–</td></tr><tr><td>SW</td><td>$45.93</td><td>72</td><td class='p'>+13.6%</td><td>63.8</td></tr><tr><td>SUZ</td><td>$7.88</td><td>6</td><td class='m'>-11.0%</td><td>4.5</td></tr></table>
+   <td><b>모멘텀</b></td><td><b>후행PER</b></td></tr><tr><td>IP</td><td>$38.26</td><td>38</td><td class='p'>+12.0%</td><td>–</td></tr><tr><td>SW</td><td>$45.23</td><td>68</td><td class='p'>+10.5%</td><td>62.8</td></tr><tr><td>SUZ</td><td>$7.85</td><td>5</td><td class='m'>-10.4%</td><td>4.4</td></tr></table>
   </div>
  </div>
 </div>

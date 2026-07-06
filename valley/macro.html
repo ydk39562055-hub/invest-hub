@@ -3,28 +3,28 @@
 <title>경기 국면 — Valley 대시보드</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
 <style>
-:root{--ink:#d6dae1;--mut:#828b99;--line:#272c35;--bg:#13161b;--card:#191d24}
+:root{--ink:#f2ebe0;--mut:#a08f7d;--line:#2b231c;--bg:#1a1512;--card:#221b15}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);
  font-family:'Pretendard Variable',system-ui,sans-serif;font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased}
 .wrap{max-width:1100px;margin:0 auto;padding:24px 20px 60px}
-h1{font-size:21px;margin:0 0 2px;font-weight:800;color:#eef1f5}
+h1{font-size:21px;margin:0 0 2px;font-weight:800;color:#f2ebe0}
 .sub{color:var(--mut);font-size:12.5px;margin-bottom:20px}
 .top{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:14px;align-items:center;
  background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:8px}
 .gauge{width:100%;max-width:230px;display:block;margin:0 auto}
 .glabel{text-align:center;color:var(--mut);font-size:13px;margin-top:-6px}
-.glabel b{color:#eef1f5}
-.bignum{font-size:46px;font-weight:850;line-height:1}
-.stage{display:inline-block;color:#fff;font-weight:800;padding:4px 13px;border-radius:999px;font-size:14px}
-.msg{background:#1b2129;border-left:3px solid #c9a94a;border-radius:9px;padding:13px 16px;margin:14px 0;font-size:13.5px;color:#c8cfd8}
+.glabel b{color:#f2ebe0}
+.bignum{font-size:46px;font-weight:850;line-height:1;font-variant-numeric:tabular-nums}
+.stage{display:inline-block;color:#f2ebe0;font-weight:800;padding:4px 13px;border-radius:999px;font-size:14px}
+.msg{background:#241c15;border-left:3px solid #cfa75e;border-radius:9px;padding:13px 16px;margin:14px 0;font-size:13.5px;color:#cfc2b0}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-top:14px}
-h2{font-size:14px;margin:0 0 12px;color:#c4cad3;font-weight:700}
+h2{font-size:14px;margin:0 0 12px;color:#e8dcc8;font-weight:700}
 .br{display:flex;align-items:center;gap:10px;margin:7px 0}
-.bl{width:120px;flex:none;font-size:13px;color:#b9c0c9}
-.bt{flex:1;height:15px;background:#11141a;border-radius:5px;overflow:hidden}
-.bf{height:100%;border-radius:5px}.bv{width:28px;text-align:right;font-weight:800;font-size:12.5px}
+.bl{width:120px;flex:none;font-size:13px;color:#cfc2b0}
+.bt{flex:1;height:15px;background:#151009;border-radius:5px;overflow:hidden}
+.bf{height:100%;border-radius:5px}.bv{width:28px;text-align:right;font-weight:800;font-size:12.5px;font-variant-numeric:tabular-nums}
 .sc{display:inline-block;border:1px solid;border-left-width:3px;border-radius:7px;
- padding:5px 11px;margin:4px 6px 4px 0;font-size:12.5px;background:#11141a}.sc b{color:#eef1f5}
+ padding:5px 11px;margin:4px 6px 4px 0;font-size:12.5px;background:#151009}.sc b{color:#f2ebe0}
 .foot{color:var(--mut);font-size:11.5px;margin-top:22px;border-top:1px solid var(--line);padding-top:14px}
 </style></head><body><div class="wrap">
 <h1>경기 국면</h1>
@@ -32,17 +32,17 @@ h2{font-size:14px;margin:0 0 12px;color:#c4cad3;font-weight:700}
 
 <div class="top">
  <div style="text-align:center">
-   <div class="bignum" style="color:#c9a94a">65</div>
-   <div class="stage" style="background:#c9a94a;margin-top:8px">과열</div>
+   <div class="bignum" style="color:#cfa75e">65</div>
+   <div class="stage" style="background:#cfa75e;margin-top:8px">과열</div>
    <div class="glabel" style="margin-top:8px">종합 경기 점수</div>
  </div>
- <div><svg viewBox='0 0 220 130' class='gauge'><path d='M 18.0 105.0 A 92 92 0 0 1 35.6 50.9' fill='none' stroke='#d0453f' stroke-width='15' opacity='.85'/><path d='M 35.6 50.9 A 92 92 0 0 1 81.6 17.5' fill='none' stroke='#5fa07a' stroke-width='15' opacity='.85'/><path d='M 81.6 17.5 A 92 92 0 0 1 138.4 17.5' fill='none' stroke='#5786a8' stroke-width='15' opacity='.85'/><path d='M 138.4 17.5 A 92 92 0 0 1 184.4 50.9' fill='none' stroke='#c9a94a' stroke-width='15' opacity='.85'/><path d='M 184.4 50.9 A 92 92 0 0 1 202.0 105.0' fill='none' stroke='#d98a3c' stroke-width='15' opacity='.85'/><line x1='110' y1='105' x2='150.7' y2='36.1' stroke='#eef1f5' stroke-width='3'/><circle cx='110' cy='105' r='5' fill='#eef1f5'/><text x='110' y='83' text-anchor='middle' font-size='34' font-weight='800' fill='#c9a94a'>67</text><text x='110' y='123' text-anchor='middle' font-size='12' fill='#828b99'>매크로</text></svg><div class="glabel">매크로 <b>20%</b></div></div>
- <div><svg viewBox='0 0 220 130' class='gauge'><path d='M 18.0 105.0 A 92 92 0 0 1 35.6 50.9' fill='none' stroke='#d0453f' stroke-width='15' opacity='.85'/><path d='M 35.6 50.9 A 92 92 0 0 1 81.6 17.5' fill='none' stroke='#5fa07a' stroke-width='15' opacity='.85'/><path d='M 81.6 17.5 A 92 92 0 0 1 138.4 17.5' fill='none' stroke='#5786a8' stroke-width='15' opacity='.85'/><path d='M 138.4 17.5 A 92 92 0 0 1 184.4 50.9' fill='none' stroke='#c9a94a' stroke-width='15' opacity='.85'/><path d='M 184.4 50.9 A 92 92 0 0 1 202.0 105.0' fill='none' stroke='#d98a3c' stroke-width='15' opacity='.85'/><line x1='110' y1='105' x2='144.1' y2='32.6' stroke='#eef1f5' stroke-width='3'/><circle cx='110' cy='105' r='5' fill='#eef1f5'/><text x='110' y='83' text-anchor='middle' font-size='34' font-weight='800' fill='#c9a94a'>64</text><text x='110' y='123' text-anchor='middle' font-size='12' fill='#828b99'>기업</text></svg><div class="glabel">기업 상황 <b>80%</b></div></div>
+ <div><svg viewBox='0 0 220 130' class='gauge'><path d='M 18.0 105.0 A 92 92 0 0 1 35.6 50.9' fill='none' stroke='#c96a57' stroke-width='15' opacity='.85'/><path d='M 35.6 50.9 A 92 92 0 0 1 81.6 17.5' fill='none' stroke='#84a877' stroke-width='15' opacity='.85'/><path d='M 81.6 17.5 A 92 92 0 0 1 138.4 17.5' fill='none' stroke='#7c93ad' stroke-width='15' opacity='.85'/><path d='M 138.4 17.5 A 92 92 0 0 1 184.4 50.9' fill='none' stroke='#cfa75e' stroke-width='15' opacity='.85'/><path d='M 184.4 50.9 A 92 92 0 0 1 202.0 105.0' fill='none' stroke='#cd8a52' stroke-width='15' opacity='.85'/><line x1='110' y1='105' x2='150.7' y2='36.1' stroke='#f2ebe0' stroke-width='3'/><circle cx='110' cy='105' r='5' fill='#f2ebe0'/><text x='110' y='83' text-anchor='middle' font-size='34' font-weight='800' fill='#cfa75e'>67</text><text x='110' y='123' text-anchor='middle' font-size='12' fill='#8a7a68'>매크로</text></svg><div class="glabel">매크로 <b>20%</b></div></div>
+ <div><svg viewBox='0 0 220 130' class='gauge'><path d='M 18.0 105.0 A 92 92 0 0 1 35.6 50.9' fill='none' stroke='#c96a57' stroke-width='15' opacity='.85'/><path d='M 35.6 50.9 A 92 92 0 0 1 81.6 17.5' fill='none' stroke='#84a877' stroke-width='15' opacity='.85'/><path d='M 81.6 17.5 A 92 92 0 0 1 138.4 17.5' fill='none' stroke='#7c93ad' stroke-width='15' opacity='.85'/><path d='M 138.4 17.5 A 92 92 0 0 1 184.4 50.9' fill='none' stroke='#cfa75e' stroke-width='15' opacity='.85'/><path d='M 184.4 50.9 A 92 92 0 0 1 202.0 105.0' fill='none' stroke='#cd8a52' stroke-width='15' opacity='.85'/><line x1='110' y1='105' x2='144.1' y2='32.6' stroke='#f2ebe0' stroke-width='3'/><circle cx='110' cy='105' r='5' fill='#f2ebe0'/><text x='110' y='83' text-anchor='middle' font-size='34' font-weight='800' fill='#cfa75e'>64</text><text x='110' y='123' text-anchor='middle' font-size='12' fill='#8a7a68'>기업</text></svg><div class="glabel">기업 상황 <b>80%</b></div></div>
 </div>
 <div class="msg">매크로 67 vs 기업 64 (-3) — 거시와 기업이 같은 방향 — 신호가 일치한다.</div>
 
-<div class="card"><h2>세부 지표 (시장 기반 매크로 + 기업측 폭) · 0 약함 ~ 100 강함</h2><div class='br'><span class='bl'>구리/금 비율</span><div class='bt'><div class='bf' style='width:100%;background:#d98a3c'></div></div><span class='bv'>100</span></div><div class='br'><span class='bl'>변동성(역)</span><div class='bt'><div class='bf' style='width:82%;background:#d98a3c'></div></div><span class='bv'>82</span></div><div class='br'><span class='bl'>수급/모멘텀 폭</span><div class='bt'><div class='bf' style='width:75%;background:#c9a94a'></div></div><span class='bv'>75</span></div><div class='br'><span class='bl'>수익률곡선</span><div class='bt'><div class='bf' style='width:60%;background:#5786a8'></div></div><span class='bv'>60</span></div><div class='br'><span class='bl'>신용 스프레드</span><div class='bt'><div class='bf' style='width:57%;background:#5786a8'></div></div><span class='bv'>57</span></div><div class='br'><span class='bl'>실질금리(역)</span><div class='bt'><div class='bf' style='width:56%;background:#5786a8'></div></div><span class='bv'>56</span></div><div class='br'><span class='bl'>달러 강세(역)</span><div class='bt'><div class='bf' style='width:46%;background:#5786a8'></div></div><span class='bv'>46</span></div></div>
-<div class="card"><h2>기업측 구성 — 섹터 평균 (이게 쌓여 기업 80%가 된다)</h2><span class='sc' style='border-color:#5786a8'>소재 <b>57</b></span><span class='sc' style='border-color:#5786a8'>에너지 <b>52</b></span><span class='sc' style='border-color:#c9a94a'>산업재 <b>74</b></span><span class='sc' style='border-color:#5786a8'>임의소비재 <b>59</b></span><span class='sc' style='border-color:#c9a94a'>필수소비재 <b>69</b></span><span class='sc' style='border-color:#c9a94a'>헬스케어 <b>71</b></span><span class='sc' style='border-color:#d98a3c'>금융 <b>80</b></span><span class='sc' style='border-color:#5786a8'>정보기술 <b>55</b></span><span class='sc' style='border-color:#5786a8'>커뮤니케이션 <b>46</b></span><span class='sc' style='border-color:#5786a8'>유틸리티 <b>55</b></span><span class='sc' style='border-color:#c9a94a'>부동산 <b>74</b></span></div>
+<div class="card"><h2>세부 지표 (시장 기반 매크로 + 기업측 폭) · 0 약함 ~ 100 강함</h2><div class='br'><span class='bl'>구리/금 비율</span><div class='bt'><div class='bf' style='width:100%;background:#cd8a52'></div></div><span class='bv'>100</span></div><div class='br'><span class='bl'>변동성(역)</span><div class='bt'><div class='bf' style='width:83%;background:#cd8a52'></div></div><span class='bv'>83</span></div><div class='br'><span class='bl'>수급/모멘텀 폭</span><div class='bt'><div class='bf' style='width:75%;background:#cfa75e'></div></div><span class='bv'>75</span></div><div class='br'><span class='bl'>수익률곡선</span><div class='bt'><div class='bf' style='width:60%;background:#7c93ad'></div></div><span class='bv'>60</span></div><div class='br'><span class='bl'>신용 스프레드</span><div class='bt'><div class='bf' style='width:56%;background:#7c93ad'></div></div><span class='bv'>56</span></div><div class='br'><span class='bl'>실질금리(역)</span><div class='bt'><div class='bf' style='width:55%;background:#7c93ad'></div></div><span class='bv'>55</span></div><div class='br'><span class='bl'>달러 강세(역)</span><div class='bt'><div class='bf' style='width:46%;background:#7c93ad'></div></div><span class='bv'>46</span></div></div>
+<div class="card"><h2>기업측 구성 — 섹터 평균 (이게 쌓여 기업 80%가 된다)</h2><span class='sc' style='border-color:#7c93ad'>소재 <b>57</b></span><span class='sc' style='border-color:#7c93ad'>에너지 <b>52</b></span><span class='sc' style='border-color:#cfa75e'>산업재 <b>74</b></span><span class='sc' style='border-color:#7c93ad'>임의소비재 <b>59</b></span><span class='sc' style='border-color:#cfa75e'>필수소비재 <b>69</b></span><span class='sc' style='border-color:#cfa75e'>헬스케어 <b>71</b></span><span class='sc' style='border-color:#cd8a52'>금융 <b>80</b></span><span class='sc' style='border-color:#7c93ad'>정보기술 <b>55</b></span><span class='sc' style='border-color:#7c93ad'>커뮤니케이션 <b>46</b></span><span class='sc' style='border-color:#7c93ad'>유틸리티 <b>55</b></span><span class='sc' style='border-color:#cfa75e'>부동산 <b>74</b></span></div>
 
 <div class="foot">생성일 2026-07-06 · 기업=60개 산업 가격 열기 평균 · 매크로=yfinance 시장신호(구리/금·신용·금리·달러·변동성).
 거시 헤드라인 하나로 판단하기보다, 기업 실측에서 출발해 어긋남을 찾는다. 매수·매도 권유 아님.</div>
