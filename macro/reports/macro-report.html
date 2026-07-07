@@ -2,74 +2,74 @@
 <meta name='viewport' content='width=device-width,initial-scale=1'>
 <title>바텀업 모자이크 매크로 리포트</title>
 <style>
-:root{--ink:#1a2230;--muted:#5f6b7a;--line:#e3e7ec;--bg:#f4f6f8;--paper:#fff;
- --ai:#6d28d9;--aibg:#f3eefe;--rest:#64748b;--restbg:#eef1f4;
- --up:#0f8a4d;--upbg:#e7f6ee;--down:#c8362f;--downbg:#fbecea;--mid:#9a6700;--midbg:#fff6e3;
- --teal:#0e7490;--tealbg:#e4f5f8}
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css');
+:root{--ink:#f2ebe0;--body:#cfc2b0;--muted:#a08f7d;--mut2:#8a7a68;--line:#2b231c;--line2:#342a20;--bg:#15100d;--paper:#1a1512;--accent:#c89468;
+ --ai:#b388e6;--aibg:#241a33;--rest:#8a7a68;--restbg:#8a7a681f;
+ --up:#8fb381;--upbg:#8fb3811f;--down:#c97a62;--downbg:#c97a621f;--mid:#cfa75e;--midbg:#cfa75e1f;
+ --teal:#c89468;--tealbg:#c894681f}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);
- font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
- line-height:1.8;font-size:16px}
-.wrap{max-width:920px;margin:0 auto;background:var(--paper)}
-header{background:linear-gradient(135deg,#0e1f33,#1d3a5f);color:#fff;padding:40px 48px 34px}
-.kicker{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:#9db6d6}
-header h1{margin:10px 0 6px;font-size:34px;letter-spacing:-.6px;line-height:1.25}
-.asof{color:#c7d6ea;font-size:14px;margin-top:10px}
-.asof b{color:#fff}
-.snapshot{display:inline-block;margin-top:14px;padding:6px 14px;border:1px solid #3a5f8a;
- border-radius:999px;font-size:13px;color:#cfe0f2}
+body{margin:0;background:var(--bg);color:var(--body);
+ font-family:'Pretendard Variable','Pretendard','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
+ line-height:1.8;font-size:16px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:920px;margin:0 auto;background:var(--paper);border-left:1px solid var(--line);border-right:1px solid var(--line);min-height:100vh}
+header{background:#1e1711;color:var(--ink);padding:40px 48px 34px;border-bottom:1px solid var(--line)}
+.kicker{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);font-weight:700}
+header h1{margin:10px 0 6px;font-size:34px;letter-spacing:-.6px;line-height:1.25;font-weight:800;color:var(--ink)}
+.asof{color:var(--muted);font-size:14px;margin-top:10px}
+.asof b{color:var(--ink)}
+.snapshot{display:inline-block;margin-top:14px;padding:6px 14px;border:1px solid var(--line2);
+ border-radius:999px;font-size:13px;color:var(--muted)}
 main{padding:8px 48px 56px}
-h2{font-size:23px;margin:36px 0 12px;padding-bottom:9px;border-bottom:2px solid var(--ink)}
-h3{font-size:18px;margin:24px 0 10px}
+h2{font-size:23px;margin:36px 0 12px;padding-bottom:9px;border-bottom:1px solid var(--line);font-weight:750;color:var(--ink)}
+h3{font-size:18px;margin:24px 0 10px;color:var(--ink)}
 h4{font-size:15px;color:var(--muted);margin:16px 0 6px;letter-spacing:.2px}
 p{margin:10px 0}ul{margin:8px 0;padding-left:22px}li{margin:6px 0}
 hr{border:0;border-top:1px solid var(--line);margin:22px 0}
-strong{color:#0a1828}
-a{color:#2563eb;text-decoration:none;border-bottom:1px solid #c7d2fe}
+strong{color:var(--ink)}
+a{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--line2)}
 table{border-collapse:collapse;width:100%;margin:14px 0;font-size:14.5px}
 th,td{border:1px solid var(--line);padding:8px 12px;text-align:left}
-th{background:#f7f9fb;font-weight:700}
+th{background:#251d16;font-weight:700;color:var(--ink)}
 blockquote{margin:13px 0;padding:12px 16px;border-radius:9px;border-left:4px solid var(--muted);
- background:#f6f8fa;color:#33414f}
+ background:#211a14;color:var(--body)}
 blockquote.warn{border-left-color:var(--mid);background:var(--midbg)}
 blockquote.danger{border-left-color:var(--down);background:var(--downbg)}
-blockquote.info{border-left-color:#2563eb;background:#eef3ff}
-.lead{font-size:18px;line-height:1.7;background:#f0f5ff;border-left:4px solid #2563eb;
+blockquote.info{border-left-color:var(--accent);background:var(--tealbg)}
+.lead{font-size:18px;line-height:1.7;background:var(--tealbg);border-left:4px solid var(--accent);
  padding:16px 20px;border-radius:10px;margin:18px 0}
-details{border:1px solid var(--line);border-radius:12px;margin:14px 0;overflow:hidden;background:#fff}
-details[open]{box-shadow:0 4px 18px rgba(20,30,50,.06)}
+details{border:1px solid var(--line);border-radius:12px;margin:14px 0;overflow:hidden;background:#211a14}
 summary{list-style:none;cursor:pointer;padding:16px 20px;display:flex;flex-wrap:wrap;
- align-items:center;gap:10px;background:#fbfcfd}
+ align-items:center;gap:10px;background:#251d16}
 summary::-webkit-details-marker{display:none}
-summary:hover{background:#f5f8fb}
-.ind-title{font-size:17px;font-weight:800;margin-right:auto}
+summary:hover{background:#342a20}
+.ind-title{font-size:17px;font-weight:800;margin-right:auto;color:var(--ink)}
 .det-body{padding:4px 22px 18px;border-top:1px solid var(--line)}
 .badge{display:inline-block;padding:4px 11px;border-radius:999px;font-size:12.5px;font-weight:700}
 .b-up{background:var(--upbg);color:var(--up)}.b-down{background:var(--downbg);color:var(--down)}
 .b-mid{background:var(--midbg);color:var(--mid)}.b-teal{background:var(--tealbg);color:var(--teal)}
 .b-ai{background:var(--aibg);color:var(--ai)}.b-rest{background:var(--restbg);color:var(--rest)}
-.b-conf{background:#eef1f4;color:#334}
+.b-conf{background:#2b231c;color:var(--muted)}
 .ev{font-size:12px;color:var(--muted);margin-left:2px}
 .ev b{color:var(--up)} .ev .n{color:var(--muted)}
-.ev .note{font-weight:800;color:#8a5a00;cursor:help}   /* 어긋남=결함 아닌 값진 신호: 빨강 아닌 금색 */
+.ev .note{font-weight:800;color:var(--mid);cursor:help}   /* 어긋남=값진 신호: 금색 */
 [title]{cursor:help}
-.legend{background:#fbfcfd;border:1px dashed #cdd5de;border-radius:11px;
- padding:15px 18px;margin:20px 0;font-size:13.5px;line-height:1.72;color:#44505e}
+.legend{background:#1c1611;border:1px dashed var(--line);border-radius:11px;
+ padding:15px 18px;margin:20px 0;font-size:13.5px;line-height:1.72;color:var(--muted)}
 .legend .lh{font-weight:800;color:var(--ink);letter-spacing:.3px;font-size:12px;
  text-transform:uppercase}
 .legend p{margin:7px 0 0}.legend b{color:var(--ink)}
 .fwd{margin:12px 0 4px;padding:10px 15px;background:var(--midbg);
- border-left:4px solid var(--mid);border-radius:9px;font-size:14px;color:#5c4708}
-.kmbox{background:#fdf6ec;border:1px solid #f0d9b5;border-left:5px solid #c98a1a;
+ border-left:4px solid var(--mid);border-radius:9px;font-size:14px;color:#e0cba0}
+.kmbox{background:#241d16;border:1px solid var(--line2);border-left:5px solid var(--accent);
  border-radius:11px;padding:13px 18px;margin:8px 0 18px}
-.kmlabel{font-weight:800;color:#9a6700;font-size:11.5px;letter-spacing:1.5px;margin-bottom:5px}
+.kmlabel{font-weight:800;color:var(--accent);font-size:11.5px;letter-spacing:1.5px;margin-bottom:5px}
 .kmbox p{margin:7px 0}
-.kmteaser{flex-basis:100%;font-size:13px;color:#8a5a00;margin-top:5px;line-height:1.5}
-.signal{font-family:ui-monospace,Consolas,monospace;font-size:12.5px;background:#0e1f33;
- color:#cfe0f2;padding:10px 14px;border-radius:8px;margin:14px 0;word-break:keep-all}
-footer{padding:22px 48px 40px;color:var(--muted);font-size:12.5px;border-top:1px solid var(--line);background:#f7f9fb}
+.kmteaser{flex-basis:100%;font-size:13px;color:var(--muted);margin-top:5px;line-height:1.5}
+.signal{font-family:ui-monospace,Consolas,monospace;font-size:12.5px;background:#151009;
+ color:var(--body);padding:10px 14px;border-radius:8px;margin:14px 0;word-break:keep-all}
+footer{padding:22px 48px 40px;color:var(--muted);font-size:12.5px;border-top:1px solid var(--line);background:#15100d}
 </style></head><body><div class='wrap'>
-<header><div class='kicker'>BOTTOM-UP MOSAIC · MACRO</div><h1>바텀업 모자이크 매크로 리포트</h1><div class='asof'>데이터 기준: <b>2026 Q1 어닝콜</b> · 생성일 2026-06-11 · 수집 9개 산업(화물·소비·AI반도체·전력·신용·자본재·주택·에너지화학·노동)</div><div class='snapshot'>스냅샷입니다 — 다음 갱신: <b>Q2</b></div></header><main>
+<header><div class='kicker'>BOTTOM-UP MOSAIC · MACRO</div><h1>바텀업 모자이크 매크로 리포트</h1><div class='asof'>데이터 기준: <b>2026 Q1 어닝콜</b> · 생성일 2026-07-06 · 수집 9개 산업(화물·소비·AI반도체·전력·신용·자본재·주택·에너지화학·노동)</div><div class='snapshot'>스냅샷입니다 — 다음 갱신: <b>Q2</b></div></header><main>
 <div class='legend'><div class='lh'>이 보고서 30초 사용법</div><p><b>① 회사의 ‘말’보다 ‘행동’을 봅니다.</b> 발표에서 한 말은 부풀릴 수 있어, 회사가 <b>실제로 돈을 어디 썼는지(투자·계약·매출 숫자)</b>로 따져봤습니다.</p><p><b>② ‘말과 행동이 다른 곳’이 제일 중요합니다.</b> 거기에 착시나 숨은 진실이 있어서, 산업마다 그 지점을 <b>‘핵심 모순’ 한 단락</b>으로 뽑았습니다(각 산업을 펼치면 맨 위 노란 박스).</p><p><b>③ 색은 그냥 ‘방향’입니다.</b> 초록=강함, 빨강=약함일 뿐 좋고 나쁨이 아닙니다. AI만 <b>보라색</b> — 강하지만 경제가 거기에만 기대고 있어 위험하기도 해서요. (신뢰 점수에 마우스를 올리면 채점 기준이 뜹니다.)</p></div>
 <h2>종합</h2>
 <div class='lead'>미국 경제는 <strong>둔해졌지만 부러지지는 않았다</strong> — 약한 부분이 업종·계층을 돌아가며 번지는 '롤링 둔화'이지 모두가 동시에 꺾이는 침체는 아니며, 성장과 증시를 떠받치는 건 사실상 AI 투자라는 한 다리인데 그 다리가 다년 계약으로 묶여 있어 올해 갑자기 무너지긴 어렵고 — 다만 이번 원문 재검증으로 그 다리의 *새로 늘어나는* 약정 무게가 소수 '돌려막기' 고리(클라우드↔AI 회사)로 쏠리는 게 공시 숫자로 확인됐다 — 진짜 고비는 2027~28년 AI 투자 회수 점검과 그 사이 사무직발 고용 냉각이 어디까지 번지느냐다.</div>

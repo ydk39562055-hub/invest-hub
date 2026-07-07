@@ -4,23 +4,24 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>매크로 대시보드</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
 <style>
-  :root{--ink:#16243a;--line:#dde3ea;--bg:#eef1f5}
+  :root{--bg:#15100d;--line:#2b231c;--accent:#c89468}
   *{box-sizing:border-box}
-  html,body{margin:0;height:100%;font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif}
-  body{display:flex;flex-direction:column;background:var(--bg)}
-  .topbar{background:linear-gradient(135deg,#0e1f33,#21466f);color:#fff;
-    padding:14px 26px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
-  .brand{font-weight:800;font-size:17px;letter-spacing:-.3px}
-  .brand small{display:block;font-weight:500;font-size:11.5px;color:#9db6d6;letter-spacing:1px}
+  html,body{margin:0;height:100%;font-family:'Pretendard Variable','Pretendard','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  body{display:flex;flex-direction:column;background:var(--bg);color:#cfc2b0}
+  .topbar{background:#1e1711;color:#f2ebe0;
+    padding:14px 26px;display:flex;align-items:center;gap:22px;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+  .brand{font-weight:800;font-size:17px;letter-spacing:-.3px;color:#f2ebe0}
+  .brand small{display:block;font-weight:500;font-size:11px;color:#a08f7d;letter-spacing:1.5px}
   .tabs{display:flex;gap:8px;margin-left:auto}
-  .tab{appearance:none;border:1px solid #3a5f8a;background:transparent;color:#cfe0f2;
-    padding:8px 16px;border-radius:999px;font-size:14px;font-weight:700;cursor:pointer}
-  .tab:hover{background:#27466b}
-  .tab.on{background:#fff;color:#16243a;border-color:#fff}
-  .desc{width:100%;color:#aec3de;font-size:12.5px;margin-top:2px}
-  .frameWrap{flex:1;position:relative;background:#fff}
-  iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .tab{appearance:none;border:1px solid #3a2f24;background:transparent;color:#cfc2b0;
+    padding:8px 16px;border-radius:999px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit}
+  .tab:hover{background:#2b231c}
+  .tab.on{background:var(--accent);color:#1a1512;border-color:var(--accent)}
+  .desc{width:100%;color:#a08f7d;font-size:12.5px;margin-top:2px}
+  .frameWrap{flex:1;position:relative;background:var(--bg)}
+  iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:var(--bg)}
 </style>
 </head>
 <body>

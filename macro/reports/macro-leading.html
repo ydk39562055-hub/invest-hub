@@ -2,85 +2,76 @@
 <meta name='viewport' content='width=device-width,initial-scale=1'>
 <title>거시 선행지표 (탑다운 · FRED)</title>
 <style>
-:root{--ink:#1a2230;--muted:#5f6b7a;--line:#e3e7ec;--bg:#f4f6f8;--paper:#fff}
+:root{--ink:#f2ebe0;--body:#cfc2b0;--muted:#a08f7d;--mut2:#8a7a68;--line:#2b231c;--line2:#342a20;--bg:#15100d;--paper:#1a1512;--accent:#c89468}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);
- font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;line-height:1.7}
-.wrap{max-width:1040px;margin:0 auto;background:var(--paper)}
-header{background:linear-gradient(135deg,#10233a,#21466f);color:#fff;padding:36px 44px 30px}
-.kicker{font-size:12px;letter-spacing:3px;color:#9db6d6}
-header h1{margin:9px 0 6px;font-size:30px;letter-spacing:-.5px}
-.asof{color:#c7d6ea;font-size:13.5px;margin-top:8px}
-.layer{display:inline-block;margin-top:12px;padding:5px 13px;border:1px solid #3a5f8a;
- border-radius:999px;font-size:12.5px;color:#cfe0f2}
+body{margin:0;background:var(--bg);color:var(--body);font-family:'Pretendard Variable','Pretendard','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1040px;margin:0 auto;background:var(--paper);border-left:1px solid var(--line);border-right:1px solid var(--line);min-height:100vh}
+header{background:#1e1711;color:var(--ink);padding:34px 44px 28px;border-bottom:1px solid var(--line)}
+.kicker{font-size:12px;letter-spacing:3px;color:var(--accent);font-weight:700}
+header h1{margin:9px 0 6px;font-size:29px;letter-spacing:-.5px;font-weight:800;color:var(--ink)}
+.asof{color:var(--muted);font-size:13.5px;margin-top:8px}
+.layer{display:inline-block;margin-top:12px;padding:5px 13px;border:1px solid var(--line2);border-radius:999px;font-size:12.5px;color:var(--muted)}
 main{padding:10px 44px 50px}
-h2{font-size:20px;margin:30px 0 4px;padding-bottom:7px;border-bottom:2px solid var(--ink)}
+h2{font-size:20px;margin:30px 0 4px;padding-bottom:7px;border-bottom:1px solid var(--line);font-weight:750;display:flex;align-items:center;gap:9px;color:var(--ink)}
+h2::before{content:"";width:4px;height:17px;border-radius:2px;background:var(--accent);flex:none}
 .gdesc{color:var(--muted);font-size:13px;margin:0 0 14px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
-.card{border:1px solid var(--line);border-radius:13px;padding:15px 17px;background:#fff;
- box-shadow:0 2px 10px rgba(20,30,50,.04)}
+.card{border:1px solid var(--line);border-radius:13px;padding:15px 17px;background:#211a14}
 .chead{display:flex;align-items:center;gap:8px}
-.cname{font-weight:800;font-size:14.5px}
-.q{margin-left:auto;width:21px;height:21px;border-radius:50%;border:1px solid #c2ccd6;
- background:#fff;color:#6b7785;font-size:13px;font-weight:800;line-height:1;padding:0;
- font-family:inherit;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none}
-.q:hover{background:#eef3f8;color:#2b3a4a}
-.q.on{background:#21466f;color:#fff;border-color:#21466f}
-.cexp{display:none;margin:9px 0 2px;padding:10px 13px;background:#f1f5f9;
- border-radius:8px;font-size:12.5px;color:#46525f;line-height:1.6}
+.cname{font-weight:750;font-size:14.5px;color:var(--ink)}
+.q{margin-left:auto;width:21px;height:21px;border-radius:50%;border:1px solid var(--line2);background:#2b231c;color:var(--muted);font-size:13px;font-weight:800;line-height:1;padding:0;font-family:inherit;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none}
+.q:hover{background:#342a20;color:var(--ink)}
+.q.on{background:var(--accent);color:#1a1512;border-color:var(--accent)}
+.cexp{display:none;margin:9px 0 2px;padding:10px 13px;background:#2b231c;border:1px solid var(--line2);border-radius:8px;font-size:12.5px;color:var(--muted);line-height:1.6}
 .cexp.show{display:block}
-.cval{font-size:26px;font-weight:800;margin:6px 0 2px;letter-spacing:-.5px}
+.cval{font-size:26px;font-weight:800;margin:6px 0 2px;letter-spacing:-.5px;font-variant-numeric:tabular-nums;color:var(--ink)}
 .ctrend{font-size:12.5px;color:var(--muted)}
-.cread{margin-top:11px;padding:9px 12px;border-left:4px solid #999;background:#f7f9fb;
- border-radius:7px;font-size:13px;font-weight:600;line-height:1.5;color:#2b3a4a}
-.badge{display:inline-block;margin-top:10px;padding:5px 12px;border-radius:999px;
- font-size:12.5px;font-weight:800}
-.cnote{font-size:12px;color:#7a8594;margin-top:10px;line-height:1.5;border-top:1px dashed var(--line);padding-top:8px}
-.na{border-style:dashed;background:#fbfcfd}
+.cread{margin-top:11px;padding:9px 12px;border-left:4px solid #8a7a68;background:#241d16;border-radius:7px;font-size:13px;font-weight:600;line-height:1.5;color:var(--body)}
+.badge{display:inline-block;margin-top:10px;padding:5px 12px;border-radius:999px;font-size:12.5px;font-weight:700}
+.cnote{font-size:12px;color:var(--mut2);margin-top:10px;line-height:1.5;border-top:1px dashed var(--line);padding-top:8px}
+.na{border-style:dashed;background:#1c1611}
 .na .cval{font-size:15px;color:var(--muted);font-weight:700}
-.legend{background:#fbfcfd;border:1px dashed #cdd5de;border-radius:11px;padding:14px 18px;
- margin:18px 0;font-size:13px;color:#44505e;line-height:1.65}
+.legend{background:#1c1611;border:1px dashed var(--line);border-radius:11px;padding:14px 18px;margin:18px 0;font-size:13px;color:var(--muted);line-height:1.65}
 .legend b{color:var(--ink)}
-.verdict{border:1px solid var(--line);border-left:6px solid #999;border-radius:13px;
- padding:18px 22px;margin:8px 0 24px;background:#fff;box-shadow:0 3px 14px rgba(20,30,50,.06)}
-.vlabel{font-size:11.5px;font-weight:800;letter-spacing:1.5px;color:#8a94a0}
+.verdict{border:1px solid var(--line);border-left:6px solid #8a7a68;border-radius:13px;padding:18px 22px;margin:8px 0 24px;background:#211a14}
+.vlabel{font-size:11.5px;font-weight:800;letter-spacing:1.5px;color:var(--muted)}
 .vhead{font-size:20px;font-weight:800;letter-spacing:-.3px;margin:4px 0 0}
 .vtally{margin:11px 0 13px;display:flex;gap:9px;flex-wrap:wrap}
 .vchip{padding:4px 12px;border-radius:999px;font-weight:800;font-size:12.5px}
-.vbody{font-size:14px;line-height:1.72;color:#33414f}
+.vbody{font-size:14px;line-height:1.72;color:var(--body)}
 .vbody p{margin:6px 0}.vbody b{color:var(--ink)}
-.vstamp{font-size:11.5px;color:#9aa3af;margin-top:12px;border-top:1px dashed var(--line);padding-top:9px}
-.err{background:#fbecea;border:1px solid #f2c4c0;border-radius:11px;padding:14px 18px;color:#8a2820}
-footer{padding:20px 44px 38px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);background:#f7f9fb}
+.vstamp{font-size:11.5px;color:var(--mut2);margin-top:12px;border-top:1px dashed var(--line);padding-top:9px}
+.err{background:#c97a621f;border:1px solid #c97a62;border-radius:11px;padding:14px 18px;color:#e0c3b6}
+footer{padding:20px 44px 38px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);background:#15100d}
 </style></head><body><div class='wrap'>
-<header><div class='kicker'>TOP-DOWN · MACRO LEADING INDICATORS</div><h1>거시 선행지표 패널</h1><div class='asof'>출처: FRED(세인트루이스 연준 무료 데이터) · 갱신일 2026-06-13</div><div class='layer'>별도 층 — 바텀업 모자이크·유동성 배관과 분리</div></header><main>
+<header><div class='kicker'>TOP-DOWN · MACRO LEADING INDICATORS</div><h1>거시 선행지표 패널</h1><div class='asof'>출처: FRED(세인트루이스 연준 무료 데이터) · 갱신일 2026-06-14</div><div class='layer'>별도 층 — 바텀업 모자이크·유동성 배관과 분리</div></header><main>
 <div class='legend'><b>읽는 법:</b> 각 지표마다 <b>현재값 · 추세 · 상태 배지</b>를 표시합니다. 배지 색은 <b>초록=양호 · 노랑=주의 · 빨강=경고/침체 · 회색=중립</b>. 각 카드의 동그란 <b>?</b>를 <b>누르면</b> 그 지표가 뭔지 설명이 펼쳐집니다. 이 패널은 거시 지표(탑다운)이며, 기업 어닝콜에서 모으는 바텀업 모자이크와는 별개 층입니다.</div>
-<div class='verdict' style='border-left-color:#9a6700'><div class='vlabel'>엔진 종합 판단 · 현 매크로 국면</div><div class='vhead' style='color:#9a6700'>확장 후반 — 대체로 양호하나 일부 둔화 조짐</div><div class='vtally'><span class='vchip' style='color:#0f8a4d;background:#e7f6ee'>양호 10</span><span class='vchip' style='color:#9a6700;background:#fff6e3'>주의 4</span><span class='vchip' style='color:#c8362f;background:#fbecea'>경고 2</span></div><div class='vbody'><p><b>침체 방아쇠</b> — Sahm 룰 0.10%p로 침체 기준(0.50)과 거리가 멀다. 장단기 금리차는 정상.</p><p><b>성장</b> — 고용 +409천 명(고용 확장), 실업률 4.3%. 성장 지표 6개 중 4개 양호 — 견조하나 소비심리·건축허가 등 가장자리가 식는 중.</p><p><b>신용</b> — 하이일드 스프레드 2.78%p로 좁아 신용시장 이상 없음.</p><p><b>물가·정책</b> — 근원물가 3.3% (전년비)로 목표(2%) 위로 끈적임, 연준은 인하(완화) 중. 물가가 덜 잡혀 추가 완화 여지는 제한적.</p><p style='margin-top:10px'><b>관전 포인트:</b> 고용(Sahm·실업청구)이 꺾이는 순간이 '경고→침체'의 확인선 — 그 전까지는 '경고는 있으나 침체는 아님' 국면.</p></div><div class='vstamp'>2026-06-13 기준 · 16개 지표 자동 종합(규칙 기반, 참고용) · 바텀업 모자이크의 사람 판단과는 별개</div></div>
+<div class='verdict' style='border-left-color:#cfa75e'><div class='vlabel'>엔진 종합 판단 · 현 매크로 국면</div><div class='vhead' style='color:#cfa75e'>확장 후반 — 대체로 양호하나 일부 둔화 조짐</div><div class='vtally'><span class='vchip' style='color:#8fb381;background:#8fb3811f'>양호 10</span><span class='vchip' style='color:#cfa75e;background:#cfa75e1f'>주의 4</span><span class='vchip' style='color:#c97a62;background:#c97a621f'>경고 2</span></div><div class='vbody'><p><b>침체 방아쇠</b> — Sahm 룰 0.10%p로 침체 기준(0.50)과 거리가 멀다. 장단기 금리차는 정상.</p><p><b>성장</b> — 고용 +409천 명(고용 확장), 실업률 4.3%. 성장 지표 6개 중 4개 양호 — 견조하나 소비심리·건축허가 등 가장자리가 식는 중.</p><p><b>신용</b> — 하이일드 스프레드 2.78%p로 좁아 신용시장 이상 없음.</p><p><b>물가·정책</b> — 근원물가 3.3% (전년비)로 목표(2%) 위로 끈적임, 연준은 인하(완화) 중. 물가가 덜 잡혀 추가 완화 여지는 제한적.</p><p style='margin-top:10px'><b>관전 포인트:</b> 고용(Sahm·실업청구)이 꺾이는 순간이 '경고→침체'의 확인선 — 그 전까지는 '경고는 있으나 침체는 아님' 국면.</p></div><div class='vstamp'>2026-06-14 기준 · 16개 지표 자동 종합(규칙 기반, 참고용) · 바텀업 모자이크의 사람 판단과는 별개</div></div>
 <h2>경기 침체 방아쇠</h2><p class='gdesc'>역전·실업·Sahm — 침체가 오는지 가장 먼저 켜지는 경고등</p><div class='grid'>
-<div class='card'><div class='chead'><span class='cname'>장단기 금리차 (10년−3개월)</span><button class='q' type='button' title='설명 보기'>?</button></div><div class='cexp'>마이너스면 '금리 역전' = 침체 선행. 역전 풀리며 다시 가팔라지면 오히려 임박 신호. <span style='color:#aab3bf'>(FRED 코드: T10Y3M)</span></div><div class='cval'>+0.70%p</div><div class='ctrend'>▲ 3개월 전 +0.56%p</div><div class='badge' style='color:#0f8a4d;background:#e7f6ee'>정상 (양수)</div><div class='cread' style='border-color:#0f8a4d'>금리차 +0.70%p, 장기>단기로 정상 = 양호</div></div>
-<div class='card'><div class='chead'><span class='cname'>장단기 금리차 (10년−2년)</span><button class='q' type='button' title='설명 보기'>?</button></div><div class='cexp'>위와 같은 의미의 보조 지표. <span style='color:#aab3bf'>(FRED 코드: T10Y2Y)</span></div><div class='cval'>+0.39%p</div><div class='ctrend'>▼ 3개월 전 +0.55%p</div><div class='badge' style='color:#0f8a4d;background:#e7f6ee'>정상 (양수)</div><div class='cread' style='border-color:#0f8a4d'>금리차 +0.39%p, 장기>단기로 정상 = 양호</div></div>
-<div class='card'><div class='chead'><span class='cname'>신규 실업수당청구 (주간)</span><button class='q' type='button' title='설명 보기'>?</button></div><div class='cexp'>매주 새로 실업급여를 신청한 사람 수. 추세가 오르면 고용 악화 시작. <span style='color:#aab3bf'>(FRED 코드: ICSA)</span></div><div class='cval'>229,000건</div><div class='ctrend'>▲ 4주 평균 219,000 · 3개월 전 211,500 · 6개월 저점 190,000</div><div class='badge' style='color:#9a6700;background:#fff6e3'>바닥서 소폭 상승</div><div class='cread' style='border-color:#9a6700'>청구 229,000건, 저점보다 조금 오름 = 약한 주의</div></div>
-<div class='card'><div class='chead'><span class='cname'>Sahm 룰 (실시간)</span><button class='q' type='button' title='설명 보기'>?</button></div><div class='cexp'>실업률 3개월 평균이 1년 최저보다 0.5%p 오르면 침체 방아쇠. 역대 적중률 높음. <span style='color:#aab3bf'>(FRED 코드: SAHMREALTIME)</span></div><div class='cval'>0.10%p</div><div class='ctrend'>▼ (0.50 이상이면 침체)</div><div class='badge' style='color:#0f8a4d;background:#e7f6ee'>정상 (<0.30)</div><div class='cread' style='border-color:#0f8a4d'>Sahm 0.10%p, 낮음 = 침체 신호 없음</div></div>
+<div class='card'><div class='chead'><span class='cname'>장단기 금리차 (10년−3개월)</span><button class='q' type='button' title='설명 보기'>?</button></div><div class='cexp'>마이너스면 '금리 역전' = 침체 선행. 역전 풀리며 다시 가팔라지면 오히려 임박 신호. <span style='color:#8a7a68'>(FRED 코드: T10Y3M)</span></div><div class='cval'>+0.70%p</div><div class='ctrend'>▲ 3개월 전 +0.56%p</div><div class='badge' style='color:#8fb381;background:#8fb3811f'>정상 (양수)</div><div class='cread' style='border-color:#8fb381'>금리차 +0.70%p, 장기>단기로 정상 = 양호</div></div>
+<div class='card'><div class='chead'><span class='cname'>장단기 금리차 (10년−2년)</span><button class='q' type='button' title='설명 보기'>?</button></div><div class='cexp'>위와 같은 의미의 보조 지표. <span style='color:#8a7a68'>(FRED 코드: T10Y2Y)</span></div><div class='cval'>+0.39%p</div><div class='ctrend'>▼ 3개월 전 +0.55%p</div><div class='badge' style='color:#8fb381;background:#8fb3811f'>정상 (양수)</div><div class='cread' style='border-color:#8fb381'>금리차 +0.39%p, 장기>단기로 정상 = 양호</div></div>
+<div class='card'><div class='chead'><span class='cname'>신규 실업수당청구 (주간)</span><button class='q' type='button' title='설명 보기'>?</button></div><div class='cexp'>매주 새로 실업급여를 신청한 사람 수. 추세가 오르면 고용 악화 시작. <span style='color:#8a7a68'>(FRED 코드: ICSA)</span></div><div class='cval'>229,000건</div><div class='ctrend'>▲ 4주 평균 219,000 · 3개월 전 211,500 · 6개월 저점 190,000</div><div class='badge' style='color:#cfa75e;background:#cfa75e1f'>바닥서 소폭 상승</div><div class='cread' style='border-color:#cfa75e'>청구 229,000건, 저점보다 조금 오름 = 약한 주의</div></div>
+<div class='card'><div class='chead'><span class='cname'>Sahm 룰 (실시간)</span><button class='q' type='button' title='설명 보기'>?</button></div><div class='cexp'>실업률 3개월 평균이 1년 최저보다 0.5%p 오르면 침체 방아쇠. 역대 적중률 높음. <span style='color:#8a7a68'>(FRED 코드: SAHMREALTIME)</span></div><div class='cval'>0.10%p</div><div class='ctrend'>▼ (0.50 이상이면 침체)</div><div class='badge' style='color:#8fb381;background:#8fb3811f'>정상 (<0.30)</div><div class='cread' style='border-color:#8fb381'>Sahm 0.10%p, 낮음 = 침체 신호 없음</div></div>
 </div>
 <h2>성장·활동</h2><p class='gdesc'>고용·주택·소비 — 지금 경제가 굴러가는 힘</p><div class='grid'>
-<div class='card'><div class='chead'><span class='cname'>비농업 고용 (최근 3개월 증감)</span><button class='q' type='button' title='설명 보기'>?</button></div><div class='cexp'>매달 늘어난 일자리 수. 플러스면 고용 확장. <span style='color:#aab3bf'>(FRED 코드: PAYEMS)</span></div><div class='cval'>+409천 명</div><div class='ctrend'>최근 3개월 합산 · 월평균 +136천</div><div class='badge' style='color:#0f8a4d;background:#e7f6ee'>고용 확장</div><div class='cread' style='border-color:#0f8a4d'>최근 3개월 +409천 명(월평균 +136천), 견조한 증가 = 고용 확장</div></div>
-<div class='card'><div class='chead'><span class='cname'>실업률</span><button class='q' type='button' title='설명 보기'>?</button></div><div class='cexp'>1년 최저보다 0.5%p 오르면 침체 영역. <span style='color:#aab3bf'>(FRED 코드: UNRATE)</span></div><div class='cval'>4.3%</div><div class='ctrend'>▬ 1년 최저 4.1%</div><div class='badge' style='color:#0f8a4d;background:#e7f6ee'>안정</div><div class='cread' style='border-color:#0f8a4d'>실업률 4.3%, 저점 부근 안정 = 양호</div></div>
-<div class='card'><div class='chead'><span class='cname'>건축 허가</span><button class='q' type='button' title='설명 보기'>?</button></div><div class='cexp'>앞으로 지을 집 허가 건수. 주택 경기 선행. <span style='color:#aab3bf'>(FRED 코드: PERMIT)</span></div><div class='cval'>1,423.0</div><div class='ctrend'>전년 대비 -1.5%</div><div class='badge' style='color:#c8362f;background:#fbecea'>하락 (둔화·수축)</div><div class='cread' style='border-color:#c8362f'>전년비 -1.5%, 하락 = 둔화·수축 신호</div></div>
-<div class='card'><div class='chead'><span class='cname'>주택 착공</span><button class='q' type='button' title='설명 보기'>?</button></div><div class='cexp'>실제로 공사 시작한 집 수. <span style='color:#aab3bf'>(FRED 코드: HOUST)</span></div><div class='cval'>1,465.0</div><div class='ctrend'>전년 대비 +4.6%</div><div class='badge' style='color:#0f8a4d;background:#e7f6ee'>상승 (확장)</div><div class='cread' style='border-color:#0f8a4d'>전년비 +4.6%, 상승 = 확장 신호</div></div>
-<div class='card'><div class='chead'><span class='cname'>소매 판매</span><button class='q' type='button' title='설명 보기'>?</button></div><div class='cexp'>사람들이 가게에서 쓴 돈. 소비 활동의 직접 지표. <span style='color:#aab3bf'>(FRED 코드: RSAFS)</span></div><div class='cval'>757,085.0</div><div class='ctrend'>전년 대비 +4.9%</div><div class='badge' style='color:#0f8a4d;background:#e7f6ee'>상승 (확장)</div><div class='cread' style='border-color:#0f8a4d'>전년비 +4.9%, 상승 = 확장 신호</div></div>
-<div class='card'><div class='chead'><span class='cname'>소비심리 (미시간대)</span><button class='q' type='button' title='설명 보기'>?</button></div><div class='cexp'>소비자들이 느끼는 경기 체감. 행동보다 먼저 움직임. <span style='color:#aab3bf'>(FRED 코드: UMCSENT)</span></div><div class='cval'>49.8</div><div class='ctrend'>전년 대비 -4.6%</div><div class='badge' style='color:#c8362f;background:#fbecea'>하락 (둔화·수축)</div><div class='cread' style='border-color:#c8362f'>전년비 -4.6%, 하락 = 둔화·수축 신호</div></div>
+<div class='card'><div class='chead'><span class='cname'>비농업 고용 (최근 3개월 증감)</span><button class='q' type='button' title='설명 보기'>?</button></div><div class='cexp'>매달 늘어난 일자리 수. 플러스면 고용 확장. <span style='color:#8a7a68'>(FRED 코드: PAYEMS)</span></div><div class='cval'>+409천 명</div><div class='ctrend'>최근 3개월 합산 · 월평균 +136천</div><div class='badge' style='color:#8fb381;background:#8fb3811f'>고용 확장</div><div class='cread' style='border-color:#8fb381'>최근 3개월 +409천 명(월평균 +136천), 견조한 증가 = 고용 확장</div></div>
+<div class='card'><div class='chead'><span class='cname'>실업률</span><button class='q' type='button' title='설명 보기'>?</button></div><div class='cexp'>1년 최저보다 0.5%p 오르면 침체 영역. <span style='color:#8a7a68'>(FRED 코드: UNRATE)</span></div><div class='cval'>4.3%</div><div class='ctrend'>▬ 1년 최저 4.1%</div><div class='badge' style='color:#8fb381;background:#8fb3811f'>안정</div><div class='cread' style='border-color:#8fb381'>실업률 4.3%, 저점 부근 안정 = 양호</div></div>
+<div class='card'><div class='chead'><span class='cname'>건축 허가</span><button class='q' type='button' title='설명 보기'>?</button></div><div class='cexp'>앞으로 지을 집 허가 건수. 주택 경기 선행. <span style='color:#8a7a68'>(FRED 코드: PERMIT)</span></div><div class='cval'>1,423.0</div><div class='ctrend'>전년 대비 -1.5%</div><div class='badge' style='color:#c97a62;background:#c97a621f'>하락 (둔화·수축)</div><div class='cread' style='border-color:#c97a62'>전년비 -1.5%, 하락 = 둔화·수축 신호</div></div>
+<div class='card'><div class='chead'><span class='cname'>주택 착공</span><button class='q' type='button' title='설명 보기'>?</button></div><div class='cexp'>실제로 공사 시작한 집 수. <span style='color:#8a7a68'>(FRED 코드: HOUST)</span></div><div class='cval'>1,465.0</div><div class='ctrend'>전년 대비 +4.6%</div><div class='badge' style='color:#8fb381;background:#8fb3811f'>상승 (확장)</div><div class='cread' style='border-color:#8fb381'>전년비 +4.6%, 상승 = 확장 신호</div></div>
+<div class='card'><div class='chead'><span class='cname'>소매 판매</span><button class='q' type='button' title='설명 보기'>?</button></div><div class='cexp'>사람들이 가게에서 쓴 돈. 소비 활동의 직접 지표. <span style='color:#8a7a68'>(FRED 코드: RSAFS)</span></div><div class='cval'>757,085.0</div><div class='ctrend'>전년 대비 +4.9%</div><div class='badge' style='color:#8fb381;background:#8fb3811f'>상승 (확장)</div><div class='cread' style='border-color:#8fb381'>전년비 +4.9%, 상승 = 확장 신호</div></div>
+<div class='card'><div class='chead'><span class='cname'>소비심리 (미시간대)</span><button class='q' type='button' title='설명 보기'>?</button></div><div class='cexp'>소비자들이 느끼는 경기 체감. 행동보다 먼저 움직임. <span style='color:#8a7a68'>(FRED 코드: UMCSENT)</span></div><div class='cval'>49.8</div><div class='ctrend'>전년 대비 -4.6%</div><div class='badge' style='color:#c97a62;background:#c97a621f'>하락 (둔화·수축)</div><div class='cread' style='border-color:#c97a62'>전년비 -4.6%, 하락 = 둔화·수축 신호</div></div>
 </div>
 <h2>제조업 활동 (ISM PMI 무료 대용)</h2><p class='gdesc'>ISM PMI는 유료 → 같은 의미의 무료 경성지표(생산량·신규주문)로 대체</p><div class='grid'>
-<div class='card'><div class='chead'><span class='cname'>산업생산 — 제조업 (ISM 생산 대용)</span><button class='q' type='button' title='설명 보기'>?</button></div><div class='cexp'>공장이 실제로 만든 양. ISM 제조업 PMI가 유료라, 같은 의미의 무료 경성지표로 대체. <span style='color:#aab3bf'>(FRED 코드: IPMAN)</span></div><div class='cval'>98.7</div><div class='ctrend'>전년 대비 +1.4%</div><div class='badge' style='color:#9a6700;background:#fff6e3'>정체</div><div class='cread' style='border-color:#9a6700'>전년비 +1.4%, 거의 제자리 = 정체</div></div>
-<div class='card'><div class='chead'><span class='cname'>핵심 자본재 신규주문 (ISM 신규주문 대용)</span><button class='q' type='button' title='설명 보기'>?</button></div><div class='cexp'>항공기·국방 뺀 기업 설비투자 주문. 제조업 미래 수요의 선행 신호(ISM 신규주문 대용). <span style='color:#aab3bf'>(FRED 코드: NEWORDER)</span></div><div class='cval'>82,487.0</div><div class='ctrend'>전년 대비 +10.5%</div><div class='badge' style='color:#0f8a4d;background:#e7f6ee'>상승 (확장)</div><div class='cread' style='border-color:#0f8a4d'>전년비 +10.5%, 상승 = 확장 신호</div></div>
+<div class='card'><div class='chead'><span class='cname'>산업생산 — 제조업 (ISM 생산 대용)</span><button class='q' type='button' title='설명 보기'>?</button></div><div class='cexp'>공장이 실제로 만든 양. ISM 제조업 PMI가 유료라, 같은 의미의 무료 경성지표로 대체. <span style='color:#8a7a68'>(FRED 코드: IPMAN)</span></div><div class='cval'>98.7</div><div class='ctrend'>전년 대비 +1.4%</div><div class='badge' style='color:#cfa75e;background:#cfa75e1f'>정체</div><div class='cread' style='border-color:#cfa75e'>전년비 +1.4%, 거의 제자리 = 정체</div></div>
+<div class='card'><div class='chead'><span class='cname'>핵심 자본재 신규주문 (ISM 신규주문 대용)</span><button class='q' type='button' title='설명 보기'>?</button></div><div class='cexp'>항공기·국방 뺀 기업 설비투자 주문. 제조업 미래 수요의 선행 신호(ISM 신규주문 대용). <span style='color:#8a7a68'>(FRED 코드: NEWORDER)</span></div><div class='cval'>82,487.0</div><div class='ctrend'>전년 대비 +10.5%</div><div class='badge' style='color:#8fb381;background:#8fb3811f'>상승 (확장)</div><div class='cread' style='border-color:#8fb381'>전년비 +10.5%, 상승 = 확장 신호</div></div>
 </div>
 <h2>신용·리스크</h2><p class='gdesc'>돈이 막히는지 — 위기는 보통 여기서 번진다</p><div class='grid'>
-<div class='card'><div class='chead'><span class='cname'>하이일드 신용 스프레드</span><button class='q' type='button' title='설명 보기'>?</button></div><div class='cexp'>위험한 회사채 금리가 안전 국채보다 얼마나 높은지. 급히 벌어지면 위기 신호. <span style='color:#aab3bf'>(FRED 코드: BAMLH0A0HYM2)</span></div><div class='cval'>2.78%p</div><div class='ctrend'>▼ 3개월 전 3.28%p</div><div class='badge' style='color:#0f8a4d;background:#e7f6ee'>좁음 (양호)</div><div class='cread' style='border-color:#0f8a4d'>스프레드 2.78%p, 좁게 유지 = 신용 양호</div></div>
+<div class='card'><div class='chead'><span class='cname'>하이일드 신용 스프레드</span><button class='q' type='button' title='설명 보기'>?</button></div><div class='cexp'>위험한 회사채 금리가 안전 국채보다 얼마나 높은지. 급히 벌어지면 위기 신호. <span style='color:#8a7a68'>(FRED 코드: BAMLH0A0HYM2)</span></div><div class='cval'>2.78%p</div><div class='ctrend'>▼ 3개월 전 3.28%p</div><div class='badge' style='color:#8fb381;background:#8fb3811f'>좁음 (양호)</div><div class='cread' style='border-color:#8fb381'>스프레드 2.78%p, 좁게 유지 = 신용 양호</div></div>
 </div>
 <h2>물가·정책</h2><p class='gdesc'>물가와 금리 — 연준이 완화할 여지가 있나, 브레이크를 밟나</p><div class='grid'>
-<div class='card'><div class='chead'><span class='cname'>근원 PCE 물가 (연준 선호)</span><button class='q' type='button' title='설명 보기'>?</button></div><div class='cexp'>에너지·식품 뺀 물가. 연준이 금리 정할 때 가장 보는 숫자. <span style='color:#aab3bf'>(FRED 코드: PCEPILFE)</span></div><div class='cval'>3.3% (전년비)</div><div class='ctrend'>▲ 재가속</div><div class='badge' style='color:#9a6700;background:#fff6e3'>재가속 (긴축 압박)</div><div class='cread' style='border-color:#9a6700'>근원물가 전년비 3.3%, 다시 오름 = 긴축 압박</div></div>
-<div class='card'><div class='chead'><span class='cname'>근원 소비자물가 (CPI)</span><button class='q' type='button' title='설명 보기'>?</button></div><div class='cexp'>위와 비슷한 보조 물가 지표. <span style='color:#aab3bf'>(FRED 코드: CPILFESL)</span></div><div class='cval'>2.8% (전년비)</div><div class='ctrend'>▲ 재가속</div><div class='badge' style='color:#9a6700;background:#fff6e3'>재가속 (긴축 압박)</div><div class='cread' style='border-color:#9a6700'>근원물가 전년비 2.8%, 다시 오름 = 긴축 압박</div></div>
-<div class='card'><div class='chead'><span class='cname'>연준 정책금리</span><button class='q' type='button' title='설명 보기'>?</button></div><div class='cexp'>기준금리. 내리면 완화(경기 부양), 올리면 긴축(브레이크). <span style='color:#aab3bf'>(FRED 코드: FEDFUNDS)</span></div><div class='cval'>3.63%</div><div class='ctrend'>▼ 6개월 전 4.09%</div><div class='badge' style='color:#0f8a4d;background:#e7f6ee'>인하 중 (완화)</div><div class='cread' style='border-color:#0f8a4d'>정책금리 3.63%, 6개월 전보다 인하 = 완화(경기 부양)</div></div>
+<div class='card'><div class='chead'><span class='cname'>근원 PCE 물가 (연준 선호)</span><button class='q' type='button' title='설명 보기'>?</button></div><div class='cexp'>에너지·식품 뺀 물가. 연준이 금리 정할 때 가장 보는 숫자. <span style='color:#8a7a68'>(FRED 코드: PCEPILFE)</span></div><div class='cval'>3.3% (전년비)</div><div class='ctrend'>▲ 재가속</div><div class='badge' style='color:#cfa75e;background:#cfa75e1f'>재가속 (긴축 압박)</div><div class='cread' style='border-color:#cfa75e'>근원물가 전년비 3.3%, 다시 오름 = 긴축 압박</div></div>
+<div class='card'><div class='chead'><span class='cname'>근원 소비자물가 (CPI)</span><button class='q' type='button' title='설명 보기'>?</button></div><div class='cexp'>위와 비슷한 보조 물가 지표. <span style='color:#8a7a68'>(FRED 코드: CPILFESL)</span></div><div class='cval'>2.8% (전년비)</div><div class='ctrend'>▲ 재가속</div><div class='badge' style='color:#cfa75e;background:#cfa75e1f'>재가속 (긴축 압박)</div><div class='cread' style='border-color:#cfa75e'>근원물가 전년비 2.8%, 다시 오름 = 긴축 압박</div></div>
+<div class='card'><div class='chead'><span class='cname'>연준 정책금리</span><button class='q' type='button' title='설명 보기'>?</button></div><div class='cexp'>기준금리. 내리면 완화(경기 부양), 올리면 긴축(브레이크). <span style='color:#8a7a68'>(FRED 코드: FEDFUNDS)</span></div><div class='cval'>3.63%</div><div class='ctrend'>▼ 6개월 전 4.09%</div><div class='badge' style='color:#8fb381;background:#8fb3811f'>인하 중 (완화)</div><div class='cread' style='border-color:#8fb381'>정책금리 3.63%, 6개월 전보다 인하 = 완화(경기 부양)</div></div>
 </div>
 <h2>미수집 — FRED 무료 아님</h2><p class='gdesc'>아래는 유료라 자동 수집 불가 → 수동입력 또는 대안 사용.</p><div class='grid'>
 <div class='card na'><div class='cname'>ISM 서비스업 PMI</div><div class='cval'>수동입력 / 미수집</div><div class='cnote'>FRED 무료 아님(ISM 유료). 깨끗한 무료 대안 없음 → 수동입력 권장. (제조업은 위 '제조업 활동'으로 무료 대용 추가됨)</div></div>
