@@ -52,13 +52,15 @@ const TOOLS = [
   {id:"digest",  name:"뉴스 다이제스트", url:"https://ydk39562055-hub.github.io/telegram-digest/"},
 ];
 const nav=document.getElementById('nav'), frame=document.getElementById('frame'), loading=document.getElementById('loading');
+// 페이지 로드 때마다 새 값 → iframe이 옛 캐시를 물지 않고 최신본을 불러옴(새로고침하면 갱신)
+const CB=Date.now();
 let cur=null;
 function go(id){
   const t=TOOLS.find(x=>x.id===id)||TOOLS[0];
   cur=t.id;
   [...nav.children].forEach(b=>b.classList.toggle('on',b.dataset.id===t.id));
   loading.classList.add('show');
-  frame.src=t.url;
+  frame.src=t.url+(t.url.includes('?')?'&':'?')+'_='+CB;
   if(location.hash.slice(1)!==t.id) history.replaceState(null,'','#'+t.id);
   try{localStorage.setItem('hub_last',t.id);}catch(e){}
 }
