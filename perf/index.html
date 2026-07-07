@@ -1,0 +1,69 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>성과 · 검증 — 투자 대시보드</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#1a1512;--card:#221b15;--card2:#241c15;--line:#2b231c;--track:#151009;
+ --ink:#f2ebe0;--txt:#cfc2b0;--mut:#a08f7d;--mut2:#8a7a68;--accent:#c89468;--up:#8fb381;--down:#c97a62}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);
+ font-family:'Pretendard Variable',system-ui,sans-serif;font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:820px;margin:0 auto;padding:26px 20px 64px}
+.kick{font-size:11px;letter-spacing:3px;color:var(--accent);font-weight:700}
+h1{font-size:24px;margin:7px 0 6px;font-weight:850;color:var(--ink);letter-spacing:-.4px}
+.lead{color:var(--mut);font-size:13px;line-height:1.7;max-width:620px}
+h2{font-size:16px;margin:34px 0 4px;font-weight:800;color:var(--ink);display:flex;align-items:center;gap:11px}
+h2 .ln{flex:1;height:1px;background:var(--line)}
+h2 small{color:var(--mut);font-size:12px;font-weight:600}
+h3{font-size:14px;margin:18px 0 9px;font-weight:700;color:var(--txt)}
+h3 small{color:var(--mut2);font-size:11px;font-weight:600;letter-spacing:.5px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-top:12px}
+table{border-collapse:separate;border-spacing:0;width:100%;font-size:13px}
+th{text-align:center;color:var(--mut);font-weight:600;font-size:11.5px;padding:7px 8px;border-bottom:1px solid var(--line)}
+th:first-child{text-align:left}
+td{text-align:center;padding:9px 8px;border-bottom:1px solid #241c15;font-variant-numeric:tabular-nums}
+td.per{text-align:left;color:var(--mut);font-weight:700}
+td b{font-size:15px;font-weight:800;display:block}
+td .sub{font-size:11px;color:var(--mut2);display:block;margin-top:1px}
+td.mut{color:var(--mut2)}
+.up{color:var(--up)}.down{color:var(--down)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:0}
+.note{color:var(--mut);font-size:12.5px;padding:8px 2px}
+.verdict{margin:10px 0}
+.vhead{font-size:15px;font-weight:800;color:var(--ink)}
+.vrow{display:flex;gap:10px;padding:10px 0;border-top:1px solid #241c15}
+.vrow:first-of-type{border-top:0}
+.tag{flex:none;font-size:11px;font-weight:800;padding:3px 9px;border-radius:999px;height:fit-content}
+.pass{color:var(--up);background:#8fb3811f}.fail{color:var(--down);background:#c97a621f}
+.vtxt b{color:var(--ink)}
+.foot{color:var(--mut2);font-size:11.5px;margin-top:30px;border-top:1px solid var(--line);padding-top:14px;line-height:1.7}
+</style></head><body><div class="wrap">
+<div class="kick">PERFORMANCE · VALIDATION</div>
+<h1>성과 · 검증</h1>
+<p class="lead">백테스트 숫자는 부풀려지기 쉬워요(망한 종목이 빠지는 <b>생존편향</b>). 그래서 여기선
+<b>실제로 발송한 신호</b>의 실현 수익률을 있는 그대로 추적하고, 백테스트는 "검증됐는가"만 정직하게 적어요.</p>
+
+<h2>주도주 — 누적 추적 성과 (미국)<span class="ln"></span><small>실측 · 매일 갱신</small></h2>
+<div class="card"><h3>주도주 <small>track A</small></h3><table><tr><th>기간</th><th><span class='dot' style='background:#cfa75e'></span>금</th><th><span class='dot' style='background:#b8ab99'></span>은</th><th><span class='dot' style='background:#b3805a'></span>동</th></tr><tr><td class='per'>+7d</td><td><b class='up'>+3.1%</b><span class='sub'>승률 50% · 22건</span></td><td><b class='up'>+1.2%</b><span class='sub'>승률 53% · 58건</span></td><td><b class='up'>+1.8%</b><span class='sub'>승률 72% · 25건</span></td></tr></table>
+<div class="note" style="margin-top:10px">신호 발송 시점 이후 실제 수익률. 시간이 지나야 +20·+60·+90일 칸이 채워져요. 미래를 안 보고 집계 = 선견편향 없음.</div>
+</div>
+
+<h2>주도주 — 누적 추적 성과 (한국)<span class="ln"></span></h2>
+<div class="card"><div class='note'>한국 주도주 추적은 집계 중이에요 — 곧 추가됩니다.</div></div>
+
+<h2>성장가속 — 백테스트 검증 결과<span class="ln"></span><small>정적</small></h2>
+<div class="card">
+ <div class="verdict">
+  <div class="vrow"><span class="tag fail">부결</span>
+   <div class="vtxt"><b>매출 가속 단독 롱온리</b> — S&P500에서 "매출 성장률이 가속되는 종목만 매수"는
+   벤치마크 초과수익이 <b>확인되지 않음</b>(A1~A9 백테스트). 가속만으로는 못 이긴다.</div></div>
+  <div class="vrow"><span class="tag pass">검증됨</span>
+   <div class="vtxt"><b>밸류에이션 거부권</b> — 고평가 종목을 <b>걸러내는</b> 필터로서는 유효.
+   그래서 운영은 "가속 + <b>저평가</b> + 회계 깨끗"의 <b>교집합</b>만 신호로 쓴다.</div></div>
+ </div>
+ <div class="note">즉 성장가속은 "가속 종목을 다 사라"가 아니라 "고평가를 피하고 저평가된 가속주만"으로 운영돼요.
+ 라이브 종목 명단은 <b>성장가속</b> 탭에서.</div>
+</div>
+
+<div class="foot">추적=실제 발송 신호의 실현 수익률(tracking, 매일 자동 갱신) · 검증=백테스트 결론(정적).
+생성 2026-07-07. 과거 성과가 미래를 보장하지 않음. 매수·매도 권유 아님.</div>
+</div></body></html>
