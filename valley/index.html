@@ -4,71 +4,52 @@
 <title>Valley 산업 사이클 대시보드</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
 <style>
-:root{--ink:#f2ebe0;--mut:#a08f7d;--line:#2b231c;--bg:#1a1512;--card:#221b15}
+:root{--ink:#f2ebe0;--mut:#a08f7d;--mut2:#8a7a68;--line:#2b231c;--bg:#1a1512;--card:#221b15;--accent:#c89468}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);
  font-family:'Pretendard Variable',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
-.wrap{max-width:980px;margin:0 auto;padding:40px 22px 60px}
-.kick{font-size:11px;letter-spacing:3px;color:#c89468;font-weight:700}
-h1{font-size:30px;margin:8px 0 6px;font-weight:850;color:#f2ebe0;letter-spacing:-.5px}
-.lead{color:var(--mut);font-size:14px;line-height:1.7;max-width:640px}
+.wrap{max-width:720px;margin:0 auto;padding:44px 22px 60px}
+.kick{font-size:11px;letter-spacing:3px;color:var(--accent);font-weight:700}
+h1{font-size:29px;margin:8px 0 8px;font-weight:850;color:var(--ink);letter-spacing:-.5px}
+.lead{color:var(--mut);font-size:14px;line-height:1.7;max-width:560px}
 .lead b{color:#e8dcc8}
-.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:30px 0 18px}
-@media(max-width:760px){.cards{grid-template-columns:1fr}}
-a.card{display:block;background:var(--card);border:1px solid var(--line);border-radius:14px;
- padding:22px 20px;text-decoration:none;color:inherit;transition:.15s}
-a.card:hover{border-color:#342a20;background:#251d15;transform:translateY(-2px)}
-.num{font-size:12px;color:#c89468;font-weight:700}
-.ct{font-size:18px;font-weight:800;color:#f2ebe0;margin:8px 0 6px}
-.cd{font-size:13px;color:var(--mut);line-height:1.6}
-.flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:22px 0;color:var(--mut);font-size:13px}
-.flow b{color:#e8dcc8}.arr{color:#8a7a68}
-.soon{opacity:.5;pointer-events:none}
-.foot{color:var(--mut);font-size:12px;margin-top:30px;border-top:1px solid var(--line);padding-top:16px;line-height:1.7}
+/* 메인: 보드 */
+a.hero{display:block;margin:28px 0 26px;background:var(--card);border:1px solid #3d2f21;border-radius:16px;
+ padding:26px 26px 24px;text-decoration:none;color:inherit;transition:.15s}
+a.hero:hover{background:#251d15;transform:translateY(-2px)}
+.hn{font-size:11px;color:var(--accent);font-weight:700;letter-spacing:1px}
+.ht{font-size:23px;font-weight:850;color:var(--ink);margin:7px 0 5px;letter-spacing:-.3px}
+.hd{font-size:13.5px;color:var(--mut);line-height:1.6}
+.hgo{margin-top:16px;display:inline-block;background:var(--accent);color:#1a1512;font-weight:800;
+ font-size:14px;padding:9px 18px;border-radius:999px}
+/* 더 보기: 작은 링크 */
+.ml{font-size:11px;letter-spacing:1.5px;color:var(--mut2);font-weight:700;margin:0 0 11px}
+.links{display:flex;flex-wrap:wrap;gap:8px}
+.links a{display:inline-flex;align-items:baseline;gap:7px;background:var(--card);border:1px solid var(--line);
+ border-radius:10px;padding:9px 14px;text-decoration:none;color:var(--ink);font-size:13.5px;font-weight:600;transition:.12s}
+.links a:hover{border-color:#3d2f21;background:#251d15}
+.links a small{color:var(--mut2);font-size:11.5px;font-weight:500}
+.foot{color:var(--mut2);font-size:11.5px;margin-top:34px;border-top:1px solid var(--line);padding-top:15px;line-height:1.7}
 </style></head><body><div class="wrap">
 <div class="kick">BOTTOM-UP INDUSTRY CYCLE</div>
-<h1>Valley 산업 사이클 대시보드</h1>
-<p class="lead">거시 지표 하나로 단정하지 않는다. <b>기업(어닝콜·실적) → 산업 → 섹터 → 경기</b> 순으로
-아래에서 쌓아 올리고, 마지막에 매크로와 맞대어 <b>어긋남</b>을 찾는다. 기업 80% : 매크로 20%.</p>
+<h1>Valley 산업 사이클</h1>
+<p class="lead">기업 실적에서 산업·경기를 <b>아래에서 쌓아 올린다.</b> 60개 산업이 지금 사이클 어디에 있는지 한눈에.</p>
 
-<div class="flow"><b>기업</b><span class="arr">→</span>산업 60개<span class="arr">→</span>섹터 11개
-<span class="arr">→</span><b>경기</b><span class="arr">↔</span>매크로</div>
+<a class="hero" href="board.html">
+  <div class="hn">메인 화면</div>
+  <div class="ht">전 산업 단계 보드</div>
+  <div class="hd">60개 산업을 바닥·회복·확장·과열·둔화 5단계로 분류 · 섹터 분포 · 시간×산업 히트맵. 산업 칸을 클릭하면 상세·보고서로.</div>
+  <div class="hgo">보드 열기 →</div>
+</a>
 
-<div class="cards">
- <a class="card" href="board.html">
-   <div class="num">화면 ① · ②</div>
-   <div class="ct">전 산업 단계 보드</div>
-   <div class="cd">60개 산업을 바닥·회복·확장·과열·둔화 5단계로 분류 + 섹터 분포 + 시간×산업 히트맵.</div>
- </a>
- <a class="card" href="macro.html">
-   <div class="num">화면 ③</div>
-   <div class="ct">경기 국면</div>
-   <div class="cd">쌓아 올린 기업(80%)과 시장 매크로(20%)를 맞대어 경기 단계와 어긋남을 본다.</div>
- </a>
- <a class="card" href="dashboard_건축소재.html">
-   <div class="num">화면 ④ · 예시</div>
-   <div class="ct">산업 상세 (건축소재)</div>
-   <div class="cd">사이클 점수 6요소 분해 + 전이 확률 + CEO 발언 + 기업 KPI + 수급·가격 시계열.</div>
- </a>
- <a class="card" href="board.html">
-   <div class="num">화면 ⑤ · 보고서 60개</div>
-   <div class="ct">산업 딥다이브 보고서</div>
-   <div class="cd">60개 산업 전부 — 밸류체인·병목·해자·KPI·가격검증·촉매·컨콜 행간. 보드 칸 클릭으로 진입.</div>
- </a>
- <a class="card" href="signals.html">
-   <div class="num">화면 ⑥ · 매일 21시</div>
-   <div class="ct">일일 1차 신호</div>
-   <div class="cd">미국 8-K 중대 이벤트(M&A·가이던스·임원교체) 스캔 → 갱신 필요 산업 깃발.</div>
- </a>
- <a class="card" href="flow.html">
-   <div class="num">화면 ⑦ · 전이 지도</div>
-   <div class="ct">사이클 단계 이동</div>
-   <div class="cd">3개월 전 → 현재, 산업들이 단계 사이를 어떻게 옮겨갔는지 흐름(Sankey). 더워지는지 식는지 한눈에.</div>
- </a>
+<div class="ml">더 자세히</div>
+<div class="links">
+  <a href="macro.html">경기 국면 <small>기업 vs 매크로</small></a>
+  <a href="dashboard_건축소재.html">산업 상세 <small>6요소 분해</small></a>
+  <a href="signals.html">일일 신호 <small>미국 8-K</small></a>
+  <a href="flow.html">전이 지도 <small>단계 이동</small></a>
 </div>
 
 <div class="foot">
- 정량 절반(가격 모멘텀·52주 위치·밸류에이션)=yfinance 실데이터 자동 · KPI 추세=미국 전자공시(EDGAR) 자동 ·
- 보고서·수급 톤=어닝콜→LLM(준비됨). 매수·매도 권유 아님.<br>
- 다음 예정: 섹터 딥다이브 · 매매 아이디어 · 매수 후보 · AI 버블.
+ 정량(가격·52주 위치·밸류에이션)=yfinance 자동 · KPI 추세=EDGAR 자동 · 보고서=어닝콜→LLM. 매수·매도 권유 아님.
 </div>
 </div></body></html>
