@@ -1,0 +1,207 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>운영 설명서 — 로테이션 · 주도주 · 성장가속</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{--bg:#1a1512;--card:#221b15;--card2:#241c15;--line:#2b231c;--track:#151009;
+ --ink:#f2ebe0;--txt:#cfc2b0;--mut:#a08f7d;--mut2:#8a7a68;--accent:#c89468;
+ --up:#8fb381;--down:#c97a62;--gold:#cfa75e;--silver:#b8ab99;--bronze:#b3805a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);
+ font-family:'Pretendard Variable','Pretendard','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
+ font-size:15px;line-height:1.72;-webkit-font-smoothing:antialiased}
+.wrap{max-width:860px;margin:0 auto;padding:30px 20px 80px}
+.kick{font-size:11px;letter-spacing:3px;color:var(--accent);font-weight:700}
+h1{font-size:27px;margin:8px 0 8px;font-weight:850;color:var(--ink);letter-spacing:-.5px}
+.lead{color:var(--mut);font-size:14px;line-height:1.75;max-width:660px}
+.toc{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 6px}
+.toc a{text-decoration:none;background:var(--card);border:1px solid var(--line);border-radius:999px;
+ padding:8px 15px;color:var(--txt);font-size:13.5px;font-weight:700}
+.toc a:hover{border-color:#3d2f21;background:#251d15}
+section{margin-top:40px;scroll-margin-top:16px}
+.sh{display:flex;align-items:center;gap:12px;margin-bottom:4px}
+.sh .no{flex:none;width:30px;height:30px;border-radius:9px;background:var(--accent);color:#1a1512;
+ font-weight:850;font-size:15px;display:flex;align-items:center;justify-content:center}
+.sh h2{font-size:21px;margin:0;font-weight:850;color:var(--ink);letter-spacing:-.3px}
+.sh .en{color:var(--mut2);font-size:11px;letter-spacing:1.5px;font-weight:700;margin-top:2px}
+.one{color:var(--mut);font-size:13.5px;margin:6px 0 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:14px}
+.card h3{font-size:15px;margin:0 0 10px;font-weight:800;color:var(--ink);display:flex;align-items:center;gap:8px}
+.card h3 .ic{font-size:16px}
+.card + .card{margin-top:10px}
+ul{margin:0;padding-left:19px}li{margin:5px 0}
+b{color:var(--ink)}
+.chip{display:inline-block;font-size:11px;font-weight:800;padding:2px 8px;border-radius:6px;margin-right:2px;vertical-align:1px}
+.c-gold{background:#cfa75e22;color:var(--gold)}.c-sil{background:#b8ab9922;color:#d8cbb8}.c-brz{background:#b3805a22;color:var(--bronze)}
+.c-g{background:#8fb3811f;color:var(--up)}.c-y{background:#e8c06b1f;color:#e0be79}.c-r{background:#c97a621f;color:var(--down)}
+table{border-collapse:separate;border-spacing:0;width:100%;font-size:13px;margin-top:6px}
+th{text-align:left;color:var(--mut);font-weight:600;font-size:11.5px;padding:7px 10px;border-bottom:1px solid var(--line)}
+td{padding:9px 10px;border-bottom:1px solid #241c15;vertical-align:top}
+td:first-child{color:var(--ink);font-weight:700;white-space:nowrap}
+.formula{background:var(--track);border:1px solid var(--line);border-radius:9px;padding:10px 13px;margin:8px 0;
+ font-size:13px;color:var(--txt);font-variant-numeric:tabular-nums;overflow-x:auto}
+.formula b{color:var(--accent)}
+.gate{border-left:3px solid var(--accent);padding:3px 0 3px 13px;margin:10px 0;color:var(--mut);font-size:13px}
+.warn{background:#c97a6214;border:1px solid #4a2f26;border-radius:11px;padding:12px 15px;margin-top:12px;font-size:13px;color:#d6b5a6}
+.warn b{color:#e8b79f}
+.tbl-scroll{overflow-x:auto}
+.foot{color:var(--mut2);font-size:12px;margin-top:44px;border-top:1px solid var(--line);padding-top:16px;line-height:1.7}
+.k{color:var(--accent);font-weight:700}
+@media(max-width:560px){.wrap{padding:22px 15px 60px}h1{font-size:23px}.card{padding:15px 15px}}
+</style></head><body><div class="wrap">
+
+<div class="kick">OPERATING MANUAL</div>
+<h1>세 시스템은 어떻게 굴러가나</h1>
+<p class="lead">로테이션 · 주도주 · 성장가속 — 각각 <b>무엇을 대상으로, 어떤 규칙으로 종목을 뽑고, 등급을 어떻게 매기며, 무엇을 믿으면 안 되는지</b>를 코드 기준으로 정리한 설명서입니다. 셋 다 "사라"가 아니라 <b>볼 것을 좁혀주는</b> 도구예요.</p>
+
+<div class="toc">
+  <a href="#rot">① 로테이션</a>
+  <a href="#lead">② 주도주</a>
+  <a href="#grow">③ 성장가속</a>
+  <a href="#compare">셋 비교</a>
+</div>
+
+<!-- ========== 로테이션 ========== -->
+<section id="rot">
+  <div class="sh"><div class="no">1</div><div><h2>로테이션 랩</h2><div class="en">THEME · SECTOR ROTATION</div></div></div>
+  <p class="one">지금 <b>자금이 어느 테마·섹터로 몰리는지</b> 상대강도 순위로 줄 세운다. "무엇을 살까"가 아니라 <b>"어디가 뜨거운가"</b>를 본다.</p>
+
+  <div class="card">
+    <h3><span class="ic">🎯</span>대상</h3>
+    <ul>
+      <li>미국 <b>11개 섹터</b> + 한국 <b>10개 섹터</b> + 내가 직접 짠 <b>18개 테마</b>(AI 인프라·전력/원자력 등)</li>
+      <li>가격 데이터는 야후 파이낸스에서 매일 자동 수집 (미국 전일 종가)</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3><span class="ic">📐</span>어떻게 순위를 매기나</h3>
+    <p style="margin:0 0 4px">핵심은 <b>상대강도(RS)</b> — 벤치마크(지수)보다 얼마나 더 올랐나예요. 세 기간을 재서 섞습니다.</p>
+    <div class="formula">종합점수 = <b>0.5</b>×(63일 상대강도) + <b>0.3</b>×(21일) + <b>0.2</b>×(5일)</div>
+    <ul>
+      <li><b>63·21·5 거래일</b> = 약 3개월·1개월·1주. 장기에 가장 큰 가중치를 준다(0.5).</li>
+      <li>양수 = 지수를 이기는 중, 음수 = 지수에 지는 중. 이 점수가 높은 순으로 순위.</li>
+      <li><b>테마 점수</b>는 구성종목 상대강도의 <span class="k">중앙값</span>(평균 아님) — 한두 종목 폭등에 순위가 왜곡되는 걸 막는다.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3><span class="ic">🧭</span>같이 보는 보조 지표</h3>
+    <div class="tbl-scroll"><table>
+      <tr><th>지표</th><th>뜻</th></tr>
+      <tr><td>확산도(breadth)</td><td>그 테마에서 <b>52주 신고가 –15% 이내</b>에 든 종목 비율. 높을수록 몇 개가 아니라 <b>다 같이</b> 강한 것 = 건강한 강세.</td></tr>
+      <tr><td>거래대금 흐름</td><td>최근 5일 평균 거래대금 ÷ 60일 평균. <b>×1.2 이상이면 자금 유입 가속</b>.</td></tr>
+      <tr><td>🔄 로테이션 후보</td><td>장기(63일)는 아직 하위 50%인데 단기(5일)가 상위 20% → <b>막 돌기 시작한</b> 초입 후보.</td></tr>
+      <tr><td>RRG 4분면</td><td>주도(우상)·차익(우하)·회피(좌하)·<b>진입후보</b>(좌상). 강한지 + 더 강해지는 중인지를 한 점으로.</td></tr>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <h3><span class="ic">🔁</span>운영 주기</h3>
+    <ul>
+      <li>매일 <b>오전 8시</b> 자동 실행 → 순위 계산 → 웹(깃허브 페이지) 자동 갱신 + 디스코드 알림</li>
+      <li>3회 연속 수집 실패 종목은 <b>상장폐지 의심</b>으로 경고를 띄운다(계산에선 자동 제외).</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ========== 주도주 ========== -->
+<section id="lead">
+  <div class="sh"><div class="no">2</div><div><h2>주도주 레이더</h2><div class="en">LEADER RADAR</div></div></div>
+  <p class="one">개별 <b>주식</b>에서 "이미 강한 대장"과 "바닥에서 막 도는 역발상"을 <b>두 트랙으로 분리</b>해 잡는다. (미국·한국 각각)</p>
+
+  <div class="card">
+    <h3><span class="ic">🚀</span>트랙 A — 주도주 (이미 강한 대장)</h3>
+    <div class="gate"><b>통과 조건</b> — 상대강도 20일 지속 강세 &nbsp;+&nbsp; 52주 고점 대비 <b>–25% 이내</b>(고점 근처) &nbsp;+&nbsp; 200일선 위·상승</div>
+    <p style="margin:0">강세장의 <b>진짜 대장</b>을 찾는 쪽. 이미 신고가 부근에서 힘이 유지되는 종목.</p>
+  </div>
+
+  <div class="card">
+    <h3><span class="ic">🔄</span>트랙 B — 턴어라운드 (바닥 반등)</h3>
+    <div class="gate"><b>통과 조건</b> — 상대강도 <b>변곡</b>(바닥에서 반등 시작) &nbsp;+&nbsp; 150일선 위·기울기 0 이상 &nbsp;+&nbsp; 고점 대비 <b>–30%보다 더 빠진</b> 종목</div>
+    <p style="margin:0"><b>역발상</b> 쪽. 많이 빠졌다가 도는 것이라 <span class="k">펀더멘털(실적) 검증 필수</span>. 두 트랙은 성격이 반대라 <b>섞으면 안 된다.</b></p>
+  </div>
+
+  <div class="card">
+    <h3><span class="ic">🏅</span>금·은·동 등급 = 섹터 안에서의 서열</h3>
+    <p style="margin:0 0 6px">통과한 종목을 <b>같은 섹터 안에서의 강도</b>로 다시 줄 세운 것. 금속이 아니라 올림픽 메달 개념(1·2·3군).</p>
+    <div class="tbl-scroll"><table>
+      <tr><td><span class="chip c-gold">금 · 골드</span></td><td>섹터 내 <b>최강</b> — 그 업종 진짜 대장</td></tr>
+      <tr><td><span class="chip c-sil">은 · 실버</span></td><td>섹터 내 <b>2군</b> — 강하지만 대장 아래</td></tr>
+      <tr><td><span class="chip c-brz">동 · 브론즈</span></td><td>통과 종목 중 <b>상대적 약체</b></td></tr>
+    </table></div>
+  </div>
+
+  <div class="card">
+    <h3><span class="ic">📊</span>같이 보는 것</h3>
+    <ul>
+      <li><b>성격</b>: 최근 10일 거래량이 50일 평균의 <b>1.5배 이상 분출</b>이면 🚀모멘텀, 아니면 😴조용.</li>
+      <li><b>장세 게이트</b>: 공격 장세 / 방어 장세를 판정 → <b>하락장이면 현금 대기</b>를 권한다.</li>
+      <li>7·20·60일 칸은 <b>신호 발송 뒤 실제 수익률</b>이 시간이 지나며 채워진다(미래를 미리 안 봄).</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ========== 성장가속 ========== -->
+<section id="grow">
+  <div class="sh"><div class="no">3</div><div><h2>성장가속 신호</h2><div class="en">REVENUE ACCELERATION</div></div></div>
+  <p class="one">미국 S&amp;P500에서 <b>매출 성장률이 빨라지는</b> 종목을 다룬다. 단, 과거 검증 결과 때문에 <b>공격이 아니라 방어(거부권) 중심</b>으로 설계됐다.</p>
+
+  <div class="card">
+    <h3><span class="ic">🧪</span>먼저 — 과거 검증이 시스템 모양을 정했다</h3>
+    <div class="tbl-scroll"><table>
+      <tr><td><span class="chip c-r">부결</span></td><td><b>매출 가속만 보고 그냥 사기</b>(롱온리)는 지수를 못 이겼다. 평균은 +지만 소수 대박에 의존하고, 초과수익은 <b>실적 발표 전에 이미 선반영</b>돼 버린다.</td></tr>
+      <tr><td><span class="chip c-g">검증됨</span></td><td><b>밸류에이션 거부권</b> — 너무 비싼(주가매출배수 상위) 가속주는 초과수익이 0이었다. 즉 <b>"비싼 건 빼기"</b>가 유일하게 검증된 규칙.</td></tr>
+    </table></div>
+    <p style="margin:8px 0 0;color:var(--mut);font-size:13px">그래서 이 시스템의 중심은 <span class="k">방어(거부권) + 선행지표 + 내 판단</span>이다. "가속 종목을 다 사라"가 아님.</p>
+  </div>
+
+  <div class="card">
+    <h3><span class="ic">⚙️</span>운영 순서 (한 사이클)</h3>
+    <div class="tbl-scroll"><table>
+      <tr><th>단계</th><th>하는 일</th></tr>
+      <tr><td>① 가속 스크리너</td><td>지금 매출이 가속 중인 종목을 <b>후보로 추림</b>(발굴).</td></tr>
+      <tr><td>② 밸류 거부권 ★</td><td>너무 비싸면 🔴 <b>STOP</b>. 제일 먼저·제일 빠르게 버린다. (유일하게 검증된 신호)</td></tr>
+      <tr><td>③ 회계 red flag</td><td>감사인 교체·재무제표 재작성·제출 지연·매출채권 급증이면 🔴 판단 보류.</td></tr>
+      <tr><td>④ 선행지표</td><td>수주잔고·잔여계약(밀린 주문) 문장을 SEC 원문에서 후보로 뽑아 <b>링크와 함께</b> 제시.</td></tr>
+      <tr><td>⑤ 내 판단 + 기록</td><td>물량이냐 단가냐 / 구조적이냐 사이클이냐를 <b>사람이</b> 분류하고, "이게 보이면 내가 틀린 것"을 적어둠.</td></tr>
+      <tr><td>⑥ 90일 복기</td><td>시스템이 90일 뒤 채점을 리마인드.</td></tr>
+    </table></div>
+    <div class="gate">실제 신호 = <b>가속</b> + <b>저평가</b> + <b>회계 깨끗</b>의 <span class="k">교집합</span>만.</div>
+  </div>
+
+  <div class="card">
+    <h3><span class="ic">🚦</span>카드 색깔 읽는 법</h3>
+    <div class="tbl-scroll"><table>
+      <tr><td><span class="chip c-g">🟢 초록</span></td><td>자동 계산이 깨끗함 — 그대로 믿어도 됨(주가·매출·주식수 등).</td></tr>
+      <tr><td><span class="chip c-y">🟡 노랑</span></td><td><b>사람이 확인해야 함.</b> 근사치거나 본문에서 긁은 문장 → 🔗 원문 대조 필수.</td></tr>
+      <tr><td><span class="chip c-r">🔴 빨강</span></td><td>거부권 발동 또는 감사 실패 — <b>판단 보류.</b></td></tr>
+    </table></div>
+  </div>
+
+  <div class="warn">
+    <b>과신 금지.</b> 검증된 건 <b>밸류 거부권 하나</b>뿐이다. 가속·선행지표는 "보조 재료"이고, 회계 거부권은 정형 신호(항목코드·지연·매출채권)만 잡는다 — 공매도 리포트·규제 조사 같은 <b>비정형 의혹은 못 잡으니 사람이 따로 챙긴다.</b> 카드는 "매수 리스트"가 아니라 "공부 리스트".
+  </div>
+</section>
+
+<!-- ========== 비교 ========== -->
+<section id="compare">
+  <div class="sh"><div class="no">★</div><div><h2>한눈에 비교</h2><div class="en">AT A GLANCE</div></div></div>
+  <div class="card" style="padding:8px 10px">
+    <div class="tbl-scroll"><table>
+      <tr><th>구분</th><th>로테이션</th><th>주도주</th><th>성장가속</th></tr>
+      <tr><td>보는 단위</td><td>테마·섹터<br><span style="color:var(--mut2)">(그룹)</span></td><td>개별 주식</td><td>개별 주식</td></tr>
+      <tr><td>핵심 재료</td><td>상대강도(가격)</td><td>상대강도+추세(가격)</td><td>매출 가속(실적)</td></tr>
+      <tr><td>질문</td><td>어디가 뜨겁나</td><td>누가 대장인가</td><td>비싸지 않은 가속주는</td></tr>
+      <tr><td>성격</td><td>순위·자금흐름</td><td>공격 A / 역발상 B</td><td>방어(거부권) 중심</td></tr>
+      <tr><td>갱신</td><td>매일 자동</td><td>매일 자동</td><td>주간 + 수동 판단</td></tr>
+    </table></div>
+  </div>
+  <p class="one" style="margin-top:14px">셋 다 공통 철학: <b>단일 숫자로 "사라"고 단정하지 않는다.</b> 후보를 좁히고, 위험을 걸러주고, 최종 판단은 사람이 한다.</p>
+</section>
+
+<div class="foot">
+ 코드 기준 정리 · 각 시스템의 실제 임계값은 운영 중 조정될 수 있음 · 과거 성과가 미래를 보장하지 않음 · 매수·매도 권유 아님.
+</div>
+
+</div></body></html>

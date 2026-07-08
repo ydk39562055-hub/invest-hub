@@ -1,0 +1,75 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>주도주 — 로테이션 · 성장가속 · 성과</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+  :root{--bg:#15100d;--line:#2b231c;--accent:#c89468;--ink:#f2ebe0;--mut:#a08f7d}
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;font-family:'Pretendard Variable','Pretendard','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  body{display:flex;flex-direction:column;background:var(--bg);color:#cfc2b0}
+  .topbar{background:#1e1711;color:var(--ink);padding:11px 18px 0;border-bottom:1px solid var(--line);flex:none}
+  .brow{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .brand{font-weight:800;font-size:16px;letter-spacing:-.3px;color:var(--ink);white-space:nowrap}
+  .brand small{display:block;font-weight:500;font-size:10.5px;color:var(--mut);letter-spacing:1.5px}
+  .tabs{display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-left:auto;padding-bottom:0}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{appearance:none;border:1px solid transparent;border-bottom:0;background:transparent;color:#a89a87;
+    padding:9px 15px;border-radius:9px 9px 0 0;font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap}
+  .tab:hover{background:#2b231c;color:var(--ink)}
+  .tab.on{background:var(--bg);color:var(--ink);border-color:var(--line);position:relative;top:1px}
+  .desc{font-size:12px;color:var(--mut);padding:8px 2px 9px;line-height:1.5;min-height:34px}
+  .frameWrap{flex:1;position:relative;background:var(--bg);min-height:0}
+  iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:var(--bg)}
+  .load{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--mut);font-size:13px;pointer-events:none;opacity:0;transition:.2s}
+  .load.show{opacity:1}
+  @media(max-width:560px){.brand{font-size:14px}.tab{padding:8px 11px;font-size:12.5px}}
+</style></head><body>
+  <div class="topbar">
+    <div class="brow">
+      <div class="brand">주도주<small>ROTATION · GROWTH · LEADERS · PERF</small></div>
+      <div class="tabs" id="tabs"></div>
+    </div>
+    <div class="desc" id="desc"></div>
+  </div>
+  <div class="frameWrap">
+    <div class="load" id="load">불러오는 중…</div>
+    <iframe id="view" title="주도주 하위 도구"></iframe>
+  </div>
+<script>
+  var TABS = [
+    {id:"us",     name:"주도주 · 미국", src:"../radar-us/",
+      desc:"이미 강한 대장(트랙A) + 바닥 반등 역발상(트랙B). 금·은·동 = 섹터 내 서열. 매일 자동 갱신."},
+    {id:"kr",     name:"주도주 · 한국", src:"../radar-kr/",
+      desc:"위와 같은 엔진의 한국 주식 버전."},
+    {id:"growth", name:"성장가속", src:"https://ydk39562055-hub.github.io/growth-signal-reports/",
+      desc:"매출 성장이 빨라지는 종목. '가속+저평가+회계 깨끗' 교집합만. 방어(거부권) 중심."},
+    {id:"rotation", name:"로테이션", src:"https://ydk39562055-hub.github.io/rotation-lab/",
+      desc:"지금 자금이 몰리는 테마·섹터 상대강도 순위 + RRG. 매일 오전 8시 자동."},
+    {id:"perf",   name:"성과 · 검증", src:"../perf/",
+      desc:"발송한 신호의 실제 실현 수익률(추적) + 백테스트 결론(검증). 생존편향 없이 정직하게."},
+    {id:"guide",  name:"📖 설명서", src:"../guide/",
+      desc:"위 도구들이 어떤 규칙으로 종목을 뽑고 등급을 매기는지 정리한 운영 설명서."}
+  ];
+  var tabsEl=document.getElementById('tabs'), view=document.getElementById('view'),
+      descEl=document.getElementById('desc'), load=document.getElementById('load');
+  var CB=Date.now(), cur=null;
+  function go(id){
+    var t=TABS.filter(function(x){return x.id===id})[0]||TABS[0];
+    cur=t.id;
+    [].forEach.call(tabsEl.children,function(b){b.classList.toggle('on',b.dataset.id===t.id)});
+    descEl.textContent=t.desc;
+    load.classList.add('show');
+    view.src=t.src+(t.src.indexOf('?')>-1?'&':'?')+'_='+CB;
+    if(location.hash.slice(1)!==t.id) history.replaceState(null,'','#'+t.id);
+  }
+  view.addEventListener('load',function(){load.classList.remove('show')});
+  TABS.forEach(function(t){
+    var b=document.createElement('button');
+    b.className='tab'; b.dataset.id=t.id; b.textContent=t.name;
+    b.onclick=function(){go(t.id)}; tabsEl.appendChild(b);
+  });
+  var start=location.hash.slice(1);
+  go(TABS.filter(function(t){return t.id===start})[0]?start:TABS[0].id);
+  window.addEventListener('hashchange',function(){var h=location.hash.slice(1); if(h&&h!==cur) go(h)});
+</script>
+</body></html>
