@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>매크로 공부 노트 · 통합판</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Noto+Serif+KR:wght@600;700;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F4F0E4; --ink:#27241C; --ink-h:#1C1A13; --ink-s:#171510;
+  --green:#1F5B41; --gold:#B79A4B;
+  --sub:#5C5644; --sub2:#6E6752; --meta:#9A9077;
+  --card:#FCFAF1; --card-bd:#E1D9C2; --card-line:#EDE6CF;
+  --box:#F6F2E3;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:'IBM Plex Sans KR',sans-serif;font-size:15.5px;line-height:1.75;-webkit-text-size-adjust:100%}
+.wrap{display:flex;max-width:1220px;margin:0 auto;gap:32px;padding:0 20px;align-items:flex-start}
+
+/* sidebar */
+nav.toc{position:sticky;top:0;width:228px;flex:none;height:100vh;overflow-y:auto;padding:28px 4px 40px;font-size:13.5px}
+nav.toc .logo{font-family:'Noto Serif KR',serif;font-weight:900;font-size:17px;color:var(--green);margin:0 8px 4px}
+nav.toc .logocap{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;color:var(--meta);margin:0 8px 18px}
+nav.toc .links{display:flex;flex-direction:column;gap:2px}
+nav.toc a{display:flex;gap:9px;padding:6px 8px;border-radius:8px;color:var(--sub);text-decoration:none;transition:background .12s,color .12s}
+nav.toc a b{font-family:'IBM Plex Mono',monospace;font-weight:600;color:var(--gold);flex:none}
+nav.toc a:hover{background:#ECE6D1;color:var(--green)}
+nav.toc .quote{margin:22px 8px 0;padding-top:16px;border-top:1px solid var(--card-bd);font-size:12px;color:var(--meta);line-height:1.6;font-style:italic}
+
+main{flex:1;min-width:0;padding:36px 0 140px}
+
+/* header */
+header.doc{margin-bottom:26px}
+.overline{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;color:var(--gold);font-weight:600}
+h1{font-family:'Noto Serif KR',serif;font-size:42px;font-weight:900;line-height:1.2;margin:8px 0 10px;color:var(--ink-h)}
+header.doc p{color:var(--sub2);max-width:640px;margin:0}
+.stats{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.pill{font-size:12px;font-weight:600;border-radius:999px;padding:3px 12px}
+.pill.green{color:var(--green);background:#E7EEE7;border:1px solid #C9D8CC}
+.pill.neu{color:var(--sub2);background:#EDE7D2;border:1px solid var(--card-bd)}
+
+/* toolbar */
+.toolbar{position:sticky;top:0;z-index:10;background:var(--paper);border-bottom:1px solid var(--card-bd);padding:12px 0;margin-bottom:8px;display:flex;gap:8px;align-items:center}
+.toolbar input{flex:1;background:#FDFBF3;border:1px solid #D8CFB4;border-radius:10px;padding:9px 13px;font-family:inherit;font-size:14px;color:var(--ink)}
+.toolbar input:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(31,91,65,.12)}
+.toolbar button{background:#FDFBF3;border:1px solid #D8CFB4;border-radius:10px;padding:9px 13px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--sub);cursor:pointer;white-space:nowrap;transition:.12s}
+.toolbar button:hover{border-color:var(--green);color:var(--green)}
+
+/* section */
+section{scroll-margin-top:70px;margin-top:44px}
+.ch-head{display:flex;align-items:baseline;gap:14px;border-bottom:3px solid var(--ink);padding-bottom:8px;margin-bottom:6px}
+.ch-num{font-family:'Noto Serif KR',serif;font-size:46px;font-weight:900;color:var(--gold);line-height:1}
+.ch-head h2{font-family:'Noto Serif KR',serif;font-size:23px;font-weight:700;margin:0;color:var(--ink-h)}
+.ch-meta{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;color:var(--meta);margin:0 0 6px}
+.lede{color:var(--sub2);font-size:16px;line-height:1.85;margin:14px 0 4px;max-width:680px}
+.lede.first::first-letter{font-family:'Noto Serif KR',serif;font-weight:900;font-size:3.1em;line-height:.85;float:left;color:var(--green);margin:6px 10px 0 0}
+
+/* cards */
+details.card{background:var(--card);border:1px solid var(--card-bd);border-radius:14px;padding:0 20px;margin:14px 0;box-shadow:0 1px 3px rgba(70,60,30,.06)}
+details.card>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:11px;padding:14px 0;font-size:16.5px;font-weight:700;color:var(--ink-h)}
+details.card>summary::-webkit-details-marker{display:none}
+.arrow{color:var(--gold);font-size:12px;transition:transform .2s;flex:none}
+details[open]>summary .arrow{transform:rotate(90deg)}
+.cnum{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:var(--gold);flex:none}
+.subttl{font-weight:400;font-size:13.5px;color:var(--meta);margin-left:2px}
+.card-body{border-top:1px solid var(--card-line);padding:10px 2px 18px}
+.card-body p{margin:.7em 0}
+.card-body p:first-child{margin-top:.4em}
+
+/* card variants */
+details.principle{border-left:4px solid var(--green)}
+details.gold-log{border-left:4px solid var(--gold)}
+details.gold{background:#F9F3DF}
+details.warn{background:#FBF0E4;border-color:#EBD2B8}
+details.dark{background:#22301F;border-color:#3A4A35}
+details.dark>summary{color:#D9CFA8}
+details.dark .card-body{border-top-color:#3A4A35;color:#E8E2CC}
+details.dark .card-body strong{color:#F1EAC8}
+
+/* badges */
+.badge{font-family:'IBM Plex Mono',monospace;border-radius:999px;padding:2px 9px;font-size:10.5px;font-weight:600;letter-spacing:.04em;flex:none}
+.badge.lec{color:var(--green);background:#E7EEE7;border:1px solid #C9D8CC}
+.badge.sup{color:#8A6B21;background:#F5EDD4;border:1px solid #E2D3A4}
+.badge.warn{color:#A4451E;background:#FBF0E4;border:1px solid #EBD2B8}
+.tag{font-family:'IBM Plex Mono',monospace;font-size:11px;background:#EDE7D2;color:var(--sub);border-radius:999px;padding:1px 8px}
+
+/* prose bits */
+strong{color:var(--ink-s)}
+.card-body strong{color:var(--ink-s)}
+a{color:var(--green)}
+.formula{background:var(--box);border:1px solid var(--card-bd);border-radius:10px;text-align:center;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:14.5px;color:var(--ink-h);padding:13px;margin:14px 0;letter-spacing:.01em}
+code{font-family:'IBM Plex Mono',monospace;font-size:.85em;background:#EDE7D2;padding:1px 6px;border-radius:5px}
+pre{background:#2B2819;color:#EDE6CF;padding:14px 16px;border-radius:10px;overflow-x:auto;font-size:12.5px;line-height:1.7;margin:12px 0}
+pre code{background:none;color:inherit;padding:0;font-size:1em}
+blockquote{margin:.8em 0;padding:10px 16px;border-left:3px solid var(--gold);background:#F8F3E2;border-radius:0 8px 8px 0;color:var(--sub2)}
+
+/* callout: my mistake */
+.mistake{background:#FBF0E4;border:1px solid #EBD2B8;border-radius:10px;padding:12px 15px;margin:14px 0;font-size:14.5px;line-height:1.7;color:#8A6A4C}
+.mistake b{color:#A4451E}
+
+/* tables */
+.tbl-scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:13.5px;background:#FFFEF8}
+th{background:#EFE9D4;color:#4C4531;text-align:left;font-weight:600}
+th,td{border:1px solid var(--card-bd);padding:7px 10px;vertical-align:top;line-height:1.6}
+
+/* grid */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 0}
+.gitem{display:flex;gap:10px;background:var(--box);border-radius:10px;padding:10px 12px;font-size:14px;line-height:1.6}
+.gitem .n{font-family:'IBM Plex Mono',monospace;font-weight:600;color:var(--gold);flex:none}
+details.dark .gitem{background:rgba(255,255,255,.05);color:#E8E2CC}
+details.dark .gitem .n{color:#D9CFA8}
+@media(max-width:620px){.grid2{grid-template-columns:1fr}}
+
+/* worksheet */
+.ws-blank{border:none;border-bottom:1.5px dashed var(--gold);background:transparent;font-family:'IBM Plex Mono',monospace;font-size:14px;text-align:center;color:var(--green);width:120px;padding:1px 4px}
+.ws-blank:focus{outline:none;border-bottom-color:var(--green)}
+label.check{display:flex;align-items:flex-start;gap:0;margin:5px 0;font-size:14.5px;line-height:1.65;cursor:pointer}
+input[type=checkbox]{accent-color:var(--green);width:15px;height:15px;margin:4px 8px 0 0;flex:none;cursor:pointer}
+textarea.concl{width:100%;min-height:90px;background:#FDFBF3;border:1px solid #D8CFB4;border-radius:10px;padding:11px 13px;font-family:inherit;font-size:14.5px;color:var(--ink);resize:vertical;margin-top:6px}
+textarea.concl:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px rgba(31,91,65,.12)}
+
+.answer{background:#E7EEE7;border:1px solid #C9D8CC;border-radius:10px;padding:11px 15px;margin:12px 0;font-size:14px;color:var(--green)}
+.hint{font-size:13px;color:var(--meta)}
+.nomatch{text-align:center;color:var(--meta);font-family:'IBM Plex Mono',monospace;font-size:13px;padding:40px 0;display:none}
+
+a.ext-note{display:block;text-decoration:none;background:linear-gradient(180deg,#F8F3E2,#FCFAF1);border:1px solid var(--card-bd);border-left:4px solid var(--gold);border-radius:14px;padding:16px 20px;margin:16px 0 24px;box-shadow:0 1px 3px rgba(70,60,30,.06);transition:box-shadow .15s,transform .15s}
+a.ext-note:hover{box-shadow:0 5px 16px rgba(70,60,30,.14);transform:translateY(-1px)}
+.ext-note-cap{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;color:var(--gold);font-weight:600}
+.ext-note-title{font-family:'Noto Serif KR',serif;font-weight:700;font-size:19px;color:var(--green);margin:5px 0 6px}
+.ext-note-sub{color:var(--sub2);font-size:14px;line-height:1.7;margin:0}
+nav.toc a.ext{margin-top:6px;border-top:1px solid var(--card-bd);border-radius:0;padding-top:12px;color:var(--gold);font-weight:600}
+nav.toc a.ext b{color:var(--gold)}
+nav.toc a.ext span{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--meta);margin-left:2px}
+
+.toc-fab{display:none}
+@media(max-width:960px){
+  .toc-fab{display:inline-flex;align-items:center;gap:6px;position:fixed;bottom:18px;left:14px;z-index:40;background:var(--green);color:#fff;font-family:'IBM Plex Sans KR',sans-serif;font-weight:600;font-size:13.5px;padding:10px 16px;border:none;border-radius:999px;box-shadow:0 4px 14px rgba(0,0,0,.28);cursor:pointer}
+  nav.toc{position:fixed;top:0;left:0;width:272px;max-width:82vw;height:100vh;background:var(--paper);border-right:1px solid var(--card-bd);box-shadow:8px 0 30px rgba(0,0,0,.3);z-index:39;padding:24px 14px 40px;transform:translateX(-102%);transition:transform .22s ease;display:block;overflow-y:auto}
+  .toc-backdrop{position:fixed;inset:0;background:rgba(20,18,12,.42);z-index:38;opacity:0;pointer-events:none;transition:opacity .22s}
+  .toc-cb:checked ~ .wrap nav.toc{transform:translateX(0)}
+  .toc-cb:checked ~ .toc-backdrop{opacity:1;pointer-events:auto}
+}
+@media(max-width:600px){h1{font-size:32px}.ch-num{font-size:36px}main{padding:24px 0 100px}}
+</style>
+</head>
+<body>
+<input type="checkbox" id="tocToggle" class="toc-cb" hidden>
+<label for="tocToggle" class="toc-fab">☰ 목차</label>
+<label for="tocToggle" class="toc-backdrop"></label>
+<div class="wrap">
+
+<nav class="toc">
+  <div class="logo">매크로 공부 노트</div>
+  <div class="logocap">MACRO · 통합판 · 2026-07-03</div>
+  <div class="links">
+    <a href="#ch0"><b>0</b>시작하기 · 마음가짐</a>
+    <a href="#ch1"><b>1</b>세션 01 · 돈과 물가와 금</a>
+    <a href="#ch2"><b>2</b>세션 02 · 경제를 세는 법</a>
+    <a href="#ch3"><b>3</b>원리 확장판 · 금 로그</a>
+    <a href="#ch4"><b>4</b>명제 카드</a>
+    <a href="#ch5"><b>5</b>금 레짐 월간 워크시트</a>
+    <a class="ext" href="principles.html"><b>↗</b>서른한 가지 원리 <span>확장판</span></a>
+  </div>
+  <div class="quote">저장만 하고 안 보면<br>죽은 파일이다.</div>
+</nav>
+
+<main>
+  <header class="doc">
+    <div class="overline">MACRO STUDY NOTES · 통합판</div>
+    <h1>매크로 공부 노트</h1>
+    <p>돈이 어디서 솟아나 어디로 흐르는지, 그 흐름을 읽는 눈을 기르기 위해 쌓은 노트다. 월가아재 지식편의 강의와 월가소식 리포트에서 건져 올린 사고의 뼈대를, 날짜 지나면 썩는 숫자는 걷어내고 원리만 남겨 한 권으로 엮었다.</p>
+    <div class="stats">
+      <span class="pill green">최종 갱신 2026-07-03</span>
+      <span class="pill neu">여섯 대단원</span>
+      <span class="pill neu">원리 스물셋</span>
+      <span class="pill neu">읽고 또 꺼내 보는 노트</span>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <input id="q" type="search" placeholder="노트 전체에서 검색 (두 글자 이상)…" autocomplete="off">
+    <button id="openAll">모두 펼치기</button>
+    <button id="closeAll">모두 접기</button>
+  </div>
+
+  <div class="nomatch" id="nomatch">찾는 말이 이 노트에 없습니다.</div>
+
+<!-- ============ 0 ============ -->
+<section id="ch0" data-ch>
+  <div class="ch-head"><span class="ch-num">0</span><h2>시작하기 — 이 노트를 쓰는 마음가짐</h2></div>
+  <p class="ch-meta">통합·중복제거판 · 최종 갱신 2026-07-03</p>
+
+  <p class="lede first">공부를 하다 보면 자료를 모으는 일에 자꾸 만족하게 된다. 좋은 글을 갈무리해 폴더에 넣는 순간 이미 내 것이 된 듯한 착각이 든다. 그러나 저장은 소유가 아니다. 다시 펼쳐 보지 않는 파일은 죽은 파일이고, 죽은 파일은 아무리 쌓여도 지식이 되지 못한다. 이 노트의 첫 번째이자 마지막 원칙은 그래서 단순하다. <strong>쌓는 것과 꺼내 보는 것을 한 몸으로 하라.</strong></p>
+
+  <p>이 노트가 겨냥하는 건 정답의 암기가 아니라 <strong>추론하는 습관</strong>이다. 월가아재의 강의는 답을 떠먹여 주는 대신 소크라테스처럼 되묻는다. "그게 정말 그런가? 어느 단계에서 무너지는가?" 그 물음에 스스로 답하는 훈련, 그리고 리포트에서 건져 올린 사고의 틀을 한곳에 모아 두었다가 실제로 자산을 분석할 때마다 옆에 펼쳐 놓고 대조하는 것 — 그게 전부다. 아래 세 가지는 어떤 자산, 어떤 사건을 만나든 가장 먼저 꺼내는 연장이다.</p>
+
+  <details class="card" data-sec open>
+    <summary><span class="arrow">▶</span><span class="cnum">도구</span><span>모든 분석에 먼저 대는 열 개의 자</span></summary>
+    <div class="card-body">
+      <p>이건 결론을 내는 공식이 아니라, 결론으로 달려가려는 나를 붙잡아 세우는 열 개의 제동 장치다. 성급함이야말로 매크로 분석에서 가장 자주 넘어지는 지점이라, 매번 이 목록을 눈으로 훑고 시작한다.</p>
+      <div class="grid2">
+        <div class="gitem"><span class="n">1</span><span><b>정의부터 깐다.</b> 말뜻을 못 박기 전엔 공격도 방어도 할 수 없다.</span></div>
+        <div class="gitem"><span class="n">2</span><span><b>잘게 쪼개고 라벨을 붙인다.</b> 원자 단위까지 나눈 뒤 각 고리에 '거의 공리 / 케바케 / 주관'을 표시하고, 가장 약한 고리를 지목한다.</span></div>
+        <div class="gitem"><span class="n">3</span><span><b>"어느 구멍이냐"부터 묻는다.</b> 결과가 아니라 돈이 빠져나가고 채워지는 통로(저축·세금·수입·투자·정부·수출)를 먼저 특정한다.</span></div>
+        <div class="gitem"><span class="n">4</span><span><b>같은 결과라도 경로는 다르다.</b> 겉으로 비슷해 보여도 건드리는 구멍이 정반대일 수 있다.</span></div>
+        <div class="gitem"><span class="n">5</span><span><b>순효과를 본다.</b> 한 구멍만 보지 말고 옆 구멍이 함께 흔들리는 것까지 합산한다.</span></div>
+        <div class="gitem"><span class="n">6</span><span><b>항등식은 인과를 주지 않는다.</b> "합이 0이다"는 참이지만, 무엇이 운전대를 잡았는지는 따로 논증해야 한다.</span></div>
+        <div class="gitem"><span class="n">7</span><span><b>새 힘인가, 거울인가.</b> 독립된 동인인지, 다른 변수의 그림자일 뿐인지 구분한다. 이중계산은 금물이다.</span></div>
+        <div class="gitem"><span class="n">8</span><span><b>운전대에 날짜가 찍히나.</b> 찍히면 파도(레짐), 못 찍히면 밀물(구조적 배경)이다.</span></div>
+        <div class="gitem"><span class="n">9</span><span><b>모형에는 경계가 있다.</b> 그 틀로 설명이 안 되는 사건을 알아채는 것도 실력이다.</span></div>
+        <div class="gitem"><span class="n">10</span><span><b>절차가 결론에 앞선다.</b> 데이터를 뽑고, 신호를 확인하고, 그다음에 결론을 낸다. 절차 없이 맞힌 답은 다음번에 틀려도 모른다.</span></div>
+      </div>
+    </div>
+  </details>
+
+  <details class="card warn" data-sec>
+    <summary><span class="arrow">▶</span><span class="badge warn">약점</span><span>내가 반복해서 넘어지는 네 곳</span></summary>
+    <div class="card-body">
+      <p>세 권의 노트를 관통하며 몇 번이고 되풀이된 나의 고질병이다. 분석을 시작하기 전, 반드시 이 넷을 먼저 펼쳐 둔다. 실수는 새로운 얼굴로 찾아오지 않는다. 늘 같은 얼굴로 온다.</p>
+      <label class="check"><input type="checkbox"><span><b>거래 대상과 경제 구조를 뒤섞는다.</b> 주식·금·채권은 사고파는 대상이지, 경제가 굴러가는 영역이 아니다. 집계지표를 구조로 착각하는 K자 오류도 같은 뿌리에서 자란다.</span></label>
+      <label class="check"><input type="checkbox"><span><b>인과를 거꾸로 놓는다.</b> A가 B를 낳았는데 B가 A를 낳았다고 읽는다. 통화승수, 2020년의 저축, 유가의 수요·공급이 단골 함정이다.</span></label>
+      <label class="check"><input type="checkbox"><span><b>방향에서 현재 상태로 건너뛴다.</b> "고용이 나쁘다"에서 곧장 "금리를 내린다"로 점프하며 중간의 제약을 뛰어넘는다.</span></label>
+      <label class="check"><input type="checkbox"><span><b>검증 전에 결론을 삼킨다.</b> 예측치와 단언을 확정된 사실로 받아들인다. 신호를 확인하기도 전에 답부터 정해 둔다.</span></label>
+    </div>
+  </details>
+
+  <details class="card" data-sec>
+    <summary><span class="arrow">▶</span><span class="cnum">템플릿</span><span>투자 명제를 세울 때 복붙하는 다섯 칸</span></summary>
+    <div class="card-body">
+      <p>어떤 확신이 들 때, 그 확신을 다섯 칸에 억지로 밀어 넣어 본다. 특히 네 번째 칸이 핵심이다. 사람은 자기가 왜 맞는지는 밤새 떠들 수 있지만, 자기가 틀렸다는 걸 무엇으로 알아챌지는 좀처럼 적지 못한다. 그 칸을 못 채우면 그건 명제가 아니라 신앙이다.</p>
+      <pre><code>① 한 줄 근거     A가 B를 계속 앞지른다 — 한 문장으로
+② 인과 사슬      A → B → C → 가격
+③ 가장 약한 관절  사슬에서 제일 먼저 깨질 고리 + 그 이유
+④ 무효화 조건    관측 가능하고 · 사실에 근거하며 · 시한이 있는, 이 명제가 틀렸다는 신호
+⑤ 포지션 사이징  무엇으로 · 진입 리스크 · 분할 규모의 규칙</code></pre>
+      <p>④에 "내가 왜 맞나"를 쓰면 실패다. <strong>"어떻게 틀린 걸 알아채나"</strong>를 써야 한다.</p>
+    </div>
+  </details>
+
+  <details class="card" data-sec>
+    <summary><span class="arrow">▶</span><span class="cnum">루틴</span><span>복습이라는, 이 노트의 심장</span></summary>
+    <div class="card-body">
+      <p>구조는 소박하다. 매 세션이 끝나면 복습 노트를 받아 이 문서에 세션별로 쌓는다. 그리고 <strong>다음 세션을 시작하기 전에 지난 노트를 반드시 한 번 펼친다.</strong> 이 한 동작이 노트를 살아 있게 한다. 실제 리포트나 자산을 분석할 때는 앞의 약점 목록과 열 개의 자를 옆 화면에 띄워 놓고 하나씩 대조한다. 그러지 않으면 아는 것과 하는 것이 끝내 만나지 않는다.</p>
+    </div>
+  </details>
+</section>
+
+<!-- ============ 1 ============ -->
+<section id="ch1" data-ch>
+  <div class="ch-head"><span class="ch-num">1</span><h2>세션 01 — 돈은 어디서 솟고, 물가는 왜 오르며, 금은 무엇에 반응하는가</h2></div>
+  <p class="ch-meta">지식편 1회차 (1·2·3강) · 작성 2026-06-20 · 재구성 2026-07-01</p>
+
+  <p class="lede first">첫 회차는 경제의 가장 밑바닥, 돈 그 자체에서 출발한다. 돈은 어디서 생겨나는가, 왜 어떤 시절엔 아무리 찍어내도 물가가 잠잠하고 어떤 시절엔 조금만 풀어도 폭발하는가, 그리고 그 모든 것이 금이라는 오래된 금속에 어떻게 새겨지는가. 강의에서 배운 것(<span class="badge lec">강의</span>)과 내가 보탠 뒤 직접 재검증해야 할 것(<span class="badge sup">보충</span>)을 구분해 적는다.</p>
+
+  <details class="card principle" data-sec>
+    <summary><span class="arrow">▶</span><span class="cnum">1</span><span>공리와 해석은 칼로 갈리지 않는다</span><span class="badge lec">강의</span></summary>
+    <div class="card-body">
+      <p>명제를 "공리"와 "주관적 해석"으로 딱 잘라 나누고 싶은 유혹이 있다. 하지만 세상의 명제는 대개 그 둘 사이의 <strong>연속된 스펙트럼</strong> 어딘가에 놓인다. 할 일은 명제를 잘게 쪼갠 뒤 각 단계에 신뢰도를 매기는 것이다.</p>
+      <p>"금리를 내리면 주식이 오른다"를 예로 들어 보자. 풀어 쓰면 <code>금리↓ → 시중금리↓(단기·장기를 구분할 것) → 대출↑ → 유동성↑ → 주식↑</code>가 된다. 이 사슬에서 가장 약한 고리는 <strong>대출이 늘어난다</strong>는 대목이다. 위기가 닥치면 사람들은 겁에 질려 돈을 빌리지 않는다. 그 고리 하나가 끊기면 전체가 무너진다. 그러니 이 명제는 공리가 아니라 상황을 타는 케바케다.</p>
+      <p>공리처럼 보이는 것도 깨진다. "원유 선물 가격은 늘 양수"라는 상식은 2020년 4월, 배럴당 마이너스 37달러라는 초유의 숫자 앞에서 산산조각 났다.</p>
+    </div>
+  </details>
+
+  <details class="card principle" data-sec>
+    <summary><span class="arrow">▶</span><span class="cnum">2</span><span>물가는 결국 '물건 대비 돈의 양'이다</span><span class="badge lec">강의</span></summary>
+    <div class="card-body">
+      <p>물가를 설명하는 가장 오래된 방정식은 이렇게 생겼다.</p>
+      <div class="formula">M · V = P · Q</div>
+      <p>통화량(M)에 그 돈이 도는 속도(V)를 곱한 것이 사회 전체의 총지출이고, 그것은 팔린 물건의 값(P)에 수량(Q)을 곱한 것과 같다. 좌변과 우변은 같은 거래를 지출하는 쪽과 받는 쪽에서 본 것뿐이다. 여기서 건져야 할 직관은 하나다. <strong>물가란 물건에 견준 돈의 양이다.</strong> 무인도에 사과 열 개와 동전 열 개가 있는데 동전만 스무 개로 늘면 사과 한 개 값은 두 배가 된다.</p>
+      <p>그런데 함정은 V, 유통속도에 숨어 있다. <strong>돈이 돌지 않고 장롱에 들어가면</strong> M을 아무리 늘려도 물가는 꿈쩍하지 않는다. 같은 "돈 찍기"가 정반대 결과를 낳은 두 시기가 이를 증언한다.</p>
+      <ul>
+        <li><strong>2009~2019년의 양적완화.</strong> 풀린 돈은 은행 지급준비금으로 묶여 실물로 흘러가지 못하고 오직 자산으로만 새어 나갔다. V는 붕괴했고, 소비자물가는 잠잠한 채 자산 가격만 폭등했다. 인플레이션은 있었으되 물건이 아니라 자산에 왔고, 그만큼 불평등은 벌어졌다.</li>
+        <li><strong>2020~2022년의 코로나.</strong> 이번엔 돈을 가계의 손에 직접 쥐여 주었다. 사람들은 그 돈으로 물건을 샀고(V 유지), 공급망은 끊겨 Q가 줄었다. 진짜 물가가 40년 만의 최고치로 터졌다.</li>
+      </ul>
+      <p>정리하면 물가가 오르려면 네 가지가 겹쳐야 한다. 돈이 늘고(M↑), 그 돈이 돌고(V 유지), 자산이 아니라 물건을 좇고, 물건의 양이 고정되거나 줄어야 한다.</p>
+      <div class="mistake"><b>내가 틀린 곳.</b> "통화량이 늘어 통화승수가 커진다"고 인과를 거꾸로 놓았다. 통화승수는 통화량 증가의 <b>원인</b>이다. <code>광의 통화량 = 통화승수 × 본원통화</code> — 시작점인 본원통화와 결과인 통화량을 헷갈리지 말 것.</div>
+    </div>
+  </details>
+
+  <details class="card principle" data-sec>
+    <summary><span class="arrow">▶</span><span class="cnum">3</span><span>빚에서 돈이 솟는다 — 신용창조와 부채 사이클</span><span class="badge lec">강의</span></summary>
+    <div class="card-body">
+      <p>은행에 예금이 들어오면, 은행은 지급준비금만 남기고 나머지를 빌려준다. 빌려준 돈은 다시 어딘가의 예금이 되고, 그 예금은 또 대출로 나간다. 이 되풀이 속에서 <strong>같은 돈이 여러 곳에 동시에 존재하게 된다.</strong> 빚에서 돈이 솟아나는 것 — 이것이 신용창조다.</p>
+      <p>부채 사이클의 본질도 여기서 나온다. 신용이 늘면 지출이 늘어 호황이 오지만, 그 지출은 미래에서 당겨온 것이다. 갚을 때가 되면 지출은 쪼그라들고 침체가 온다. 이 <strong>당겨 쓰고 갚는 왕복</strong>이 곧 사이클이다. 그러므로 침체는 바깥에서 불청객처럼 찾아오는 게 아니다. 호황 그 자체가 제 안에 침체의 씨앗을 품는다.</p>
+      <div class="mistake"><b>내가 틀린 곳.</b> "신용이 생산성을 올린다"고 적었다. 아니다. 신용은 <b>지출과 경제활동</b>을 밀어 올릴 뿐, 생산성은 건드리지 못한다.</div>
+    </div>
+  </details>
+
+  <details class="card principle" data-sec>
+    <summary><span class="arrow">▶</span><span class="cnum">4</span><span>직선과 물결 — 생산성과 부채 (달리오의 그림)</span><span class="badge lec">강의</span></summary>
+    <div class="card-body">
+      <p>레이 달리오는 경제를 두 개의 선으로 그린다. 하나는 <strong>생산성</strong>이다. 지식이 쌓이며 매끄럽게 우상향하는 직선. 신용은 이 선을 건드리지 못한다. (기울기 자체는 변할 수 있다. AI가 더 가파르게 만들 수도, 드물게는 멈추거나 꺾을 수도.) 다른 하나는 <strong>신용</strong>이다. 그 직선 위아래로 출렁이는 물결.</p>
+      <p>투자자가 던져야 할 질문은 그래서 하나로 모인다. 지금 눈앞의 GDP 성장은 진짜 실력이 만든 직선인가, 아니면 빚이 만든 물결인가?</p>
+    </div>
+  </details>
+
+  <details class="card principle" data-sec>
+    <summary><span class="arrow">▶</span><span class="cnum">5</span><span>경제를 정의하는 세 개의 시장</span><span class="badge lec">강의</span></summary>
+    <div class="card-body">
+      <p>경제가 굴러가는 무대는 세 개의 시장으로 나뉜다. 물건과 서비스가 오가는 <strong>실물 시장</strong>, 돈이 빌려지고 갚아지는 <strong>신용 시장</strong>, 그리고 나라끼리 돈을 바꾸는 <strong>외환 시장</strong>이다.</p>
+      <div class="mistake"><b>내가 틀린 곳.</b> 나는 "원자재·채권·증시"라고 답했다. 그것들은 사고파는 <b>대상</b>이지 경제가 굴러가는 <b>영역</b>이 아니다. 나의 1번 약점 — 거래 대상과 구조를 뒤섞는 병이 여기서 또 도졌다.</div>
+    </div>
+  </details>
+
+  <details class="card gold-log" data-sec>
+    <summary><span class="arrow">▶</span><span class="badge sup">금 레짐</span><span>밀물과 파도 — 금을 읽는 두 개의 층</span></summary>
+    <div class="card-body">
+      <p>금값은 한 겹이 아니라 두 겹으로 움직인다. 느리게 바닥을 밀어 올리는 <strong>밀물</strong>과, 그 위에서 출렁이는 <strong>파도</strong>다.</p>
+      <p>지금 운전대를 잡은 파도는 둘 중 하나다. <strong>통화 레짐(A)</strong>에서는 실질금리가 내려가면 금이 오른다. 이때 마지막으로 값을 밀어 올리는 손, 즉 한계매수자는 ETF를 사는 금융투자자다. <strong>공적수요 레짐(B)</strong>에서는 중앙은행의 탈달러 매수가 실질금리의 힘을 압도하며 금을 밀어 올린다. 이때 한계매수자는 중앙은행이다.</p>
+      <p>그 아래 밀물은 화폐화, 금 공급 부족, 세계의 부유화, 느린 탈달러가 천천히 바닥을 들어 올리는 흐름이고, 반대로 바닥을 갉아먹는 썰물은 비트코인이다.</p>
+      <p>반드시 붙들어야 할 구분이 둘 있다. 첫째, <strong>금리는 한 덩어리가 아니다.</strong> 명목금리와 실질금리는 다르고, 금을 움직이는 건 실질금리다. 둘째, <strong>달러는 대체로 실질금리의 거울</strong>이다. 달러를 별개 변수로 또 세면 같은 힘을 두 번 세는 이중계산이 된다.</p>
+      <p>레짐을 가르는 신호는 이렇다. 금과 실질금리가 역상관이면 A, 그 관계가 끊겨 디커플링이면 B. ETF의 유출입으로 한계매수자가 누구인지 확인한다.</p>
+      <blockquote>2026년 6월 기준 — 실질금리가 1.1%에서 2.2%로 오르고 금은 고점 대비 25% 빠졌으며 ETF는 유출 중이다. 통화 레짐(A)으로의 복귀다. 다만 중앙은행 매수가 바닥을 깔고 있어(중국 18개월 연속) 지정학 격화나 연준 피벗이 오면 다시 B로 전환될 수 있다. <em>이 숫자들은 6월의 것이니, 다음에 볼 땐 반드시 새로 뽑아 갱신할 것.</em></blockquote>
+    </div>
+  </details>
+
+  <details class="card" data-sec>
+    <summary><span class="arrow">▶</span><span class="cnum">퀴즈</span><span>보지 말고 먼저 답해 보기</span></summary>
+    <div class="card-body">
+      <ol>
+        <li>명제를 분석할 때 0번으로 하는 작업은?</li>
+        <li>통화량이 늘어도 물가가 안 오를 수 있는 이유를 한 단어로?</li>
+        <li>신용은 생산성을 올린다? (O/X)</li>
+        <li>금을 움직이는 것은 명목금리인가 실질금리인가?</li>
+        <li>달러를 실질금리와 별개 변수로 또 세면 무슨 오류인가?</li>
+        <li>레짐과 구조적 배경을 가르는 테스트는?</li>
+      </ol>
+      <div class="answer"><b>정답 —</b> 1) 정의부터 까기 · 2) 유통속도(V) · 3) X, 지출을 올릴 뿐 · 4) 실질금리 · 5) 이중계산 · 6) "운전대에 날짜가 찍히나"</div>
+    </div>
+  </details>
+
+  <details class="card" data-sec>
+    <summary><span class="arrow">▶</span><span class="cnum">숙제</span><span>멘토링 퀴즈 Q1~Q9 — 문제·내 답·판정·교훈</span></summary>
+    <div class="card-body">
+      <p class="hint">형식: 문제 → 내가 낸 답 → 판정 → 수정과 핵심.</p>
+
+      <p><strong>Q1. 투자자가 알아야 할 세 시장은?</strong><br>
+      처음엔 "원자재·채권·증시"라 답했다가 실물·신용·외환으로 고쳤다. 거래 대상이 아니라 경제가 굴러가는 영역이라는 것 — 나의 1번 약점을 그대로 밟은 자리다.</p>
+
+      <p><strong>Q2. 공급이 고정된 채 통화량만 늘면 물가는?</strong><br>
+      "오른다"는 방향은 맞혔지만 메커니즘에서 미끄러졌다. "통화량↑ → 통화승수↑"는 인과를 거꾸로 놓은 것이다. 한 단계 위에서 보면 "통화량↑ → 물가↑"조차 V가 일정하다는 전제 위에서만 거의 공리다. 2009~19년처럼 V가 무너지면 오지 않는다.</p>
+
+      <p><strong>Q3. 중국의 WTO 가입은 왜 디플레였나?</strong><br>
+      "값싼 인건비로 생산이 늘어서"라 답했는데, 엔진은 "더 많이"가 아니라 "훨씬 싸게"였다. 저임금 노동력이 세계 시장에 편입되며 구조적 디플레의 밀물("China price")을 만들었다. 지금은 미·중 디커플링으로 그 흐름이 역류해 인플레 쪽으로 돈다.</p>
+
+      <p><strong>Q4. 신용창조란? 왜 부채 사이클의 본질인가?</strong><br>
+      정의와 본질은 맞혔으나 단어 하나를 고쳤다. "신용 → 생산성↑"이 아니라 "신용 → 지출·경제활동↑"이다. 생산성은 직선, 신용은 물결.</p>
+
+      <p><strong>Q5. 공리에 가장 가까운 명제는?</strong><br>
+      "국채 금리 &lt; 회사채 금리"가 위험 프리미엄이라는 거의 공리다. "금리 인하 → 주식 상승"은 대출 고리가 위기 때 끊기니 케바케, "원유는 늘 양수"는 2020년 4월에 파훼됐다. 그 음수 유가는 "생산 감소"가 아니라 수요 붕괴 + 공급 과잉 + 저장 한계의 합작이었다.</p>
+
+      <p><strong>Q6. 지금 내 실력은 4단계 중 어디쯤?</strong><br>
+      스스로는 진짜 초보(1단계)라 적었는데, 바깥에서 본 평가는 오히려 과소평가였다. 실제론 1~2단계 경계에서 발판을 받으면 3단계 능력이 깜빡인다고 한다. "나는 모른다"를 정확히 아는 것 자체가 1단계를 제대로 밟는 일이다.</p>
+
+      <p class="hint"><strong>Q7~Q9 (미완)</strong> — 지수추종에 대한 내 입장과 강의 후 변화 성찰(Q7), 연역 추론 쪼개기 연습(Q8), '맞는 것 같은' 인과 명제 다섯 개 적어 보기(Q9).</p>
+    </div>
+  </details>
+</section>
+
+<!-- ============ 2 ============ -->
+<section id="ch2" data-ch>
+  <div class="ch-head"><span class="ch-num">2</span><h2>세션 02 — 경제를 세는 법, 그리고 위기를 분해하는 법</h2></div>
+  <p class="ch-meta">지식편 2회차 · 경제성장·GDP·5섹터·신용 사이클 · 작성 2026-06-28</p>
+
+  <p class="lede first">둘째 회차는 관점을 바꾼다. 돈이 어디서 솟는지를 배웠으니, 이번엔 경제를 어떻게 세고 어떻게 분해하는지를 익힌다. GDP는 무엇을 세고 무엇을 빼놓는가, 돈이 새고 채워지는 구멍은 어떻게 서로 묶여 있는가, 그리고 2008년과 2020년이라는 정반대의 위기를 같은 틀로 어떻게 해부하는가.</p>
+
+  <details class="card principle" data-sec>
+    <summary><span class="arrow">▶</span><span class="cnum">1</span><span>GDP에 주식이 안 들어가는 이유</span><span class="badge lec">강의</span></summary>
+    <div class="card-body">
+      <p>GDP가 세는 것은 오직 <strong>새로 생산된 것</strong>, 즉 그해에 새로 만들어진 물건과 서비스다. 삼성전자 주식 100만 원어치를 사는 일은 주인이 바뀌는 손바꿈일 뿐, 세상에 새 물건을 하나도 더하지 않는다. 그저 자금이 이전됐을 뿐이라 GDP에는 0으로 잡힌다.</p>
+      <p>신주 발행(IPO나 증자)도 마찬가지다. GDP에 잡히는 것은 그 돈으로 실제로 산 기계·공장 같은 <strong>실물 설비</strong>뿐이다. 주식까지 세면 이중계산이 된다.</p>
+      <blockquote>경제학에서 말하는 <strong>투자(I)</strong>는 기업이 기계·공장·건물·재고 같은 실물 설비에 돈을 쓰는 행위다. 일상어의 '주식 투자'와는 단어만 같을 뿐 뜻이 전혀 다르다. 금융자산은 실물 위에 얹힌 청구권일 뿐이다.</blockquote>
+      <p class="hint">나의 "거래 대상 vs 경제 구조" 혼동의 뿌리가 정확히 여기에 있다.</p>
+    </div>
+  </details>
+
+  <details class="card principle" data-sec>
+    <summary><span class="arrow">▶</span><span class="cnum">2</span><span>돈이 새는 구멍과 채우는 구멍 — 5섹터 모형</span><span class="badge lec">강의</span></summary>
+    <div class="card-body">
+      <p>경제의 순환을 세 쌍의 구멍으로 볼 수 있다. 한쪽에서 새어 나간 돈이 중간 부문을 거쳐 반대쪽 구멍으로 다시 채워진다.</p>
+      <pre><code>새는 구멍           중간 정거장          채우는 구멍
+저축(S)  ──── [ 금융 부문 ] ────  투자(I)
+세금(T)  ──── [ 정부 부문 ] ────  정부지출(G)
+수입(M)  ──── [ 해외 부문 ] ────  수출(X)</code></pre>
+      <p>저축은 은행을 거쳐 대출이 되어 투자로 돌아오고, 세금은 정부를 거쳐 정부지출로 나가며, 수입과 수출은 해외 부문이라는 양방향 창구로 드나든다.</p>
+    </div>
+  </details>
+
+  <details class="card principle" data-sec>
+    <summary><span class="arrow">▶</span><span class="cnum">3</span><span>구멍은 고무줄처럼 묶여 있다 — 회계 항등식</span><span class="badge sup">보충 · 재검증 권장</span></summary>
+    <div class="card-body">
+      <div class="formula">(S − I) + (T − G) + (M − X) = 0</div>
+      <p>세 항 모두 "새는 것 − 채우는 것"의 순서로 적었다(M−X이지 X−M이 아님에 주의). (T−G)가 음수면 재정적자, (M−X)가 양수면 무역적자(수입&gt;수출), (S−I)가 양수면 민간이 투자보다 저축을 더 많이 한다는 뜻이다.</p>
+      <p>이 셋의 합이 언제나 0이라는 건, 하나가 깊어지면 나머지가 강제로 그만큼 메운다는 뜻이다. 고무줄처럼. 이른바 <strong>쌍둥이 적자</strong>도 여기서 나온다. 재정적자가 늘면 소비가 늘고, 소비가 늘면 수입이 늘어 무역적자가 커진다.</p>
+      <div class="mistake"><b>새겨 둘 것.</b> 항등식은 상관을 보여줄 뿐 <b>인과의 방향은 주지 않는다.</b> 무엇이 원인이고 무엇이 결과인지는 항등식 바깥에서 따로 논증해야 한다.</div>
+    </div>
+  </details>
+
+  <details class="card principle" data-sec>
+    <summary><span class="arrow">▶</span><span class="cnum">4</span><span>감세와 부양책 — 같은 '돈↑', 정반대 경로</span><span class="badge lec">강의</span></summary>
+    <div class="card-body">
+      <div class="tbl-scroll"><table>
+        <tr><th>정책</th><th>건드리는 구멍</th><th>방식</th></tr>
+        <tr><td>트럼프식 <strong>감세</strong></td><td>T (새는 구멍)</td><td>새어 나가는 걸 줄여 돈을 남긴다</td></tr>
+        <tr><td>바이든식 <strong>부양책</strong></td><td>G (채우는 구멍)</td><td>채우는 걸 키워 돈을 붓는다</td></tr>
+      </table></div>
+      <p>결과는 둘 다 "시중에 돈이 늘어난다"로 같지만, 경로는 정반대다. 내가 미끄러진 지점은 "세금을 줄여서 그걸로 정부지출을 늘린다"고 이은 대목이다. 틀렸다. 감세는 T만 건드린다. G를 늘리는 건 완전히 별개의 행위다.</p>
+    </div>
+  </details>
+
+  <details class="card principle" data-sec>
+    <summary><span class="arrow">▶</span><span class="cnum">5</span><span>관세 — 순효과와 모형의 경계</span><span class="badge sup">보충 · 재검증 권장</span></summary>
+    <div class="card-body">
+      <p>처음엔 "관세 → 수입↓ → 새는 구멍을 막음 → 경제 활성화"로 추론했다. 논리의 틀은 맞았지만 두 곳에서 미끄러졌다.</p>
+      <p><strong>함정 하나.</strong> 관세는 수입을 막는 게 아니라 값을 올린다. 그 인상분은 결국 자국 소비자가 부담하니 소비(C)가 위축된다. <strong>함정 둘.</strong> 수입이 줄면 상대국이 보복관세를 매겨 수출(X)도 함께 줄어든다. 한 구멍만 보면 안 되고 순효과를 봐야 한다.</p>
+      <div class="mistake"><b>모형의 경계.</b> 소비(C)는 기본 순환일 뿐 깔끔한 '구멍'이 아니다. 가격을 건드리는 정책은 5섹터 틀만으론 부족하고 무역정책+물가의 틀을 함께 대야 한다.</div>
+    </div>
+  </details>
+
+  <details class="card principle" data-sec>
+    <summary><span class="arrow">▶</span><span class="cnum">6</span><span>2008과 2020 — 정반대의 위기를 같은 자로 재기</span><span class="badge lec">강의 + 보충</span></summary>
+    <div class="card-body">
+      <p>두 위기는 발원지도, 막힌 구멍도, 후유증도 정반대였다. 그런데 같은 5섹터 자를 대면 놀랍도록 선명하게 갈린다.</p>
+      <div class="tbl-scroll"><table>
+        <tr><th>단계</th><th>2008</th><th>2020</th></tr>
+        <tr><td>개요</td><td>서브프라임 → MBS 전파 → 리먼 파산 → 신용경색</td><td>팬데믹 → 락다운 → 실물 활동의 물리적 중단</td></tr>
+        <tr><td>시작 부문</td><td><strong>금융</strong> (실물은 멀쩡했다)</td><td><strong>실물</strong> (가계와 기업 순환이 동시에 정지)</td></tr>
+        <tr><td>막힌 구멍</td><td>I (대출이 끊김), C도 동반</td><td>C (소비가 강제 중단), 저축 폭증은 결과</td></tr>
+        <tr><td>대응</td><td>금리↓+QE / 국채·TARP</td><td>금리↓+QE / 가계에 직접 지원금</td></tr>
+        <tr><td>후유증</td><td>부채가 민간에서 정부로 이전, 디레버리징</td><td>수요↑+공급↓ → 인플레 폭등, 정부부채 급증</td></tr>
+      </table></div>
+      <p>공통의 패턴은 이렇다. 위기가 오면 막힌 민간의 구멍을 정부가 G로 메운다. 부채는 사라지는 게 아니라 주인이 바뀔 뿐이다. 민간에서 정부로.</p>
+      <div class="mistake"><b>내가 틀린 곳.</b> 2020년의 막힌 구멍을 저축(S)이라 답했다. 틀렸다. 저축은 <b>결과</b>이고, 직접 충격을 받은 건 소비(C)다.</div>
+    </div>
+  </details>
+
+  <details class="card principle" data-sec>
+    <summary><span class="arrow">▶</span><span class="cnum">7</span><span>"금리 인하 → 주가↑"를 현금흐름할인으로 해부하다</span><span class="badge lec">강의 + 보충</span></summary>
+    <div class="card-body">
+      <p>주식의 값을 미래 현금흐름의 현재가치로 보는 틀에 이 명제를 올려놓으면, 세 갈래로 갈라진다.</p>
+      <div class="formula">주가 = Σ 미래 현금흐름(CF) ÷ (1 + r)ᵗ,  성장률 g</div>
+      <div class="tbl-scroll"><table>
+        <tr><th>변수</th><th>금리를 내리면</th><th>경로</th><th>확실성</th></tr>
+        <tr><td><strong>r</strong> 할인율</td><td>↓ → 주가↑</td><td>무위험금리↓ → 분모↓</td><td>가장 직접적</td></tr>
+        <tr><td><strong>CF</strong> 현금흐름</td><td>↑ → 주가↑</td><td>이자부담↓ + 소비↑ → 이익↑</td><td>한 다리 건넘</td></tr>
+        <tr><td><strong>g</strong> 성장</td><td>↑ → 주가↑</td><td>대출이 쉬워짐 → 투자↑ → 성장 기대↑</td><td>한 다리 건넘</td></tr>
+      </table></div>
+      <p>그런데 이 명제가 <strong>위기 때 깨지는</strong> 이유도 같은 틀에서 드러난다. 금리를 내려도 겁먹은 사람들이 안 빌리면 CF와 g로 가는 "대출↑" 고리가 끊긴다. 게다가 위기엔 위험 프리미엄이 폭발해 r이 오히려 치솟는다. 그래서 2008년과 2020년 초입엔 금리를 내렸는데도 주가가 빠졌다. 결론은 하나다. <strong>"금리 인하 → 주가 상승"은 공리가 아니다.</strong></p>
+    </div>
+  </details>
+
+  <details class="card" data-sec>
+    <summary><span class="arrow">▶</span><span class="cnum">메모</span><span>2026년 6월, 사이클 위치를 날 것으로 적어 두다</span><span class="badge sup">보충 · 데이터</span></summary>
+    <div class="card-body">
+      <p>교정을 거친 내 판단은 <strong>확장 후기, 과열 국면</strong>이다. AI 설비투자가 7,250억 달러 규모로 폭발하고 반도체는 수요가 공급을 앞선다. 5월 소비자물가는 4.2%, 연준은 3.5~3.75%에서 동결했지만 점도표는 인상 쪽으로 돌아섰고, 주가는 사상 최고다. 다만 GDP 전망이 2.4%에서 2.2%로 내려온 게 상충 신호다. 과열인데 성장이 살짝 식는 — 스태그플레이션적 긴장이다.</p>
+      <div class="mistake"><b>미끄러진 곳 세 가지.</b> ① 동결인데 성급히 "인상 기조"로 점프했다. ② 동결의 이유를 재정적자로 봤으나 실제론 인플레였다. ③ 결론(둔화)과 근거(과열)의 방향이 어긋났다. <b>교훈 — 결론과 근거의 방향이 맞는지 반드시 확인할 것.</b></div>
+    </div>
+  </details>
+</section>
+
+<!-- ============ 3 ============ -->
+<section id="ch3" data-ch>
+  <div class="ch-head"><span class="ch-num">3</span><h2>변하지 않는 원리 — 확장판으로, 그리고 나의 금 로그</h2></div>
+  <p class="ch-meta">원리 스물셋 → 서른한 가지 확장판 문서로 이전 · 여기엔 금 로그와 숙제 문답 Q1~Q9 · 7/8 최신</p>
+
+  <p class="lede first">여기 있던 원리 카드 스물세 장은 <strong>서른한 가지로 넓혀 다시 쓴 확장판</strong>으로 옮겼다. 부(部)로 나누고 서문·종장·부록(금 관찰 일지·검증 문답)까지 붙인 완성본이니, 원리는 아래 링크에서 읽는다. 이 자리에는 확장판에 담지 못한 나만의 기록 — <strong>금 로그</strong>(2-레짐 실전 관찰)와 <strong>숙제 멘토링 퀴즈 Q1~Q9</strong>(내 답·판정·교훈) — 를 남겨 둔다.</p>
+
+  <a class="ext-note" href="principles.html">
+    <div class="ext-note-cap">읽을거리 · 확장판</div>
+    <div class="ext-note-title">시장을 읽는 서른한 가지 원리 →</div>
+    <div class="ext-note-sub">원리 스물셋을 서른한 장으로 넓혀, 부(部)로 나누고 서문·종장·부록(금 일지·검증 문답)까지 붙여 다시 쓴 완성본. “월가 리포트에서 길어낸, 유효기간 없는 생각의 도구들.” 새 창처럼 따로 열립니다.</div>
+  </a>
+
+  <details class="card gold-log" data-sec>
+    <summary><span class="arrow">▶</span><span class="badge sup">🥇 금 로그</span><span>2-레짐 프레임으로 금을 실전 관찰한 기록</span></summary>
+    <div class="card-body">
+      <blockquote>내 금 명제 — 레짐 A(실질금리·달러에 반응하는 금융 수요)와 레짐 B(중앙은행 탈달러가 만드는 구조적 바닥), 이 둘의 겹침으로 금을 읽는다.</blockquote>
+      <p><strong>2026-07-02, 달러와 금이 함께 올랐다.</strong> 금은 온스당 4,068달러로 1.13% 올랐고 달러지수도 101.42로 0.23% 올랐다. 레짐 A로 보면 워시의 발언이 단기금리를 눌러 실질금리를 낮췄으니 금에 우호적이다. 그런데 레짐 B의 흔적일 수도 있다. 역상관이 깨진 날은 달러와 무관한 수요(중앙은행이나 제도 불안 헤지)의 자국일 수 있기 때문이다. 하루로 판정하는 건 금물.</p>
+      <p><strong>6월 말, 달러↓·금↓로 역상관이 붕괴했다.</strong> 금이 4,050을 하회해 8개월 최저인 4,026.45로 밀렸다. 달러가 약한데 금이 밀리는 건 취약(카드 17)이다. 상하이는 온스당 1달러 디스카운트, 헤지펀드는 매도로 돌아섰다. 배경은 연말 0.33%포인트 인상을 미리 반영한 것 — 지정학 프리미엄이 사라지며 재료가 지정학에서 연준으로 회귀했다.</p>
+      <p><strong>기관 전망의 충돌은 시계의 충돌이다(카드 19).</strong> HSBC는 단기로 4,000 재이탈 시 손절 연쇄로 더 아래를 보고, 반등 실마리로 중앙은행 재매수를 꼽는다. UBS는 12개월 목표를 5,200달러로 잡으며 중앙은행 수요와 구조적 달러 약세를 근거로 든다. 번역하면 HSBC는 레짐 A가 단기를 지배한다고, UBS는 레짐 B가 장기를 지배한다고 보는 것이다. 모순이 아니라 시계의 차이다.</p>
+      <p><strong>레짐 판별의 축적 —</strong> 6월 말 달러↓·금↓(취약, A 우세), 7월 1일 달러↑·금↑(B의 흔적?). 결국 <strong>"중앙은행 매수가 재개되느냐"가 레짐 B 바닥의 스위치</strong>다. 체크리스트: WGC 톤수, 10년 실질금리(DFII10), 상하이 프리미엄, 달러·금 롤링 상관, 4,000 지지선.</p>
+    </div>
+  </details>
+
+  <details class="card dark" data-sec>
+    <summary><span class="arrow">▶</span><span>📌 스물세 장을 관통하는 메타 원리</span></summary>
+    <div class="card-body">
+      <p>카드를 다 덮고 나면 몇 개의 굵은 줄기가 남는다. 개별 원리를 잊더라도 이 줄기만은 몸에 배게 하려 한다.</p>
+      <div class="grid2">
+        <div class="gitem"><span class="n">1</span><span><b>한쪽만 보지 마라</b> — 반대편 변수를 항상 (1·5·6)</span></div>
+        <div class="gitem"><span class="n">2</span><span><b>분해해서 봐라</b> — 무엇이 무엇을 만들었나 (2·7·13·15·16)</span></div>
+        <div class="gitem"><span class="n">3</span><span><b>단위·기준선을 먼저</b> — 날 숫자는 무의미 (3·4·12)</span></div>
+        <div class="gitem"><span class="n">4</span><span><b>시간축을 구분하라</b> — 선행·동행, 올해·작년 (10·12·19)</span></div>
+        <div class="gitem"><span class="n">5</span><span><b>구조와 타이밍을 분리하라</b> (8·18)</span></div>
+        <div class="gitem"><span class="n">6</span><span><b>예측을 사실로 못 박지 마라</b> (전 카드 공통)</span></div>
+        <div class="gitem"><span class="n">7</span><span><b>밸류체인 위치가 반응을 정한다</b> (9)</span></div>
+        <div class="gitem"><span class="n">8</span><span><b>기대·심리가 반응을 정한다</b> (11·13)</span></div>
+        <div class="gitem"><span class="n">9</span><span><b>제도·독립성은 통화가치의 토대</b> (14)</span></div>
+        <div class="gitem"><span class="n">10</span><span><b>헤드라인보다 구성과 만기를</b> (15·22)</span></div>
+        <div class="gitem"><span class="n">11</span><span><b>관계가 깨지는 순간에 정보가 있다</b> (17)</span></div>
+        <div class="gitem"><span class="n">12</span><span><b>뉴스의 시간과 실물의 시간은 다르다</b> (18·23)</span></div>
+        <div class="gitem"><span class="n">13</span><span><b>가정 사슬을 펼쳐라</b> — 관절 하나로 무너진다 (20)</span></div>
+        <div class="gitem"><span class="n">14</span><span><b>과녁은 움직인다</b> — 반응으로 역추론 (4·21)</span></div>
+        <div class="gitem"><span class="n">15</span><span><b>정책가의 신념도 데이터 앞에 뒤집힌다</b> (14)</span></div>
+      </div>
+    </div>
+  </details>
+
+  <details class="card" data-sec>
+    <summary><span class="arrow">▶</span><span class="cnum">로그</span><span>실전 적용 — 7/2 예고편의 성적표와 소크라테스 문답</span></summary>
+    <div class="card-body">
+      <p><strong>예측 검증.</strong> ADP가 9.8만(예상 하회)을 낸 뒤 BLS가 5.7만(예상 대폭 하회)을 냈다. 방향은 ADP가 맞혔다. "ADP로 BLS를 확정하지 말라"는 원칙은 여전히 유효하지만(크기는 달랐다), 원칙과 결과를 둘 다 기록해 둔다. 대체 데이터를 든 쪽은 "고용이 회복 중"이라 주장하니, 정부와 민간의 충돌은 다음 달 수정치가 심판할 것이다.</p>
+      <p><strong>정책 함의.</strong> 약한 BLS에 낮은 에너지 가격이 겹치며 7월 인상 가능성이 급감했다. 인상 기대의 후퇴는 금의 단기 압력(레짐 A)을 덜어 주는 요인이다.</p>
+      <p><strong>소크라테스 문답(7/3).</strong> <em>AI發 물가 압력이 왜 소비자물가보다 생산자물가에서 먼저 잡히나?</em> — "PPI가 선행해서"는 결과일 뿐 이유가 아니다(순환논리). 진짜 이유는 충격의 진입 지점이 기업 간 거래(자본재·중간재)이기 때문이다. 소비자물가에는 전가 우회로와 수입 누출로 희석되어 도달한다. <em>약한 고용은 워시의 유턴을 앞당기나 미루나?</em> — 미루는 재료다. 단 그 유예는 "BLS가 진실"이라는 가정 위에 서 있다. 잡음이라면 미뤄진 게 아니라 가려진 것이다. <em>중립금리 역추론.</em> — 금리가 진짜 브레이크였다면 고용은 식어야 한다. 고용이 재가속하면 "긴축 중"이라는 믿음이 틀렸다는 폭로다. 판정 조건을 미리 못 박아 둔다. 향후 2~3개월의 고용과 수정치, 대체 데이터와의 수렴, 임금. 강세로 수렴하면 중립금리가 폭로된 것이고, 그때 유턴 시계가 재가동되며 그것이 내 AI 포트폴리오의 경계 신호가 된다.</p>
+    </div>
+  </details>
+</section>
+
+<!-- ============ 4 ============ -->
+<section id="ch4" data-ch>
+  <div class="ch-head"><span class="ch-num">4</span><h2>명제 카드 — 확신을 해부대에 올리다</h2></div>
+  <p class="ch-meta">투자 명제를 게이트 다섯 칸에 넣어 검증한 기록</p>
+
+  <p class="lede first">명제 카드는 확신을 다스리는 장치다. 어떤 판단이 옳게 느껴질 때, 그 느낌을 그대로 믿는 대신 다섯 칸의 해부대에 눕힌다. 근거는 한 줄로, 사슬은 눈에 보이게, 가장 약한 관절은 정직하게, 그리고 무엇보다 "이 명제가 틀렸음을 무엇으로 알아챌지"를 미리 적는다.</p>
+
+  <details class="card" data-sec>
+    <summary><span class="arrow">▶</span><span class="cnum">#01</span><span>금 가격 레짐 판별</span><span class="badge sup">난이도 3</span></summary>
+    <div class="card-body">
+      <p class="hint">대상: 금(XAU) · 작성 2026-06-20</p>
+      <p><strong>핵심 명제.</strong> 금은 두 층으로 움직인다. 단기 스윙을 만드는 파도(레짐)와 장기 바닥을 밀어 올리는 밀물(구조적 배경)이다. 레짐 A(통화)에서는 실질금리가 내리면 금이 오르고 한계매수자가 ETF의 금융투자자다. 레짐 B(공적수요)에서는 지정학발 중앙은행 매수가 실질금리를 압도하며 한계매수자가 중앙은행이다. 밀물은 화폐화·공급 부족·세계의 부유화·느린 탈달러, 썰물은 비트코인이며, 예외적으로 화폐 신뢰가 붕괴하면 화폐화가 급성 레짐으로 점화한다.</p>
+      <p><strong>메커니즘.</strong> 금은 이자를 주지 않으니 보유 비용이 곧 실질금리(명목−기대인플레)다. 역상관은 한계매수자가 금융투자자일 때만 성립하고, 중앙은행이 그 자리를 차지하면 디커플링한다. 달러는 실질금리의 거울이니 따로 세면 이중계산이다.</p>
+      <p><strong>판별 절차.</strong> 뽑을 것은 금값 추세, 10년 실질금리(FRED DFII10), 중앙은행 순매수(WGC), 금 ETF 플로우. 읽는 법은 금과 실질금리가 역상관이면 A, 디커플링이면 B. 금값이 오르는데 ETF가 빠지면 운전대는 중앙은행(B)이다.</p>
+      <p><strong>무효화 조건.</strong> A라 판정했는데 실질금리도 오르고 금도 오르면 폐기하고 B로 전환한다. ETF가 빠지는데 금값이 오르면 운전대를 중앙은행으로 넘긴다. 재전환 방아쇠는 지정학 충격, 연준의 비둘기 피벗, 중국 매수 재가속.</p>
+    </div>
+  </details>
+
+  <details class="card" data-sec>
+    <summary><span class="arrow">▶</span><span class="cnum">#02</span><span>"AI 성장 → 내 메가캡 베팅"을 해체하다</span><span class="badge warn">난이도 5</span></summary>
+    <div class="card-body">
+      <p class="hint">대상: 포트폴리오 70%(반도체·메가캡 지수) · 초장기 매크로 · 작성 2026-06-20</p>
+      <p><strong>해체할 명제.</strong> "AI가 발전하면 미국이 더 성장하고, 그 과실을 내 메가캡 지수가 가져간다." 한 문장처럼 보이지만 실은 다섯 개의 독립 명제가 뭉쳐 있고, 이기려면 그 여럿이 모두 참이어야 한다.</p>
+      <div class="tbl-scroll"><table>
+        <tr><th>명제</th><th>판정</th><th>핵심</th></tr>
+        <tr><td>①-a 기술은 계속 발전한다</td><td>거의 공리</td><td>스케일링 체감 신호는 주의</td></tr>
+        <tr><td>①-b AI → 실측 생산성으로 전환</td><td><strong>케바케 ★가장 근본이자 무름</strong></td><td>솔로의 역설. 지출은 생산성이 아니다</td></tr>
+        <tr><td>①-c 회수 기간이 지금이다</td><td>주관</td><td>타이밍 미스매치가 곧 버블 메커니즘</td></tr>
+        <tr><td>② 미국의 우위가 지속된다</td><td>조건부</td><td>해자 = 수출통제+자본깊이+인재+전력</td></tr>
+        <tr><td>③ 내 지수가 과실을 독식한다</td><td>삼중 조건부 ★가장 약함</td><td>국가의 성장 ≠ 주주의 수익</td></tr>
+      </table></div>
+      <p><strong>메커니즘.</strong> ①-b에서, 돈을 쓴다는 건 ①(발전)의 증거지 생산성의 증거가 아니다. ②에서, 순수 기술 해자는 딥시크처럼 빠르게 좁혀진다. ③에서, 설비투자의 주체와 수익의 주체가 다르다(비상장으로의 유출, 기저율, 상품화에 따른 마진 붕괴).</p>
+      <p><strong>반증 신호(뜨면 70%를 재검토).</strong> 생산성 통계의 부재나 파일럿 ROI 실패, 스케일링의 체감, 딥시크식 효율 점프나 수출통제 붕괴, 비상장으로의 유출·목표 ROIC 미달·마진 압축.</p>
+      <p><strong>핵심 깨달음.</strong> 내 70%는 'AI가 발전한다'가 아니라 그 아래의 ①-b·②·③(전부 케바케)에 거는 베팅이다. 그리고 제일 밑돌인 ①-b가 제일 무르다. 결론은 "팔아라"가 아니다. <strong>"무엇을 가정하고 들고 있는지 알고, 반증 신호를 감시하라"</strong>는 것이다.</p>
+    </div>
+  </details>
+
+  <details class="card" data-sec>
+    <summary><span class="arrow">▶</span><span class="cnum">양식</span><span>명제 카드 빈 템플릿</span></summary>
+    <div class="card-body">
+      <pre><code># 명제 카드 #NN — [제목]
+- 대상 자산 / 작성일 / 난이도(1~5)
+
+## 핵심 명제 (if-then)
+
+## 메커니즘
+
+## 판별 절차
+Pull(데이터):
+Check(신호 판독):
+
+## 무효화 조건
+
+## 현재 데이터 정합성 (절차 돌릴 때만, 본체엔 결론을 박지 않는다)
+| 실행일 | 판정 | 근거(핵심 수치) |</code></pre>
+    </div>
+  </details>
+</section>
+
+<!-- ============ 5 ============ -->
+<section id="ch5" data-ch>
+  <div class="ch-head"><span class="ch-num">5</span><h2>금 레짐 월간 워크시트 — 매달 한 번, 손으로 채우는 판별표</h2></div>
+  <p class="ch-meta">여덟 편의 글에서 뽑은 임계값·메커니즘·출처를 전부 박은 실전용</p>
+
+  <p class="lede first">앞의 모든 사고가 결국 도달하는 곳은 매달 한 번 손으로 채우는 이 표다. 읽기만 해선 늘지 않는다. 빈칸을 실제로 메우고, 체크박스를 실제로 켜고, 결론을 실제로 한 문단 써 봐야 레짐이라는 감각이 몸에 붙는다. 아래 입력값은 브라우저에 자동 저장되니, 매달 이 페이지로 돌아와 갱신하면 된다.</p>
+
+  <blockquote>출처 약어 — SC=SpaceCowboy · 첫=첫번째자리 · Be=Bewizard · IN=INTP · MR=마인드러너 · 비=비트 · 익=익명</blockquote>
+  <p style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--sub)">작성일: <input class="ws-blank" data-ws="date" style="width:150px" placeholder="20__ . __ . __">　│　금 현재가: $<input class="ws-blank" data-ws="price" placeholder="______"></p>
+
+  <details class="card" data-sec open>
+    <summary><span class="arrow">▶</span><span class="cnum">PART 1</span><span>데이터와 임계값 판정</span></summary>
+    <div class="card-body">
+      <p><strong>A. 천장 — 금을 누르는 힘 (실질금리·달러)</strong></p>
+
+      <p><b>A1. 10년 실질금리 (FRED DFII10) — 이번 달 <input class="ws-blank" data-ws="a1" placeholder="__"></b>%<br>
+      <span class="hint">금은 무이자라 실질금리가 오르면 국채 대비 기회비용이 커져 금이 눌린다. 단기 최대 압력.</span></p>
+      <label class="check"><input type="checkbox" data-ws="a1c1"><span>2.0% 부근이거나 하락 → 우호 (4,800~4,900 테스트)</span></label>
+      <label class="check"><input type="checkbox" data-ws="a1c2"><span>2.30% 이상 + 달러 103 이상 동시 → 악재, 방어 전환</span></label>
+      <label class="check"><input type="checkbox" data-ws="a1c3"><span>+2% 이상 고착 → 3,800~4,200 박스권</span></label>
+      <p class="hint">반론: 2022년 이후엔 실질금리가 급등해도 금이 올랐다. 한 변수로 단정하지 말고 레짐으로 볼 것.</p>
+
+      <p><b>A2. 달러지수(DXY) — 이번 달 <input class="ws-blank" data-ws="a2" placeholder="__"></b><br>
+      <span class="hint">강달러는 외국인에게 금을 비싸게 만들고, 경쟁 가치저장수단이 된다.</span></p>
+      <label class="check"><input type="checkbox" data-ws="a2c1"><span>99 부근 → 우호</span></label>
+      <label class="check"><input type="checkbox" data-ws="a2c2"><span>103 이상 → 악재 (A1과 동시면 강한 매도)</span></label>
+      <p class="hint">메모: 지금의 강달러는 구조적이 아니라 지정학발 피난처다. 상황이 풀리면 달러↓ → 금↑.</p>
+
+      <p><b>A3. 장단기 스프레드 (FRED T10Y2Y) — 이번 달 <input class="ws-blank" data-ws="a3" placeholder="__"></b>%p</p>
+      <label class="check"><input type="checkbox" data-ws="a3c1"><span>음수(역전) → 침체 임박, 연준 인하 강제 · <b>완만화는 역전이 아니다. 진짜 신호는 역전.</b></span></label>
+
+      <p><b>A4. 연준 스탠스 (FOMC)</b><br>
+      <span class="hint">핵심 질문은 "올릴까"가 아니라 "인플레를 따라잡을 만큼 강하게 올릴 수 있나"이다.</span></p>
+      <label class="check"><input type="checkbox" data-ws="a4c1"><span>매파·higher-for-longer → 금 박스권</span></label>
+      <label class="check"><input type="checkbox" data-ws="a4c2"><span>비둘기·인하 시사 → 우호 (고용 붕괴 시 강제 피벗 → 실질금리 마이너스 = 6,000 도화선)</span></label>
+
+      <p style="margin-top:16px"><strong>B. 바닥 — 금을 받치는 힘 (중앙은행·탈달러)</strong></p>
+
+      <p><b>B1. 중앙은행 분기 순매수 (WGC) — 최근 분기 <input class="ws-blank" data-ws="b1" placeholder="__"></b>톤<br>
+      <span class="hint">금은 누구의 부채도 아니고 제재도 낮은 중립자산이라, 가격에 둔감한 구조적 매수가 하단을 받친다.</span></p>
+      <label class="check"><input type="checkbox" data-ws="b1c1"><span>180~200톤 이상 유지 → 5,150 목표 정당화</span></label>
+      <label class="check"><input type="checkbox" data-ws="b1c2"><span>2분기 연속 100톤 이하 또는 순매도 → 바닥 붕괴</span></label>
+      <p class="hint">★약점 함정: 비중(%) 상승은 가격효과일 수 있다. 반드시 톤(물량)으로 볼 것.</p>
+
+      <p><b>B2. 외환보유고 달러 비중 (IMF COFER) — 추세 <input class="ws-blank" data-ws="b2" placeholder="__"></b></p>
+      <label class="check"><input type="checkbox" data-ws="b2c1"><span>달러 비중 하락 지속 → 구조적 우호 (느린 추세) · 러시아 자산 동결(2022) 학습이 탈달러를 가속</span></label>
+
+      <p><b>B3. 지정학 (뉴스·유가)</b></p>
+      <label class="check"><input type="checkbox" data-ws="b3c1"><span>중동 장기화 + 유가 90~100 이상 → 실질금리 마이너스 압력 · 단 유동성이 마르면 금도 투매</span></label>
+
+      <p style="margin-top:16px"><strong>C. 연료 — 천장을 뚫을 힘 (ETF·투기·실물)</strong></p>
+
+      <p><b>C1. 글로벌 ETF 보유량 (WGC) — 이번 달 <input class="ws-blank" data-ws="c1" placeholder="__"></b>톤</p>
+      <label class="check"><input type="checkbox" data-ws="c1c1"><span>4,176톤(사상 최고) 돌파 → 5,000 위</span></label>
+      <label class="check"><input type="checkbox" data-ws="c1c2"><span>4,000톤 이하 재하락 → 약세</span></label>
+
+      <p><b>C2. COMEX 투기 포지션 (CFTC, Managed Money)</b></p>
+      <label class="check"><input type="checkbox" data-ws="c2c1"><span>가벼움 → 하락 방어력↑ (양날: 사줄 모멘텀도 없음)</span></label>
+      <label class="check"><input type="checkbox" data-ws="c2c2"><span>과열 → 단기 조정 경계</span></label>
+
+      <p><b>C3. 바·코인 수요 (WGC) — 최근 분기 <input class="ws-blank" data-ws="c3" placeholder="__"></b>톤</p>
+      <label class="check"><input type="checkbox" data-ws="c3c1"><span>350톤 이상 → 견조 / 이하 → 피로 · 장신구는 −23%지만 투자·중앙은행이 메우는 "수요의 질" 변화가 핵심</span></label>
+
+      <p style="margin-top:16px"><strong>D. 거시 배경 (레짐 판정용)</strong></p>
+      <div class="tbl-scroll"><table>
+        <tr><th>지표</th><th>출처</th><th>값</th><th>메모</th></tr>
+        <tr><td>기대인플레(미시간 1년)</td><td>FRED MICH</td><td><input class="ws-blank" data-ws="d1" placeholder="__" style="width:70px"></td><td>자기실현. 4.6% 이상이면 고착 우려</td></tr>
+        <tr><td>근원 PCE</td><td>FRED PCEPILFE</td><td><input class="ws-blank" data-ws="d2" placeholder="__" style="width:70px"></td><td>연준이 보는 진짜 물가</td></tr>
+        <tr><td>부채/GDP</td><td>FRED GFDEGDQ188S</td><td><input class="ws-blank" data-ws="d3" placeholder="__" style="width:70px"></td><td>120% 이상 = 재정지배 압력</td></tr>
+        <tr><td>Global M2</td><td>tradingview</td><td><input class="ws-blank" data-ws="d4" placeholder="__" style="width:70px"></td><td>M2만으론 금 3~4배를 설명 못함</td></tr>
+        <tr><td>금·은 비율</td><td>XAU/XAG</td><td><input class="ws-blank" data-ws="d5" placeholder="__" style="width:70px"></td><td>60:1 평균, 85~90:1이면 침체 초기</td></tr>
+      </table></div>
+    </div>
+  </details>
+
+  <details class="card" data-sec>
+    <summary><span class="arrow">▶</span><span class="cnum">PART 2</span><span>레짐 판정 (Era 틀)</span></summary>
+    <div class="card-body">
+      <p><b>Q1. 연준이 인플레를 "금리로" 잡고 있나?</b> (실질금리 추세가 양(+)으로 오르고 기대인플레가 꺾였나?)</p>
+      <label class="check"><input type="checkbox" data-ws="q1y"><span>YES = 통화 우위(볼커식) = Era2형 (금이 죽은 시대)</span></label>
+      <label class="check"><input type="checkbox" data-ws="q1n"><span>NO = 재정지배 = Era3형 (금 강세) · 근거: 부채/GDP 120% 이상이라 "볼커는 돌아올 수 없다"</span></label>
+
+      <p><b>Q2. 구조적 바닥(B1)이 살아 있나?</b></p>
+      <label class="check"><input type="checkbox" data-ws="q2y"><span>YES = 톤 유지</span></label>
+      <label class="check"><input type="checkbox" data-ws="q2n"><span>NO = 2분기 연속 100톤 이하·순매도</span></label>
+
+      <div class="tbl-scroll"><table>
+        <tr><th>Q1 (금리로 잡나)</th><th>Q2 (바닥 살아있나)</th><th>레짐</th><th>자세</th></tr>
+        <tr><td>NO</td><td>YES</td><td><strong>금 강세 (Era3 연장)</strong></td><td>분할매수·보유</td></tr>
+        <tr><td>NO</td><td>NO</td><td>바닥 의존 약화</td><td>신중, 비중 점검</td></tr>
+        <tr><td>YES</td><td>YES</td><td>천장 강화</td><td>관망·박스 대응</td></tr>
+        <tr><td>YES</td><td>NO</td><td><strong>금 약세 (Era2 재현)</strong></td><td>보수적·헤지</td></tr>
+      </table></div>
+
+      <p><b>AI 분기점</b> (마인드러너 vs 익명의 충돌)<br>
+      <span class="hint">AI가 공급 디플레라면 실질금리 양수 유지 → 금 약세, AI가 수요 견인 인플레라면 고착 → 금 강세. 이번 달 증거가 강한 쪽:</span> <input class="ws-blank" data-ws="ai" placeholder="______" style="width:150px"></p>
+      <p class="hint">단기 오버레이: 강세 레짐인데 A1·A2가 단기 반등이면 눌림목, C1·C2가 과열이면 조정 경계.</p>
+    </div>
+  </details>
+
+  <details class="card" data-sec>
+    <summary><span class="arrow">▶</span><span class="cnum">PART 3</span><span>가격 레벨 점검</span></summary>
+    <div class="card-body">
+      <div class="tbl-scroll"><table>
+        <tr><th>레벨</th><th>의미</th><th>출처</th></tr>
+        <tr><td>$4,180</td><td>3월 저점 하회 = "하단이 높아졌다"의 붕괴 = 명확한 손절</td><td>SC</td></tr>
+        <tr><td>$3,900</td><td>2025 저점 = 명제 점검선 (리스크 모드 전환)</td><td>MR</td></tr>
+        <tr><td>손절 없음</td><td>트리거 신뢰 / 평생 보유 보험</td><td>Be, 첫</td></tr>
+      </table></div>
+      <p><strong>"트레이드(손절 있음)"냐 "보험(평생)"이냐를 먼저 정의해야 손절선이 정해진다.</strong> 이번 달 금값 vs 레벨: <input class="ws-blank" data-ws="p3" placeholder="______" style="width:180px"></p>
+    </div>
+  </details>
+
+  <details class="card" data-sec>
+    <summary><span class="arrow">▶</span><span class="cnum">PART 4</span><span>반증 조건 (두 개 이상 켜지면 재검토)</span></summary>
+    <div class="card-body">
+      <label class="check"><input type="checkbox" data-ws="f1"><span>중앙은행 2분기 연속 순매도</span></label>
+      <label class="check"><input type="checkbox" data-ws="f2"><span>약달러·실질금리 하락인데도 ETF가 회복 못함 (MR "진짜 경고신호")</span></label>
+      <label class="check"><input type="checkbox" data-ws="f3"><span>실질금리 +2.3% 이상 고착 + 달러 103 이상</span></label>
+      <label class="check"><input type="checkbox" data-ws="f4"><span>AI 디플레로 기대인플레가 2%대에 안착</span></label>
+      <label class="check"><input type="checkbox" data-ws="f5"><span>장기금리 5.5~6% 이상 → 금에서 국채로 역류</span></label>
+    </div>
+  </details>
+
+  <details class="card" data-sec>
+    <summary><span class="arrow">▶</span><span class="cnum">PART 5</span><span>비중 산출 (선택)</span></summary>
+    <div class="card-body">
+      <p>시나리오 확률 × 목표 비중 = 기댓값. 예를 들어 골디락스 22%×5% + 스태그 27%×20% + 안정침체 18%×5% + 인플레드리븐 33%×15% = 12.35%.</p>
+      <p style="font-family:'IBM Plex Mono',monospace;font-size:13.5px">물가뷰 상승 <input class="ws-blank" data-ws="w1" placeholder="__" style="width:60px">% / 경기뷰 호조 <input class="ws-blank" data-ws="w2" placeholder="__" style="width:60px">% / 산출 목표비중 <input class="ws-blank" data-ws="w3" placeholder="__" style="width:60px">%</p>
+      <p class="hint">리스크: 리밸런싱과 점진주의를 안 하거나 단일 자산에 집착하는 것 — "수신(修身)이 곧 핵심 자산".</p>
+    </div>
+  </details>
+
+  <details class="card" data-sec open>
+    <summary><span class="arrow">▶</span><span class="cnum">PART 6</span><span>결론 — 한 문단으로</span></summary>
+    <div class="card-body">
+      <p style="font-size:13.5px;color:var(--sub)">이번 달 레짐 / 결정적 근거(천장·바닥·연료·AI) / 지난달 대비 변화 / 자세(매수·보유·관망·축소·헤지) / 목표비중 / 다음 달 트리거(FOMC·WGC·고용·CPI) / 반증 점등 __/5</p>
+      <textarea class="concl" data-ws="concl" placeholder="이번 달 결론을 한 문단으로 직접 써 본다…"></textarea>
+    </div>
+  </details>
+
+  <details class="card warn" data-sec>
+    <summary><span class="arrow">▶</span><span class="badge warn">항상</span><span>매번 틀리는 다섯 곳 (인과)</span></summary>
+    <div class="card-body">
+      <ol>
+        <li>중앙은행은 <strong>비중(%)이 아니라 톤</strong>으로 본다. 비중 상승은 가격효과 착시일 수 있다.</li>
+        <li>침체 신호는 완만화가 아니라 <strong>역전(T10Y2Y 음수)</strong>이다.</li>
+        <li>동력은 인플레 그 자체가 아니라 <strong>금리로 못 잡게 만드는 부채 구조</strong>(재정지배)다.</li>
+        <li>"실질금리−금 역상관"은 2022년 이후 약해졌다. 한 변수로 단정하지 말고 <strong>레짐(Q1·Q2)</strong>으로.</li>
+        <li>금을 단독으로 보지 말고, <strong>주식의 기대수익 대비</strong> 매력도를 한 번 더 견준다.</li>
+      </ol>
+    </div>
+  </details>
+</section>
+
+</main>
+</div>
+
+<script>
+(function(){
+  var q = document.getElementById('q');
+  var nomatch = document.getElementById('nomatch');
+  var secs = Array.prototype.slice.call(document.querySelectorAll('details[data-sec]'));
+  var chs = Array.prototype.slice.call(document.querySelectorAll('section[data-ch]'));
+
+  // ---- search filter ----
+  function filter(){
+    var v = q.value.trim().toLowerCase();
+    if(v.length < 2){
+      secs.forEach(function(d){ d.style.display=''; });
+      chs.forEach(function(c){ c.style.display=''; });
+      nomatch.style.display='none';
+      return;
+    }
+    var anyGlobal = false;
+    chs.forEach(function(ch){
+      var cards = ch.querySelectorAll('details[data-sec]');
+      var anyInCh = false;
+      Array.prototype.forEach.call(cards, function(d){
+        var hit = d.textContent.toLowerCase().indexOf(v) !== -1;
+        d.style.display = hit ? '' : 'none';
+        if(hit){ d.open = true; anyInCh = true; anyGlobal = true; }
+      });
+      ch.style.display = anyInCh ? '' : 'none';
+    });
+    nomatch.style.display = anyGlobal ? 'none' : 'block';
+  }
+  q.addEventListener('input', filter);
+
+  document.getElementById('openAll').addEventListener('click', function(){
+    secs.forEach(function(d){ if(d.style.display!=='none') d.open = true; });
+  });
+  document.getElementById('closeAll').addEventListener('click', function(){
+    secs.forEach(function(d){ d.open = false; });
+  });
+
+  // ---- localStorage persistence (worksheet + open state) ----
+  var KEY = 'macro-note-v1';
+  var store = {};
+  try { store = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e){ store = {}; }
+  function save(){ try { localStorage.setItem(KEY, JSON.stringify(store)); } catch(e){} }
+
+  // worksheet fields
+  document.querySelectorAll('[data-ws]').forEach(function(el){
+    var k = 'ws:' + el.getAttribute('data-ws');
+    if(el.type === 'checkbox'){
+      if(store[k]) el.checked = true;
+      el.addEventListener('change', function(){ store[k] = el.checked; save(); });
+    } else {
+      if(store[k] != null) el.value = store[k];
+      el.addEventListener('input', function(){ store[k] = el.value; save(); });
+    }
+  });
+
+  // ---- mobile TOC: close drawer after tapping a link ----
+  var tocCb = document.getElementById('tocToggle');
+  document.querySelectorAll('nav.toc a').forEach(function(a){
+    a.addEventListener('click', function(){ if(tocCb) tocCb.checked = false; });
+  });
+})();
+</script>
+</body>
+</html>
