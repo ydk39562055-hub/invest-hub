@@ -14,7 +14,11 @@ NY = "America/New_York"
 # ───────────────────────── 파라미터 ─────────────────────────
 DEFAULT = dict(
     htf_len=5, len=5, window=12, pb_window=24,
-    mss_mode="다리", sth_len=2,   # 다리: 스윕 직전 단기 고점(STH)을 변위 다리가 돌파 + 다리 안 FVG / 캔들: 변위 캔들 하나로 5봉 피벗 돌파
+    mss_mode="다리", sth_len=2,
+    bias_mode="없음",      # 없음 | 1H | 1H+4H : 상위 TF 구조 편향 방향의 스윕만 (롱 편향 → 저점 스윕만)
+    bias_len=3,            # 상위 TF 스윙 피벗 길이
+    disp15=False,          # 15분 변위 필수: 최근 disp15_bars 개 15분 봉 안에 편향 방향 변위 봉(몸통 ≥ ATR15 × disp15_mult) + FVG
+    disp15_bars=8, disp15_mult=1.5,   # 다리: 스윕 직전 단기 고점(STH)을 변위 다리가 돌파 + 다리 안 FVG / 캔들: 변위 캔들 하나로 5봉 피벗 돌파
     atr_len=14, atr_mult=1.5, body_pct=0.5, strong_x=1.5,
     use_pd=True, use_asia=True, use_ldn=True, use_ny=True, use_htf=True, use_int=False,
     s_asia=("20:00", "00:00"), s_ldn=("02:00", "05:00"), s_ny=("09:30", "16:00"),
@@ -80,6 +84,34 @@ def prepare(df, P):
     hl = pd.Series(hsl, index=avail).reindex(ts, method="ffill").values
     df["hh"], df["hl"] = hh, hl
 
+    # 상위 TF 구조 편향: 마지막 확정 스윙 고점 돌파 → +1, 스윙 저점 이탈 → -1 (봉 마감 후 다음 봉부터 유효)
+    def bias_series(rule, minutes):
+        x = df[["open", "high", "low", "close"]].resample(rule, label="left", closed="left").agg(
+            {"open": "first", "high": "max", "low": "min", "close": "last"}).dropna()
+        bh, bl = pivots(x["high"].values, x["low"].values, P["bias_len"])
+        cl = x["close"].values; b = np.zeros(len(x)); cur = 0
+        for j in range(len(x)):
+            if not np.isnan(bh[j]) and cl[j] > bh[j]: cur = 1
+            elif not np.isnan(bl[j]) and cl[j] < bl[j]: cur = -1
+            b[j] = cur
+        return pd.Series(b, index=x.index + pd.Timedelta(minutes=minutes)).reindex(ts, method="ffill").fillna(0).values
+    df["bias1h"] = bias_series("60min", 60)
+    df["bias4h"] = bias_series("240min", 240)
+
+    # 15분 변위: 15분 봉 j 가 몸통 ≥ ATR15×mult 이고 (j-1, j, j+1) 이 FVG 를 남기면 방향 ±1. 최근 disp15_bars 봉 안에 있으면 유효
+    x15 = df[["open", "high", "low", "close"]].resample("15min", label="left", closed="left").agg(
+        {"open": "first", "high": "max", "low": "min", "close": "last"}).dropna()
+    o15, h15, l15, c15 = [x15[k].values for k in ("open", "high", "low", "close")]
+    tr15 = np.maximum(h15 - l15, np.maximum(abs(h15 - np.roll(c15, 1)), abs(l15 - np.roll(c15, 1)))); tr15[0] = h15[0] - l15[0]
+    atr15 = rma(tr15, 14); d15 = np.zeros(len(x15)); last_dir = 0; last_j = -10**9
+    for j in range(1, len(x15) - 1):
+        body = abs(c15[j] - o15[j])
+        if body >= atr15[j] * P["disp15_mult"]:
+            if c15[j] > o15[j] and l15[j + 1] > h15[j - 1]: last_dir, last_j = 1, j
+            elif c15[j] < o15[j] and h15[j + 1] < l15[j - 1]: last_dir, last_j = -1, j
+        d15[j + 1] = last_dir if j + 1 - last_j <= P["disp15_bars"] else 0   # j+1 봉이 닫혀야 FVG 확정
+    df["disp15"] = pd.Series(d15, index=x15.index + pd.Timedelta(minutes=30)).reindex(ts, method="ffill").fillna(0).values
+
     # 전일 고/저 (뉴욕 달력일 기준, 직전 거래일)
     day = ts.date
     daily = df.groupby(day).agg(H=("high", "max"), L=("low", "min"))
@@ -131,6 +163,7 @@ def run(df, P, m1bars=None, verbose=False):
     o, h, l, c, v = d.open.values, d.high.values, d.low.values, d.close.values, d.volume.values
     atr, sh, sl, hh, hl = d.atr.values, d.sh.values, d.sl.values, d.hh.values, d.hl.values
     sth, stl = d.sth.values, d.stl.values
+    b1, b4, d15v = d.bias1h.values, d.bias4h.values, d.disp15.values
     pdh, pdl = d.pdh.values, d.pdl.values
     kz, eod, ts = d.kz.values, d.eod.values, d.index
     sess = {k: (d[k + "H"].values, d[k + "L"].values, d["in_" + k].values) for k in ("asia", "ldn", "ny")}
@@ -197,8 +230,13 @@ def run(df, P, m1bars=None, verbose=False):
             hi_hits.append((sw_hi(i, hh[i], P["use_htf"]), "HTF H", hh[i], True))
             lo_hits.append((sw_lo(i, sl[i], P["use_int"]), "Swing L", sl[i], False))
             hi_hits.append((sw_hi(i, sh[i], P["use_int"]), "Swing H", sh[i], False))
-            bull = next((x for x in lo_hits if x[0]), None)
-            bear = next((x for x in hi_hits if x[0]), None) if bull is None else None
+            bias = 0
+            if P["bias_mode"] == "1H": bias = b1[i]
+            elif P["bias_mode"] == "1H+4H": bias = b1[i] if b1[i] == b4[i] else 0
+            allow_bull = (P["bias_mode"] == "없음" or bias == 1) and (not P["disp15"] or d15v[i] == 1)
+            allow_bear = (P["bias_mode"] == "없음" or bias == -1) and (not P["disp15"] or d15v[i] == -1)
+            bull = next((x for x in lo_hits if x[0]), None) if allow_bull else None
+            bear = (next((x for x in hi_hits if x[0]), None) if allow_bear else None) if bull is None else None
             hit = bull or bear
             if hit:
                 F["sweep"] += 1; F["sweep_ext"] += int(hit[3])
