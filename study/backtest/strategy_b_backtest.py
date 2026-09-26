@@ -10,7 +10,7 @@ from ict_backtest import DEFAULT, prepare, attach_smt, in_sess, stats
 
 NY = "America/New_York"
 P0 = dict(min_gap=3.0, age5=24, age15=32, buffer=5.0, stop_buf=2.0, rr=2.0, win=("09:30", "12:00"), hard_exit="15:45",
-          max_day=1, short=False, mitigate="bottom", bias_mode="없음", need_sweep=False, sweep_bars=12, smt_mode="없음", vwap=False)
+          max_day=1, short=False, mitigate="bottom", bias_mode="없음", need_sweep=False, sweep_bars=12, smt_mode="없음", vwap=False, be_r=0.0, trail=False)
 
 def fvg_list(o, h, l, c, ts, min_gap, allow):
     """(dir, bottom, top, formed_idx) — formed_idx 는 세 번째 봉 인덱스(이 봉이 닫힌 뒤부터 유효)"""
@@ -79,6 +79,8 @@ def run_b(df, P, smt=None):
         # 포지션 관리 (5분 봉, 손절 우선)
         if pos is not None:
             d = pos["dir"]
+            if P["be_r"] > 0 and not pos.get("be") and d * (c[i - 1] - pos["entry"]) >= pos["risk"] * P["be_r"]:
+                pos["stop"] = pos["entry"]; pos["be"] = True
             if (o[i] <= pos["stop"]) if d == 1 else (o[i] >= pos["stop"]):
                 px, ex = o[i], "STOP"
             elif (l[i] <= pos["stop"]) if d == 1 else (h[i] >= pos["stop"]):
@@ -90,6 +92,7 @@ def run_b(df, P, smt=None):
             else:
                 px = None
             if px is not None:
+                if ex == "STOP" and pos.get("be"): ex = "BE"
                 r = d * (px - pos["entry"]) / pos["risk"]; pos.update(exit=ex, R=r, pnl=d * (px - pos["entry"])); trades.append(pos); pos = None
         # 활성 FVG 갱신
         while p5 < len(f5) and f5[p5][3] < i: act5.append(f5[p5]); p5 += 1        # 형성 봉 다음부터
@@ -166,6 +169,21 @@ if __name__ == "__main__":
         configs["SMT 필수"] = dict(smt_mode="필수")
         configs["1H+4H + SMT 필수"] = dict(bias_mode="1H+4H", smt_mode="필수")
         configs["1H+4H + SMT + 숏"] = dict(bias_mode="1H+4H", smt_mode="필수", short=True)
+    if "--rr" in sys.argv:
+        base = dict(P0); base.update(bias_mode="1H+4H", vwap=True, win=("10:00", "12:00"))
+        configs = {}
+        for rr in (1.0, 1.5, 2.0, 3.0, 4.0):
+            configs[f"RR 1:{rr}"] = dict(rr=rr)
+            configs[f"RR 1:{rr} + 본전@+1R"] = dict(rr=rr, be_r=1.0)
+        for sb in (0.0, 5.0, 10.0):
+            configs[f"RR 1:2, 손절여유 {sb}pt"] = dict(rr=2.0, stop_buf=sb)
+        configs["RR 1:3, 본전@+1.5R"] = dict(rr=3.0, be_r=1.5)
+        configs["RR 1:2, 15:45 대신 종가 보유 안 함(12:00 청산)"] = dict(rr=2.0, hard_exit="12:00")
+        configs["RR 1:2, 숏 포함"] = dict(rr=2.0, short=True)
+        configs["RR 1:3, 숏 포함, 본전@+1R"] = dict(rr=3.0, short=True, be_r=1.0)
+        for name, cfg in configs.items():
+            Q = dict(base); Q.update(cfg); report(name, run_b(df, Q, smt))
+        print("DONE"); sys.exit()
     for name, cfg in configs.items():
         Q = dict(P0); Q.update(cfg); report(name, run_b(df, Q, smt))
     print("DONE")
