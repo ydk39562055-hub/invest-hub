@@ -5,6 +5,7 @@
 //
 //  앵커 모드
 //   · 연동 : "ICT Sweep + MSS" 의 히든 플롯 "▸ Sweep Signal" 을 소스로 선택하면 스윕마다 자동 앵커 (권장)
+//            소스를 아직 안 골랐으면 자동으로 클릭 앵커(수동)로 동작하고, 상태 테이블에 안내가 뜬다
 //   · 내장 : PDH/PDL · HTF 스윙 스윕을 자체 감지해 자동 앵커 (단독 사용)
 //   · 수동 : 인디케이터를 추가할 때 차트에서 스윕 캔들을 클릭
 //
@@ -61,10 +62,17 @@ intHi = f_swHi(pdh) or f_swHi(htfH)
 intLo = f_swLo(pdl) or f_swLo(htfL)
 
 // ─── 앵커 이벤트 ───────────────────────────────────────────────────────────────
+// 연동 소스가 실제 신호 플롯인지 감지: 신호 플롯은 대부분의 봉에서 정확히 0, 가격(close)은 0이 될 수 없다
+var bool linked = false
+if srcSig == 0
+    linked := true
+useLink   = mode == "연동" and linked
+useManual = mode == "수동" or (mode == "연동" and not linked)   // 소스 미선택이면 클릭 앵커로 대체
+
 sigOK    = srcSig == 1 or srcSig == 2 or srcSig == -1 or srcSig == -2
-linkBull = mode == "연동" and sigOK and srcSig > 0 and (not extOnly or srcSig == 2)
-linkBear = mode == "연동" and sigOK and srcSig < 0 and (not extOnly or srcSig == -2)
-manual   = mode == "수동" and time >= anchorT and (na(time[1]) or time[1] < anchorT)
+linkBull = useLink and sigOK and srcSig > 0 and (not extOnly or srcSig == 2)
+linkBear = useLink and sigOK and srcSig < 0 and (not extOnly or srcSig == -2)
+manual   = useManual and time >= anchorT and (na(time[1]) or time[1] < anchorT)
 manDir   = (open + close) / 2 - low > high - (open + close) / 2 ? 1 : -1   // 아래 꼬리가 길면 저점 스윕
 
 anchorBull = linkBull or (mode == "내장" and intLo) or (manual and manDir == 1)
@@ -151,11 +159,22 @@ if failEvt
          style = aDir == 1 ? label.style_label_up : label.style_label_down,
          color = color.new(color.gray, 20), textcolor = color.white, size = size.small)
 
-// 거래량 없는 심볼 경고
+// 상태 테이블: 앵커가 안 잡히는 이유를 차트에서 바로 보이게
 cumVol = ta.cum(nz(volume))
-var table tb = table.new(position.bottom_right, 1, 1, bgcolor = color.new(color.red, 70))
-if barstate.islast and cumVol == 0
-    table.cell(tb, 0, 0, "거래량 데이터 없음 — VWAP 계산 불가", text_color = color.white, text_size = size.small)
+var table tb = table.new(position.bottom_right, 1, 1, bgcolor = color.new(color.black, 60))
+if barstate.islast
+    string s = "모드 " + mode
+    if mode == "연동" and not linked
+        s += " → 소스 미선택, 클릭 앵커로 동작\n설정에서 'ICT MSS: ▸ Sweep Signal' 선택"
+    else if mode == "연동"
+        s += " (연동됨" + (extOnly ? ", 외부 스윕만)" : ")")
+    if na(aBar)
+        s += "\n앵커 없음 — " + (useLink ? "표시 구간에 스윕 없음" : mode == "내장" ? "표시 구간에 PDH/PDL·HTF 스윕 없음" : "클릭한 봉이 표시 구간 밖")
+    else
+        s += "\n앵커 " + str.tostring(bar_index - aBar) + "봉 전 · " + (aDir == 1 ? "롱" : "숏") + (failed ? " · FAIL" : reclaimed ? " · RECLAIM" : " · 대기")
+    if cumVol == 0
+        s += "\n⚠ 거래량 데이터 없음 — VWAP 계산 불가"
+    table.cell(tb, 0, 0, s, text_color = color.white, text_size = size.small, text_halign = text.align_left)
 
 // ─── 히든 플롯 ─────────────────────────────────────────────────────────────────
 plot(reclaimEvt ? aDir : 0, "▸ Reclaim Signal", display = display.none)
