@@ -1,0 +1,307 @@
+//@version=6
+// ═══════════════════════════════════════════════════════════════════════════════
+//  ICT Sweep + MSS [Displacement]   v1.0
+//  1분 ~ 1시간봉 공용. "외부 유동성 스윕 → 변위 MSS" 시퀀스를 셋업으로 점수화한다.
+//
+//  구성
+//   1) 유동성 레벨 : 전일 고저(PDH/PDL) · 세션 고저(아시아/런던/뉴욕) · HTF 스윙 · 차트 스윙(내부)
+//   2) 스윕 감지   : 꼬리로 레벨을 넘고 같은 봉 종가가 레벨 안쪽으로 복귀
+//   3) MSS         : 몸통 종가로 차트 스윙 돌파 + 몸통 ≥ ATR×배수 + 몸통비율 + (선택) 다음 봉 FVG 확정
+//   4) 셋업 점수   : 스윕 종류(외부 2 / 내부 1) + 킬존 + 프리미엄·디스카운트 + 강한 변위 + SMT
+//   5) 히든 플롯   : ▸ Sweep Signal / ▸ Sweep Wick / ▸ MSS Signal / ▸ Setup Score
+//                    → 다른 인디케이터(예: ICT Sweep-Anchored VWAP)의 소스 입력으로 선택 가능
+//
+//  1분봉 사용 시 : 스윙 길이 자동(3), HTF 15분, 허용 봉 수 20~30. 내부 스윕 마커는 꺼두는 것을 권장.
+//  한국 주식 예  : 타임존 Asia/Seoul, 아시아 세션 0900-1000(시초 레인지), 킬존1 0900-1000, 킬존2 1400-1520
+// ═══════════════════════════════════════════════════════════════════════════════
+indicator("ICT Sweep + MSS [Displacement]", "ICT MSS", overlay = true,
+     max_labels_count = 500, max_boxes_count = 200)
+
+// ─── 입력 ──────────────────────────────────────────────────────────────────────
+gS = "구조 (Structure)"
+lenIn    = input.int(0, "차트 스윙 피벗 길이 (0 = 자동)", minval = 0, group = gS,
+     tooltip = "자동: 5분 이하 3, 그 외 5. 1분봉에서 5 이상 주면 MSS 확정이 너무 늦어진다")
+htfTfIn  = input.timeframe("15", "HTF 스윙 타임프레임", group = gS,
+     tooltip = "외부 유동성과 딜링 레인지(프리미엄/디스카운트) 기준. 차트보다 낮으면 차트 TF로 대체")
+htfLenIn = input.int(5, "HTF 스윙 피벗 길이", minval = 2, group = gS)
+
+gD = "변위 (Displacement)"
+atrLen  = input.int(14, "ATR 기간", minval = 1, group = gD)
+atrMult = input.float(1.5, "몸통 ≥ ATR × 배수", minval = 0.1, step = 0.1, group = gD,
+     tooltip = "지수선물 1.5, 개별주식 2.0, 암호화폐 1.5~2.0 에서 시작")
+bodyPct = input.float(0.5, "몸통 / 전체범위 최소 비율", minval = 0, maxval = 1, step = 0.05, group = gD,
+     tooltip = "긴 꼬리 봉(핀바)을 변위로 세지 않기 위한 필터")
+strongX = input.float(1.5, "강한 변위 = 배수 × 이 값", minval = 1, step = 0.1, group = gD)
+needFVG = input.bool(true, "FVG 확정 후 신호 (1봉 지연)", group = gD,
+     tooltip = "끄면 변위 봉 종가에서 즉시 신호. 켜면 다음 봉에서 FVG가 남았는지 확인한 뒤 신호")
+
+gL = "유동성 (Liquidity)"
+usePD   = input.bool(true, "전일 고/저 (PDH · PDL)", group = gL)
+useAsia = input.bool(true, "아시아 세션 고/저", group = gL)
+useLdn  = input.bool(true, "런던 세션 고/저", group = gL)
+useNY   = input.bool(true, "뉴욕 세션 고/저", group = gL)
+useHTF  = input.bool(true, "HTF 스윙 고/저", group = gL)
+useInt  = input.bool(true, "차트 스윙 고/저 (내부 유동성)", group = gL)
+tz      = input.string("America/New_York", "세션 타임존 (IANA)", group = gL)
+sAsia   = input.session("2000-0000", "아시아 세션", group = gL)
+sLdn    = input.session("0200-0500", "런던 세션", group = gL)
+sNY     = input.session("0930-1600", "뉴욕 세션", group = gL)
+
+gK = "킬존 (Killzone)"
+useKZ = input.bool(true, "킬존 가중치 사용", group = gK)
+kz1   = input.session("0200-0500", "킬존 1 (런던 오픈)", group = gK)
+kz2   = input.session("0700-1000", "킬존 2 (뉴욕 AM)", group = gK)
+kz3   = input.session("1330-1600", "킬존 3 (뉴욕 PM)", group = gK)
+
+gM = "SMT (상관 자산 다이버전스)"
+useSMT   = input.bool(false, "SMT 사용", group = gM)
+smtSymIn = input.symbol("CME_MINI:NQ1!", "상관 자산", group = gM)
+smtInv   = input.bool(false, "역상관 자산 (예: DXY)", group = gM)
+
+gX = "셋업 (Setup)"
+window   = input.int(20, "스윕 후 MSS 허용 봉 수", minval = 1, group = gX,
+     tooltip = "1분봉 20~30, 5분봉 12~20, 15분봉 8~12")
+minScore = input.int(3, "셋업 최소 점수 (라벨 · 알림)", minval = 1, maxval = 6, group = gX)
+
+gV = "표시 (Display)"
+showLv  = input.bool(true, "유동성 레벨", group = gV)
+showInt = input.bool(false, "내부 스윕 마커", group = gV)
+showFVG = input.bool(true, "MSS FVG 박스", group = gV)
+fvgExt  = input.int(30, "FVG 박스 연장 봉 수", minval = 1, group = gV)
+showKZ  = input.bool(true, "킬존 배경", group = gV)
+
+// ─── 기본 계산 ─────────────────────────────────────────────────────────────────
+tfSec = timeframe.in_seconds()
+len   = lenIn > 0 ? lenIn : tfSec <= 300 ? 3 : 5
+htfTf = timeframe.in_seconds(htfTfIn) > tfSec ? htfTfIn : timeframe.period
+atr   = ta.atr(atrLen)
+
+// 마지막 확정 피벗 추적. shift = true 면 1봉 지연으로 HTF 리페인트 방지
+f_swings(simple int l, simple bool shift) =>
+    var float sh = na
+    var float sl = na
+    float ph = ta.pivothigh(high, l, l)
+    float pl = ta.pivotlow(low, l, l)
+    if not na(ph)
+        sh := ph
+    if not na(pl)
+        sl := pl
+    [shift ? sh[1] : sh, shift ? sl[1] : sl]
+
+[swingHigh, swingLow] = f_swings(len, false)
+[htfHigh, htfLow]     = request.security(syminfo.tickerid, htfTf, f_swings(htfLenIn, true), lookahead = barmerge.lookahead_on)
+[pdh, pdl]            = request.security(syminfo.tickerid, "D", [high[1], low[1]], lookahead = barmerge.lookahead_on)
+
+// 세션 고/저 (세션 진행 중에는 갱신, 끝나면 다음 같은 세션까지 유지)
+f_sessHL(simple string sess, simple string tzone) =>
+    var float h = na
+    var float l = na
+    bool inS = not na(time(timeframe.period, sess, tzone))
+    if inS and (not inS[1] or na(h))
+        h := high
+        l := low
+    else if inS
+        h := math.max(h, high)
+        l := math.min(l, low)
+    [h, l, inS]
+
+[asiaH, asiaL, inAsia] = f_sessHL(sAsia, tz)
+[ldnH, ldnL, inLdn]    = f_sessHL(sLdn, tz)
+[nyH, nyL, inNY]       = f_sessHL(sNY, tz)
+
+f_inSess(simple string sess, simple string tzone) =>
+    not na(time(timeframe.period, sess, tzone))
+inKZ = f_inSess(kz1, tz) or f_inSess(kz2, tz) or f_inSess(kz3, tz)
+
+// SMT: 상관 자산의 현재 고/저와 마지막 스윙
+f_smtPack(simple int l) =>
+    [sh, sl] = f_swings(l, false)
+    [high, low, sh, sl]
+smtTicker = useSMT ? smtSymIn : syminfo.tickerid
+[cHigh, cLow, cSH, cSL] = request.security(smtTicker, timeframe.period, f_smtPack(len))
+smtOK   = useSMT and not na(cSH) and not na(cSL)
+smtBear = smtOK and (smtInv ? cLow >= cSL : cHigh <= cSH)   // 우리는 고점 스윕, 상관 자산은 실패
+smtBull = smtOK and (smtInv ? cHigh <= cSH : cLow >= cSL)   // 우리는 저점 스윕, 상관 자산은 실패
+
+// ─── 스윕 감지 ─────────────────────────────────────────────────────────────────
+f_swHi(float lvl, bool on) =>
+    on and not na(lvl) and high > lvl and close < lvl and close[1] <= lvl
+f_swLo(float lvl, bool on) =>
+    on and not na(lvl) and low < lvl and close > lvl and close[1] >= lvl
+
+bool   hiSw = false
+string hiNm = ""
+bool   hiEx = false
+if f_swHi(pdh, usePD)
+    hiSw := true
+    hiNm := "PDH"
+    hiEx := true
+else if f_swHi(asiaH, useAsia and not inAsia)
+    hiSw := true
+    hiNm := "Asia H"
+    hiEx := true
+else if f_swHi(ldnH, useLdn and not inLdn)
+    hiSw := true
+    hiNm := "London H"
+    hiEx := true
+else if f_swHi(nyH, useNY and not inNY)
+    hiSw := true
+    hiNm := "NY H"
+    hiEx := true
+else if f_swHi(htfHigh, useHTF)
+    hiSw := true
+    hiNm := "HTF H"
+    hiEx := true
+else if f_swHi(swingHigh, useInt)
+    hiSw := true
+    hiNm := "Swing H"
+    hiEx := false
+
+bool   loSw = false
+string loNm = ""
+bool   loEx = false
+if f_swLo(pdl, usePD)
+    loSw := true
+    loNm := "PDL"
+    loEx := true
+else if f_swLo(asiaL, useAsia and not inAsia)
+    loSw := true
+    loNm := "Asia L"
+    loEx := true
+else if f_swLo(ldnL, useLdn and not inLdn)
+    loSw := true
+    loNm := "London L"
+    loEx := true
+else if f_swLo(nyL, useNY and not inNY)
+    loSw := true
+    loNm := "NY L"
+    loEx := true
+else if f_swLo(htfLow, useHTF)
+    loSw := true
+    loNm := "HTF L"
+    loEx := true
+else if f_swLo(swingLow, useInt)
+    loSw := true
+    loNm := "Swing L"
+    loEx := false
+
+// 마지막 스윕 상태
+var int    sHiBar = na
+var string sHiNm  = ""
+var bool   sHiEx  = false
+var float  sHiLvl = na
+var bool   sHiSMT = false
+if hiSw
+    sHiBar := bar_index
+    sHiNm  := hiNm
+    sHiEx  := hiEx
+    sHiLvl := high
+    sHiSMT := smtBear
+
+var int    sLoBar = na
+var string sLoNm  = ""
+var bool   sLoEx  = false
+var float  sLoLvl = na
+var bool   sLoSMT = false
+if loSw
+    sLoBar := bar_index
+    sLoNm  := loNm
+    sLoEx  := loEx
+    sLoLvl := low
+    sLoSMT := smtBull
+
+// ─── MSS (변위 필터) ───────────────────────────────────────────────────────────
+rng     = high - low
+body    = math.abs(close - open)
+disp    = body >= atr * atrMult and rng > 0 and body / rng >= bodyPct
+strg    = body >= atr * atrMult * strongX
+bullBrk = not na(swingHigh) and close > swingHigh and close[1] <= swingHigh
+bearBrk = not na(swingLow) and close < swingLow and close[1] >= swingLow
+off     = needFVG ? 1 : 0
+bullMSS = needFVG ? (bullBrk[1] and disp[1] and low > high[2]) : (bullBrk and disp)
+bearMSS = needFVG ? (bearBrk[1] and disp[1] and high < low[2]) : (bearBrk and disp)
+mssBar  = bar_index - off
+
+// ─── 셋업 점수 ─────────────────────────────────────────────────────────────────
+mid      = (htfHigh + htfLow) / 2
+maxScore = 4 + (useKZ ? 1 : 0) + (useSMT ? 1 : 0)
+
+bearSetup = bearMSS and not na(sHiBar) and mssBar >= sHiBar and mssBar - sHiBar <= window
+bullSetup = bullMSS and not na(sLoBar) and mssBar >= sLoBar and mssBar - sLoBar <= window
+
+kzHit  = useKZ and inKZ[off]
+strHit = strg[off]
+locS   = not na(mid) and sHiLvl > mid      // 숏: 스윕 레벨이 프리미엄
+locL   = not na(mid) and sLoLvl < mid      // 롱: 스윕 레벨이 디스카운트
+scoreS = (sHiEx ? 2 : 1) + (kzHit ? 1 : 0) + (locS ? 1 : 0) + (strHit ? 1 : 0) + (sHiSMT ? 1 : 0)
+scoreL = (sLoEx ? 2 : 1) + (kzHit ? 1 : 0) + (locL ? 1 : 0) + (strHit ? 1 : 0) + (sLoSMT ? 1 : 0)
+
+if bearSetup
+    if scoreS >= minScore
+        string txt = "SHORT " + str.tostring(scoreS) + "/" + str.tostring(maxScore)
+        txt += "\n스윕 " + sHiNm + (sHiEx ? " (외부)" : " (내부)")
+        txt += "\n" + (kzHit ? "KZ ✓" : "KZ ✗") + "  " + (locS ? "프리미엄 ✓" : "프리미엄 ✗") + "  " + (strHit ? "강변위 ✓" : "강변위 ✗")
+        txt += useSMT ? (sHiSMT ? "\nSMT ✓" : "\nSMT ✗") : ""
+        label.new(mssBar, high[off], txt, style = label.style_label_down, color = color.new(color.red, 15), textcolor = color.white, size = size.small)
+        alert("SHORT 셋업 " + syminfo.ticker + " " + str.tostring(scoreS) + "/" + str.tostring(maxScore) + " 스윕 " + sHiNm, alert.freq_once_per_bar_close)
+    sHiBar := na
+
+if bullSetup
+    if scoreL >= minScore
+        string txt = "LONG " + str.tostring(scoreL) + "/" + str.tostring(maxScore)
+        txt += "\n스윕 " + sLoNm + (sLoEx ? " (외부)" : " (내부)")
+        txt += "\n" + (kzHit ? "KZ ✓" : "KZ ✗") + "  " + (locL ? "디스카운트 ✓" : "디스카운트 ✗") + "  " + (strHit ? "강변위 ✓" : "강변위 ✗")
+        txt += useSMT ? (sLoSMT ? "\nSMT ✓" : "\nSMT ✗") : ""
+        label.new(mssBar, low[off], txt, style = label.style_label_up, color = color.new(color.green, 15), textcolor = color.white, size = size.small)
+        alert("LONG 셋업 " + syminfo.ticker + " " + str.tostring(scoreL) + "/" + str.tostring(maxScore) + " 스윕 " + sLoNm, alert.freq_once_per_bar_close)
+    sLoBar := na
+
+// ─── 그리기 ────────────────────────────────────────────────────────────────────
+// 스윕 마커
+if hiSw and (hiEx or showInt)
+    label.new(bar_index, high, hiNm + " 스윕", style = label.style_label_down, color = color.new(color.orange, hiEx ? 0 : 60), textcolor = color.black, size = size.tiny)
+if loSw and (loEx or showInt)
+    label.new(bar_index, low, loNm + " 스윕", style = label.style_label_up, color = color.new(color.orange, loEx ? 0 : 60), textcolor = color.black, size = size.tiny)
+
+// MSS 마커 (FVG 확정 모드면 변위 봉 위치로 1봉 당겨서 표시)
+plotshape(bullMSS, "Bull MSS", shape.triangleup, location.belowbar, color.lime, offset = -off, size = size.small, text = "MSS")
+plotshape(bearMSS, "Bear MSS", shape.triangledown, location.abovebar, color.red, offset = -off, size = size.small, text = "MSS")
+
+// MSS 가 남긴 FVG 박스
+drawBull = showFVG and (needFVG ? bullMSS : (bullMSS[1] and low > high[2]))
+drawBear = showFVG and (needFVG ? bearMSS : (bearMSS[1] and high < low[2]))
+if drawBull
+    box.new(bar_index - 2, low, bar_index + fvgExt, high[2], border_color = color.new(color.lime, 60), bgcolor = color.new(color.lime, 85))
+if drawBear
+    box.new(bar_index - 2, low[2], bar_index + fvgExt, high, border_color = color.new(color.red, 60), bgcolor = color.new(color.red, 85))
+
+// 유동성 레벨 (값이 바뀌는 봉에서 선을 끊어 계단 연결선 제거)
+f_brk(float x) =>
+    x == x[1] ? x : na
+plot(showLv and usePD ? f_brk(pdh) : na, "PDH", color.new(color.purple, 0), 1, plot.style_linebr)
+plot(showLv and usePD ? f_brk(pdl) : na, "PDL", color.new(color.purple, 0), 1, plot.style_linebr)
+plot(showLv and useAsia ? f_brk(asiaH) : na, "Asia H", color.new(color.orange, 30), 1, plot.style_linebr)
+plot(showLv and useAsia ? f_brk(asiaL) : na, "Asia L", color.new(color.orange, 30), 1, plot.style_linebr)
+plot(showLv and useLdn ? f_brk(ldnH) : na, "London H", color.new(color.blue, 30), 1, plot.style_linebr)
+plot(showLv and useLdn ? f_brk(ldnL) : na, "London L", color.new(color.blue, 30), 1, plot.style_linebr)
+plot(showLv and useNY ? f_brk(nyH) : na, "NY H", color.new(color.teal, 30), 1, plot.style_linebr)
+plot(showLv and useNY ? f_brk(nyL) : na, "NY L", color.new(color.teal, 30), 1, plot.style_linebr)
+plot(showLv and useHTF ? f_brk(htfHigh) : na, "HTF Swing H", color.new(color.red, 0), 2, plot.style_linebr)
+plot(showLv and useHTF ? f_brk(htfLow) : na, "HTF Swing L", color.new(color.green, 0), 2, plot.style_linebr)
+plot(showLv and useInt ? f_brk(swingHigh) : na, "Swing H", color.new(color.red, 60), 1, plot.style_linebr)
+plot(showLv and useInt ? f_brk(swingLow) : na, "Swing L", color.new(color.green, 60), 1, plot.style_linebr)
+
+bgcolor(showKZ and useKZ and inKZ ? color.new(color.blue, 92) : na, title = "킬존")
+
+// ─── 히든 플롯 (다른 스크립트의 소스 입력용) ──────────────────────────────────
+// Sweep Signal: +2 저점 외부 스윕, +1 저점 내부 스윕, -1 고점 내부, -2 고점 외부, 0 없음
+sweepSig = hiSw ? (hiEx ? -2 : -1) : loSw ? (loEx ? 2 : 1) : 0
+plot(sweepSig, "▸ Sweep Signal", display = display.none)
+plot(hiSw ? high : loSw ? low : na, "▸ Sweep Wick", display = display.none)
+plot(bullMSS ? 1 : bearMSS ? -1 : 0, "▸ MSS Signal", display = display.none)
+plot(bullSetup ? scoreL : bearSetup ? -scoreS : 0, "▸ Setup Score", display = display.none)
+
+// ─── 알림 ──────────────────────────────────────────────────────────────────────
+alertcondition(hiSw and hiEx or loSw and loEx, "외부 유동성 스윕", "외부 유동성 스윕 발생")
+alertcondition(bullMSS or bearMSS, "MSS (변위 확인)", "MSS 발생")
+alertcondition(bearSetup and scoreS >= minScore or bullSetup and scoreL >= minScore, "셋업 (점수 충족)", "스윕 → MSS 셋업")

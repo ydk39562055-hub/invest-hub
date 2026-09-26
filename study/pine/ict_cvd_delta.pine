@@ -1,0 +1,172 @@
+//@version=6
+// ═══════════════════════════════════════════════════════════════════════════════
+//  ICT Delta / CVD   v1.0   (별도 패널)
+//  하위 타임프레임(LTF) 봉으로 매수/매도 체결을 근사 → 봉별 델타, 누적 CVD 캔들,
+//  흡수(Absorption) 판정, 가격-CVD 다이버전스
+//
+//  타임프레임별 데이터 사정
+//   · 15분 · 5분 차트 : 1분 하위 봉으로 계산. 모든 플랜에서 동작
+//   · 1분 차트         : 진짜 델타는 초봉(1S)이 필요 → Premium 이상에서 "초봉 사용" 켜기
+//                        그 외 플랜은 1분 봉 자체를 종가 위치로 배분한 근사값 (테이블에 ⚠ 표시)
+//   · 하위 봉 총량 100,000개 제한 → 1분 차트 + 1S 는 약 1,600봉(24시간 시장 기준 하루 남짓)만 표시
+//
+//  같은 패널에 델타 컬럼과 CVD 캔들을 겹치면 스케일이 달라 델타가 눌려 보인다.
+//  → 인디케이터를 두 번 추가해 하나는 "CVD", 하나는 "델타" 로 쓰는 것을 권장.
+// ═══════════════════════════════════════════════════════════════════════════════
+indicator("ICT Delta / CVD", "ICT CVD", overlay = false, format = format.volume,
+     max_lines_count = 100, max_labels_count = 200)
+
+// ─── 입력 ──────────────────────────────────────────────────────────────────────
+gT = "하위 타임프레임 (LTF)"
+ltfMode = input.string("자동", "LTF 선택", options = ["자동", "수동"], group = gT,
+     tooltip = "자동: 초봉 차트→1S, 1분→1(또는 1S), ≤1시간→1, 그 외 인트라데이/일봉→5, 주봉 이상→60")
+ltfMan  = input.timeframe("1", "수동 LTF (차트 TF 이하만)", group = gT)
+useSec  = input.bool(false, "1분 차트에서 초봉(1S) 사용 — Premium 이상", group = gT)
+clsMode = input.string("종가 위치", "매수/매도 분류", options = ["종가 위치", "종가 방향"], group = gT,
+     tooltip = "종가 위치: 하위 봉 범위 안 종가 위치 비율로 거래량 배분 (권장). 종가 방향: 양봉=매수, 음봉=매도")
+
+gC = "누적 (CVD)"
+anchor   = input.string("세션", "누적 리셋", options = ["세션", "일", "주", "연속"], group = gC)
+viewMode = input.string("CVD", "표시", options = ["CVD", "델타", "둘 다"], group = gC)
+
+gD = "델타 판정"
+avgLen  = input.int(20, "|델타| 평균 기간", minval = 2, group = gD)
+bigMult = input.float(2.0, "큰 델타 = 평균 × 배수", minval = 1, step = 0.1, group = gD)
+absBody = input.float(0.35, "흡수 판정: 몸통비율 이하", minval = 0, maxval = 1, step = 0.05, group = gD,
+     tooltip = "큰 델타인데 종가가 델타 방향으로 못 가거나(역봉) 몸통이 이 비율 이하면 흡수로 본다")
+
+gV = "다이버전스"
+divOn      = input.bool(true, "가격-CVD 다이버전스", group = gV)
+pivLenIn   = input.int(0, "피벗 길이 (0 = 자동)", minval = 0, group = gV, tooltip = "자동: 5분 이하 3, 그 외 5")
+divMinBars = input.int(3, "피벗 간 최소 봉 수", minval = 1, group = gV)
+divMaxBars = input.int(60, "피벗 간 최대 봉 수", minval = 5, group = gV)
+
+showTbl = input.bool(true, "상태 테이블", group = "표시")
+
+// ─── LTF 선택 ──────────────────────────────────────────────────────────────────
+tfSec = timeframe.in_seconds()
+f_autoLtf() =>
+    string r = "1"
+    if timeframe.isseconds
+        r := "1S"
+    else if tfSec <= 60
+        r := useSec ? "1S" : "1"
+    else if tfSec <= 3600
+        r := "1"
+    else if timeframe.isintraday or timeframe.isdaily
+        r := "5"
+    else
+        r := "60"
+    r
+ltf = ltfMode == "자동" ? f_autoLtf() : ltfMan
+approx1m = tfSec <= 60 and not timeframe.isseconds and ltf == "1"   // 1분 봉 자체 근사 상태
+
+// ─── 하위 봉 매수/매도 배분 ────────────────────────────────────────────────────
+buyLtf  = clsMode == "종가 위치" ? (high == low ? volume / 2 : volume * (close - low) / (high - low)) : (close > open ? volume : close < open ? 0.0 : volume / 2)
+sellLtf = volume - buyLtf
+[buyArr, sellArr] = request.security_lower_tf(syminfo.tickerid, ltf, [buyLtf, sellLtf])
+
+n     = buyArr.size()
+hasD  = n > 0
+buyV  = hasD ? array.sum(buyArr) : na
+sellV = hasD ? array.sum(sellArr) : na
+delta = buyV - sellV
+
+// ─── CVD 캔들 (봉 안의 누적 경로로 고/저 산출) ─────────────────────────────────
+reset = anchor == "세션" ? session.isfirstbar : anchor == "일" ? timeframe.change("D") : anchor == "주" ? timeframe.change("W") : false
+
+var float cvd = 0.0
+float cO  = reset ? 0.0 : cvd
+float run = cO
+float cH  = cO
+float cL  = cO
+if hasD
+    for [i, b] in buyArr
+        run += b - sellArr.get(i)
+        cH := math.max(cH, run)
+        cL := math.min(cL, run)
+cvd := run
+
+// ─── 큰 델타 · 흡수 ────────────────────────────────────────────────────────────
+absD   = math.abs(delta)
+avgAbs = ta.sma(absD, avgLen)
+big    = hasD and absD >= avgAbs * bigMult
+rng    = high - low
+bodyR  = rng > 0 ? math.abs(close - open) / rng : 0.0
+// 매수 흡수(약세): 큰 양의 델타인데 종가가 못 오름  /  매도 흡수(강세): 큰 음의 델타인데 종가가 안 내림
+absorbBear = big and delta > 0 and (close < open or (bodyR <= absBody and close <= hl2))
+absorbBull = big and delta < 0 and (close > open or (bodyR <= absBody and close >= hl2))
+
+// ─── 가격-CVD 다이버전스 (일반형만) ────────────────────────────────────────────
+pivLen = pivLenIn > 0 ? pivLenIn : tfSec <= 300 ? 3 : 5
+ph = ta.pivothigh(high, pivLen, pivLen)
+pl = ta.pivotlow(low, pivLen, pivLen)
+
+var float lastPh    = na
+var int   lastPhBar = na
+var float lastCvdH  = na
+var float lastPl    = na
+var int   lastPlBar = na
+var float lastCvdL  = na
+bool bearDiv = false
+bool bullDiv = false
+
+if divOn and not na(ph)
+    int   pb = bar_index - pivLen
+    float cv = cH[pivLen]
+    if not na(lastPhBar) and pb - lastPhBar >= divMinBars and pb - lastPhBar <= divMaxBars and ph > lastPh and cv < lastCvdH
+        bearDiv := true
+        line.new(lastPhBar, lastCvdH, pb, cv, color = color.new(color.red, 0), width = 2)
+    lastPh    := ph
+    lastPhBar := pb
+    lastCvdH  := cv
+
+if divOn and not na(pl)
+    int   pb = bar_index - pivLen
+    float cv = cL[pivLen]
+    if not na(lastPlBar) and pb - lastPlBar >= divMinBars and pb - lastPlBar <= divMaxBars and pl < lastPl and cv > lastCvdL
+        bullDiv := true
+        line.new(lastPlBar, lastCvdL, pb, cv, color = color.new(color.lime, 0), width = 2)
+    lastPl    := pl
+    lastPlBar := pb
+    lastCvdL  := cv
+
+// ─── 그리기 ────────────────────────────────────────────────────────────────────
+showCvd   = viewMode != "델타"
+showDelta = viewMode != "CVD"
+
+plot(showDelta ? delta : na, "Delta", delta >= 0 ? color.new(color.teal, 25) : color.new(color.red, 25), 1, plot.style_columns)
+plotcandle(showCvd ? cO : na, showCvd ? cH : na, showCvd ? cL : na, showCvd ? cvd : na, "CVD",
+     color = cvd >= cO ? color.new(color.aqua, 0) : color.new(color.orange, 0),
+     wickcolor = color.new(color.gray, 30),
+     bordercolor = cvd >= cO ? color.aqua : color.orange)
+hline(0, "0", color.new(color.gray, 50))
+
+plotshape(absorbBear, "매수 흡수 (약세)", shape.diamond, location.top, color.red, size = size.small)
+plotshape(absorbBull, "매도 흡수 (강세)", shape.diamond, location.bottom, color.lime, size = size.small)
+plotshape(bearDiv, "약세 다이버전스", shape.triangledown, location.top, color.orange, offset = -pivLen, size = size.tiny)
+plotshape(bullDiv, "강세 다이버전스", shape.triangleup, location.bottom, color.orange, offset = -pivLen, size = size.tiny)
+bgcolor(big ? color.new(color.yellow, 88) : na, title = "큰 델타 봉")
+
+// 상태 테이블
+var table tb = table.new(position.top_right, 1, 1, bgcolor = color.new(color.black, 60))
+if showTbl and barstate.islast
+    string s = "LTF " + ltf + " · " + str.tostring(n) + " 봉/바"
+    s += "\nΔ " + str.tostring(delta, format.volume) + "   CVD " + str.tostring(cvd, format.volume)
+    s += "\n" + (absorbBear ? "매수 흡수 ▼" : absorbBull ? "매도 흡수 ▲" : big ? "큰 델타" : "—")
+    if approx1m
+        s += "\n⚠ 1분 봉 자체 근사 (초봉 미사용)"
+    table.cell(tb, 0, 0, s, text_color = color.white, text_size = size.small, text_halign = text.align_left)
+
+// ─── 히든 플롯 ─────────────────────────────────────────────────────────────────
+plot(delta, "▸ Delta", display = display.none)
+plot(cvd, "▸ CVD", display = display.none)
+plot(absorbBear ? -1 : absorbBull ? 1 : 0, "▸ Absorption", display = display.none)
+plot(bearDiv ? -1 : bullDiv ? 1 : 0, "▸ Divergence", display = display.none)
+
+// ─── 알림 ──────────────────────────────────────────────────────────────────────
+alertcondition(absorbBear or absorbBull, "흡수 (Absorption)", "델타 흡수 발생")
+alertcondition(bearDiv or bullDiv, "CVD 다이버전스", "가격-CVD 다이버전스")
+alertcondition(big, "큰 델타", "큰 델타 봉")
+if absorbBear or absorbBull
+    alert((absorbBear ? "매수 흡수(약세) " : "매도 흡수(강세) ") + syminfo.ticker + " Δ " + str.tostring(delta, format.volume), alert.freq_once_per_bar_close)
