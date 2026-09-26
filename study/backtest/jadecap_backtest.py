@@ -68,6 +68,7 @@ def run_j(df, P):
             if t1 != ts[i]: continue
             bias = b1[i] if P["bias"] == "1H" else pbias[i]
             if bias != d: continue
+            if d == -1 and not P["short"]: continue
             if P["skip_first_hour"] and hhmm[i] <= 630: continue
             active = (d, i, wick, i + P["fvg_wait"]); F["sfp_bias_ok"][d] += 1
         if pos is not None or active is None or i + 1 >= N: continue
