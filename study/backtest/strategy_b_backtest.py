@@ -10,7 +10,7 @@ from ict_backtest import DEFAULT, prepare, attach_smt, in_sess, stats
 
 NY = "America/New_York"
 P0 = dict(min_gap=3.0, age5=24, age15=32, buffer=5.0, stop_buf=2.0, rr=2.0, win=("09:30", "12:00"), hard_exit="15:45",
-          max_day=1, short=False, mitigate="bottom", bias_mode="없음", need_sweep=False, sweep_bars=12, smt_mode="없음", vwap=False, be_r=0.0, trail=False)
+          max_day=1, short=False, mitigate="bottom", bias_mode="없음", need_sweep=False, sweep_bars=12, smt_mode="없음", vwap=False, be_r=0.0, trail_step=0.0)   # trail_step>0: 가격이 +k·step R 에 닿을 때마다 손절을 (k-1)·step R 로 (1R 부터 본전)
 
 def fvg_list(o, h, l, c, ts, min_gap, allow):
     """(dir, bottom, top, formed_idx) — formed_idx 는 세 번째 봉 인덱스(이 봉이 닫힌 뒤부터 유효)"""
@@ -81,6 +81,12 @@ def run_b(df, P, smt=None):
             d = pos["dir"]
             if P["be_r"] > 0 and not pos.get("be") and d * (c[i - 1] - pos["entry"]) >= pos["risk"] * P["be_r"]:
                 pos["stop"] = pos["entry"]; pos["be"] = True
+            if P["trail_step"] > 0:
+                reached = d * ((h[i - 1] if d == 1 else l[i - 1]) - pos["entry"]) / pos["risk"]   # 전 봉까지 도달한 최대 R
+                k = int(reached // P["trail_step"])
+                if k >= 1:
+                    new_stop = pos["entry"] + d * pos["risk"] * max(0.0, (k - 1) * P["trail_step"])
+                    if d * (new_stop - pos["stop"]) > 0: pos["stop"] = new_stop; pos["be"] = True
             if (o[i] <= pos["stop"]) if d == 1 else (o[i] >= pos["stop"]):
                 px, ex = o[i], "STOP"
             elif (l[i] <= pos["stop"]) if d == 1 else (h[i] >= pos["stop"]):
@@ -181,6 +187,12 @@ if __name__ == "__main__":
         configs["RR 1:2, 15:45 대신 종가 보유 안 함(12:00 청산)"] = dict(rr=2.0, hard_exit="12:00")
         configs["RR 1:2, 숏 포함"] = dict(rr=2.0, short=True)
         configs["RR 1:3, 숏 포함, 본전@+1R"] = dict(rr=3.0, short=True, be_r=1.0)
+        configs["트레일 1R 단계, 목표 없음"] = dict(rr=99.0, trail_step=1.0)
+        configs["트레일 0.5R 단계, 목표 없음"] = dict(rr=99.0, trail_step=0.5)
+        configs["트레일 1R 단계 + 목표 1:3"] = dict(rr=3.0, trail_step=1.0)
+        configs["트레일 1R 단계 + 목표 1:4"] = dict(rr=4.0, trail_step=1.0)
+        configs["트레일 0.5R 단계 + 목표 1:3"] = dict(rr=3.0, trail_step=0.5)
+        configs["트레일 1R 단계, 목표 없음, 숏 포함"] = dict(rr=99.0, trail_step=1.0, short=True)
         for name, cfg in configs.items():
             Q = dict(base); Q.update(cfg); report(name, run_b(df, Q, smt))
         print("DONE"); sys.exit()
