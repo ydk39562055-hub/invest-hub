@@ -1,0 +1,371 @@
+//@version=6
+// ═══════════════════════════════════════════════════════════════════════════════
+//  ICT Sweep → MSS → FVG × VWAP   Strategy v1.0   (5분 차트 전용, 15분 구조)
+//
+//  시퀀스 (롱 기준, 숏은 대칭)
+//   1. 외부 유동성 스윕 : PDL · 세션 저점 · HTF 스윙 저점을 꼬리로 털고 종가 복귀
+//   2. 변위 MSS         : 몸통 종가로 차트 스윙 고점 돌파 + 몸통 ≥ ATR×배수 + 다음 봉 FVG 확정
+//   3. 앵커드 VWAP      : 스윕 캔들부터 누적. 종가가 반대편에 N봉 연속이면 무효
+//   4. 구역             : FVG 와 VWAP 이 겹치는 자리로 가격이 되돌아옴 (첫 번째·두 번째 터치만)
+//   5. 확인             : 터치 후 종가가 VWAP 쪽에 N봉 연속 유지 (+ CVD 흡수 가중)
+//   6. 진입/청산        : 종가 진입, 손절 스윕 극단값, TP1 유동성, TP2 +2σ 또는 RR
+//   7. 필터             : 킬존, 프리미엄/디스카운트, 점수, 일일 거래 수, 장 마감 청산
+//
+//  백테스트 : CVD 는 하위 봉 총량 제한으로 과거 구간이 짧다. 긴 백테스트는 "CVD 흡수 가중" 을 끄고 돌릴 것.
+//  기본값   : ES(S&P 선물) 5분 기준. NQ 는 손절 여유를 3~5 포인트로.
+// ═══════════════════════════════════════════════════════════════════════════════
+strategy("ICT Sweep → MSS → FVG × VWAP", "ICT STRAT", overlay = true,
+     initial_capital = 50000, default_qty_type = strategy.fixed, default_qty_value = 2,
+     commission_type = strategy.commission.cash_per_contract, commission_value = 2.5, slippage = 1,
+     process_orders_on_close = true, max_labels_count = 500, max_boxes_count = 200)
+
+// ─── 입력 ──────────────────────────────────────────────────────────────────────
+gS = "구조"
+htfTfIn  = input.timeframe("15", "HTF 타임프레임", group = gS)
+htfLen   = input.int(5, "HTF 스윙 피벗 길이", minval = 2, group = gS)
+lenIn    = input.int(5, "차트 스윙 피벗 길이", minval = 2, group = gS)
+window   = input.int(12, "스윕 후 MSS 허용 봉 수", minval = 1, group = gS)
+pbWindow = input.int(24, "MSS 후 되돌림 대기 봉 수", minval = 1, group = gS)
+
+gD = "변위"
+atrLen  = input.int(14, "ATR 기간", minval = 1, group = gD)
+atrMult = input.float(1.5, "몸통 ≥ ATR × 배수", minval = 0.1, step = 0.1, group = gD)
+bodyPct = input.float(0.5, "몸통 / 범위 최소 비율", minval = 0, maxval = 1, step = 0.05, group = gD)
+strongX = input.float(1.5, "강한 변위 = 배수 × 이 값", minval = 1, step = 0.1, group = gD)
+
+gL = "유동성"
+usePD   = input.bool(true, "전일 고/저", group = gL)
+useAsia = input.bool(true, "아시아 세션 고/저", group = gL)
+useLdn  = input.bool(true, "런던 세션 고/저", group = gL)
+useNY   = input.bool(true, "뉴욕 세션 고/저", group = gL)
+useHTF  = input.bool(true, "HTF 스윙 고/저", group = gL)
+useInt  = input.bool(false, "차트 스윙 고/저 (내부, 점수 1)", group = gL)
+tz      = input.string("America/New_York", "세션 타임존 (IANA)", group = gL)
+sAsia   = input.session("2000-0000", "아시아 세션", group = gL)
+sLdn    = input.session("0200-0500", "런던 세션", group = gL)
+sNY     = input.session("0930-1600", "뉴욕 세션", group = gL)
+
+gK = "킬존"
+kzMode = input.string("필수", "킬존 적용", options = ["필수", "가중", "사용 안 함"], group = gK)
+kz1    = input.session("0200-0500", "킬존 1 (런던 오픈)", group = gK)
+kz2    = input.session("0700-1000", "킬존 2 (뉴욕 AM)", group = gK)
+kz3    = input.session("1330-1600", "킬존 3 (뉴욕 PM)", group = gK)
+
+gV = "VWAP"
+holdBars   = input.int(2, "확인: 종가 연속 봉 수", minval = 1, group = gV)
+maxTouch   = input.int(2, "허용 터치 횟수 (첫·둘째)", minval = 1, group = gV)
+reqOverlap = input.bool(true, "FVG 와 VWAP 겹침 필수", group = gV)
+tolAtr     = input.float(0.5, "겹침 허용 오차 (ATR 배수)", minval = 0, step = 0.1, group = gV)
+sigmaT     = input.float(2.0, "TP2 σ 배수", minval = 0.5, step = 0.5, group = gV)
+
+gC = "CVD"
+useCVD    = input.bool(true, "CVD 흡수 가중 (백테스트 길게 돌릴 땐 끄기)", group = gC)
+ltf       = input.timeframe("1", "하위 타임프레임", group = gC)
+cvdAvgLen = input.int(20, "|델타| 평균 기간", minval = 2, group = gC)
+cvdMult   = input.float(2.0, "큰 델타 = 평균 × 배수", minval = 1, step = 0.1, group = gC)
+
+gX = "필터"
+locMode  = input.string("가중", "프리미엄/디스카운트", options = ["필수", "가중", "사용 안 함"], group = gX)
+minScore = input.int(4, "최소 점수 (최대 7)", minval = 1, maxval = 7, group = gX)
+
+gR = "리스크"
+stopMode   = input.string("스윕 극단값", "손절 기준", options = ["스윕 극단값", "FVG 반대편"], group = gR)
+stopBuf    = input.float(1.0, "손절 여유 (포인트)", minval = 0, step = 0.25, group = gR)
+tp1Mode    = input.string("유동성", "TP1", options = ["유동성", "RR"], group = gR)
+rr1        = input.float(1.0, "TP1 RR (유동성 없을 때 대체)", minval = 0.2, step = 0.1, group = gR)
+tp2Mode    = input.string("2σ", "TP2", options = ["2σ", "RR"], group = gR)
+rr2        = input.float(2.0, "TP2 RR", minval = 0.5, step = 0.1, group = gR)
+beAfterTp1 = input.bool(true, "TP1 후 손절을 진입가로", group = gR)
+maxTrades  = input.int(3, "일일 최대 진입 수", minval = 1, group = gR)
+eodClose   = input.bool(true, "장 마감 청산", group = gR)
+eodSess    = input.session("1555-1600", "마감 청산 구간", group = gR)
+
+// ─── 기본 계산 ─────────────────────────────────────────────────────────────────
+tfSec = timeframe.in_seconds()
+htfTf = timeframe.in_seconds(htfTfIn) > tfSec ? htfTfIn : timeframe.period
+atr   = ta.atr(atrLen)
+
+f_swings(simple int l, simple bool shift) =>
+    var float sh = na
+    var float sl = na
+    float ph = ta.pivothigh(high, l, l)
+    float pl = ta.pivotlow(low, l, l)
+    if not na(ph)
+        sh := ph
+    if not na(pl)
+        sl := pl
+    [shift ? sh[1] : sh, shift ? sl[1] : sl]
+
+[swingHigh, swingLow] = f_swings(lenIn, false)
+[htfHigh, htfLow]     = request.security(syminfo.tickerid, htfTf, f_swings(htfLen, true), lookahead = barmerge.lookahead_on)
+[pdh, pdl]            = request.security(syminfo.tickerid, "D", [high[1], low[1]], lookahead = barmerge.lookahead_on)
+mid = (htfHigh + htfLow) / 2
+
+f_sessHL(simple string sess, simple string tzone) =>
+    var float h = na
+    var float l = na
+    bool inS = not na(time(timeframe.period, sess, tzone))
+    if inS and (not inS[1] or na(h))
+        h := high
+        l := low
+    else if inS
+        h := math.max(h, high)
+        l := math.min(l, low)
+    [h, l, inS]
+
+[asiaH, asiaL, inAsia] = f_sessHL(sAsia, tz)
+[ldnH, ldnL, inLdn]    = f_sessHL(sLdn, tz)
+[nyH, nyL, inNY]       = f_sessHL(sNY, tz)
+
+f_inSess(simple string sess, simple string tzone) =>
+    not na(time(timeframe.period, sess, tzone))
+inKZ  = f_inSess(kz1, tz) or f_inSess(kz2, tz) or f_inSess(kz3, tz)
+inEOD = f_inSess(eodSess, tz)
+
+// ─── CVD (하위 봉 근사) ─────────────────────────────────────────────────────────
+buyLtf  = high == low ? volume / 2 : volume * (close - low) / (high - low)
+sellLtf = volume - buyLtf
+[buyArr, sellArr] = request.security_lower_tf(syminfo.tickerid, ltf, [buyLtf, sellLtf])
+nLtf   = array.size(buyArr)
+delta  = nLtf > 0 ? array.sum(buyArr) - array.sum(sellArr) : na
+avgAbs = ta.sma(math.abs(delta), cvdAvgLen)
+bigD   = nLtf > 0 and math.abs(delta) >= avgAbs * cvdMult
+absorbBull = bigD and delta < 0 and close >= hl2     // 큰 매도 델타인데 가격이 안 빠짐
+absorbBear = bigD and delta > 0 and close <= hl2     // 큰 매수 델타인데 가격이 안 오름
+
+// ─── 스윕 감지 ─────────────────────────────────────────────────────────────────
+f_swHi(float lvl, bool on) =>
+    on and not na(lvl) and high > lvl and close < lvl and close[1] <= lvl
+f_swLo(float lvl, bool on) =>
+    on and not na(lvl) and low < lvl and close > lvl and close[1] >= lvl
+
+loPD  = f_swLo(pdl, usePD)
+loAs  = f_swLo(asiaL, useAsia and not inAsia)
+loLd  = f_swLo(ldnL, useLdn and not inLdn)
+loNY  = f_swLo(nyL, useNY and not inNY)
+loHT  = f_swLo(htfLow, useHTF)
+loIn  = f_swLo(swingLow, useInt)
+extLo = loPD or loAs or loLd or loNY or loHT
+loNm  = loPD ? "PDL" : loAs ? "Asia L" : loLd ? "London L" : loNY ? "NY L" : loHT ? "HTF L" : "Swing L"
+loLvl = loPD ? pdl : loAs ? asiaL : loLd ? ldnL : loNY ? nyL : loHT ? htfLow : swingLow
+
+hiPD  = f_swHi(pdh, usePD)
+hiAs  = f_swHi(asiaH, useAsia and not inAsia)
+hiLd  = f_swHi(ldnH, useLdn and not inLdn)
+hiNY  = f_swHi(nyH, useNY and not inNY)
+hiHT  = f_swHi(htfHigh, useHTF)
+hiIn  = f_swHi(swingHigh, useInt)
+extHi = hiPD or hiAs or hiLd or hiNY or hiHT
+hiNm  = hiPD ? "PDH" : hiAs ? "Asia H" : hiLd ? "London H" : hiNY ? "NY H" : hiHT ? "HTF H" : "Swing H"
+hiLvl = hiPD ? pdh : hiAs ? asiaH : hiLd ? ldnH : hiNY ? nyH : hiHT ? htfHigh : swingHigh
+
+bullSw = extLo or loIn
+bearSw = extHi or hiIn
+
+// ─── MSS (변위 + FVG 확정, 1봉 지연) ────────────────────────────────────────────
+rng     = high - low
+body    = math.abs(close - open)
+disp    = body >= atr * atrMult and rng > 0 and body / rng >= bodyPct
+strg    = body >= atr * atrMult * strongX
+bullBrk = not na(swingHigh) and close > swingHigh and close[1] <= swingHigh
+bearBrk = not na(swingLow) and close < swingLow and close[1] >= swingLow
+bullMSS = bullBrk[1] and disp[1] and low > high[2]
+bearMSS = bearBrk[1] and disp[1] and high < low[2]
+
+// ─── 상태 ──────────────────────────────────────────────────────────────────────
+// st: 0 대기 · 1 스윕됨(MSS 대기) · 2 MSS 후 되돌림 대기 · 3 포지션 보유
+var int    st      = 0
+var int    dir     = 0
+var int    swBar   = na
+var float  swWick  = na
+var float  swLvl   = na
+var bool   swExt   = false
+var string swNm    = ""
+var int    mssBar  = na
+var float  fvgTop  = na
+var float  fvgBot  = na
+var bool   strongMSS = false
+var int    touches = 0
+var bool   inZone  = false
+var int    holdCnt = 0
+var int    againstCnt = 0
+var bool   absorbed = false
+
+// VWAP 누적 (스윕 캔들 앵커)
+var float sPV  = 0.0
+var float sV   = 0.0
+var float sPV2 = 0.0
+var int   aBar = na
+
+// 포지션 정보
+var float ePx   = na
+var float eStop = na
+var float eTp1  = na
+var float eRisk = na
+var float eQty  = na
+var bool  tp1Done = false
+var int   tradesToday = 0
+
+flat = strategy.position_size == 0
+if timeframe.change("D")
+    tradesToday := 0
+
+// 포지션 종료 → 대기로
+if st == 3 and flat
+    st := 0
+    eQty := na
+    tp1Done := false
+
+// 새 스윕 (포지션 없을 때만)
+newBull = bullSw and st != 3
+newBear = bearSw and st != 3 and not newBull
+if newBull or newBear
+    st     := 1
+    dir    := newBull ? 1 : -1
+    swBar  := bar_index
+    swWick := newBull ? low : high
+    swLvl  := newBull ? loLvl : hiLvl
+    swExt  := newBull ? extLo : extHi
+    swNm   := newBull ? loNm : hiNm
+    sPV    := 0.0
+    sV     := 0.0
+    sPV2   := 0.0
+    aBar   := bar_index
+    mssBar := na
+    touches := 0
+    inZone  := false
+    holdCnt := 0
+    againstCnt := 0
+    absorbed := false
+
+if not na(aBar)
+    sPV  += hlc3 * volume
+    sV   += volume
+    sPV2 += hlc3 * hlc3 * volume
+vwap = not na(aBar) and sV > 0 ? sPV / sV : na
+sd   = not na(vwap) ? math.sqrt(math.max(sPV2 / sV - vwap * vwap, 0.0)) : na
+
+// 1 → 2 : MSS 확정
+if st == 1
+    if bar_index - swBar > window
+        st := 0
+    else if dir == 1 and bullMSS and bar_index - 1 >= swBar
+        st := 2
+        mssBar := bar_index - 1
+        fvgBot := high[2]
+        fvgTop := low
+        strongMSS := strg[1]
+    else if dir == -1 and bearMSS and bar_index - 1 >= swBar
+        st := 2
+        mssBar := bar_index - 1
+        fvgTop := low[2]
+        fvgBot := high
+        strongMSS := strg[1]
+
+// 2 : 되돌림 대기 → 구역 터치 → 확인 → 진입
+bool enterNow = false
+int  score    = 0
+bool kzHit    = kzMode != "사용 안 함" and inKZ
+bool locHit   = locMode != "사용 안 함" and not na(mid) and (dir == 1 ? swLvl < mid : swLvl > mid)
+
+if st == 2
+    side = dir * (close - vwap)
+    // 무효화
+    if bar_index - mssBar > pbWindow
+        st := 0
+    else if dir == 1 and close < fvgBot
+        st := 0
+    else if dir == -1 and close > fvgTop
+        st := 0
+    else
+        againstCnt := side < 0 ? againstCnt + 1 : 0
+        if againstCnt >= holdBars
+            st := 0
+    if st == 2
+        tol = atr * tolAtr
+        overlapOK = not reqOverlap or (not na(vwap) and vwap >= fvgBot - tol and vwap <= fvgTop + tol)
+        touchNow  = overlapOK and (dir == 1 ? low <= fvgTop : high >= fvgBot)
+        if touchNow
+            if not inZone
+                touches += 1
+            inZone := true
+            if useCVD and (dir == 1 ? absorbBull : absorbBear)
+                absorbed := true
+        else
+            inZone := false
+        if touches > 0
+            holdCnt := side > 0 ? holdCnt + 1 : 0
+        score := (swExt ? 2 : 1) + (kzHit ? 1 : 0) + (locHit ? 1 : 0) + (strongMSS ? 1 : 0) + (absorbed ? 1 : 0) + (touches == 1 ? 1 : 0)
+        kzOK  = kzMode != "필수" or inKZ
+        locOK = locMode != "필수" or locHit
+        enterNow := touches >= 1 and touches <= maxTouch and holdCnt >= holdBars and score >= minScore and kzOK and locOK and tradesToday < maxTrades and not inEOD and flat
+
+// 진입
+if enterNow
+    ePx   := close
+    eStop := stopMode == "스윕 극단값" ? (dir == 1 ? swWick - stopBuf : swWick + stopBuf) : (dir == 1 ? fvgBot - stopBuf : fvgTop + stopBuf)
+    eRisk := math.abs(ePx - eStop)
+    float liq = dir == 1 ? htfHigh : htfLow
+    bool liqOK = not na(liq) and dir * (liq - ePx) >= eRisk * 0.5
+    eTp1  := tp1Mode == "유동성" and liqOK ? liq : ePx + dir * eRisk * rr1
+    tp1Done := false
+    tradesToday += 1
+    st := 3
+    if dir == 1
+        strategy.entry("L", strategy.long)
+    else
+        strategy.entry("S", strategy.short)
+    string msg = '{"side":"' + (dir == 1 ? "long" : "short") + '","symbol":"' + syminfo.ticker + '","entry":' + str.tostring(ePx) + ',"stop":' + str.tostring(eStop) + ',"tp1":' + str.tostring(eTp1) + ',"score":' + str.tostring(score) + ',"sweep":"' + swNm + '"}'
+    alert(msg, alert.freq_once_per_bar_close)
+    label.new(bar_index, dir == 1 ? low : high, (dir == 1 ? "LONG " : "SHORT ") + str.tostring(score) + "/7\n" + swNm + (absorbed ? " · CVD" : "") + (touches == 1 ? " · 1st" : " · 2nd"),
+         style = dir == 1 ? label.style_label_up : label.style_label_down,
+         color = color.new(dir == 1 ? color.green : color.red, 10), textcolor = color.white, size = size.small)
+
+// 청산 관리
+if st == 3 and not flat
+    if na(eQty)
+        eQty := math.abs(strategy.position_size)
+    if not tp1Done and not na(eQty) and math.abs(strategy.position_size) < eQty
+        tp1Done := true
+    float tp2 = tp2Mode == "2σ" and not na(sd) ? (dir == 1 ? math.max(vwap + sd * sigmaT, ePx + eRisk * rr1) : math.min(vwap - sd * sigmaT, ePx - eRisk * rr1)) : ePx + dir * eRisk * rr2
+    float stopNow = beAfterTp1 and tp1Done ? ePx : eStop
+    string eid = dir == 1 ? "L" : "S"
+    strategy.exit("TP1", from_entry = eid, qty_percent = 50, limit = eTp1, stop = stopNow)
+    strategy.exit("TP2", from_entry = eid, qty_percent = 50, limit = tp2, stop = stopNow)
+    if eodClose and inEOD
+        strategy.close_all(comment = "EOD")
+
+// ─── 그리기 ────────────────────────────────────────────────────────────────────
+if newBull or newBear
+    label.new(bar_index, newBull ? low : high, (newBull ? loNm : hiNm) + (newBull ? (extLo ? " ✓" : "") : (extHi ? " ✓" : "")),
+         style = newBull ? label.style_label_up : label.style_label_down,
+         color = color.new(color.orange, newBull ? (extLo ? 0 : 60) : (extHi ? 0 : 60)), textcolor = color.black, size = size.tiny)
+
+plotshape(st == 2 and st[1] == 1, "MSS", shape.triangleup, location.belowbar, color.new(color.lime, 0), offset = -1, size = size.tiny)
+if st == 2 and st[1] == 1
+    box.new(bar_index - 2, fvgTop, bar_index + pbWindow, fvgBot, border_color = color.new(dir == 1 ? color.lime : color.red, 50), bgcolor = color.new(dir == 1 ? color.lime : color.red, 85))
+
+vcol = st == 0 ? color.new(color.gray, 70) : dir == 1 ? color.lime : color.red
+plot(vwap, "Anchored VWAP", vcol, 2)
+plot(st >= 2 and not na(sd) ? vwap + sd * sigmaT * dir : na, "TP2 σ", color.new(color.gray, 50), 1, plot.style_circles)
+plot(st == 3 ? eStop : na, "Stop", color.new(color.red, 30), 1, plot.style_linebr)
+plot(st == 3 ? eTp1 : na, "TP1", color.new(color.teal, 30), 1, plot.style_linebr)
+bgcolor(st == 2 ? color.new(color.yellow, 92) : na, title = "되돌림 대기")
+bgcolor(kzMode != "사용 안 함" and inKZ ? color.new(color.blue, 94) : na, title = "킬존")
+
+var table tb = table.new(position.top_right, 1, 1, bgcolor = color.new(color.black, 60))
+if barstate.islast
+    string s = "상태 " + (st == 0 ? "대기" : st == 1 ? "스윕됨 → MSS 대기" : st == 2 ? "되돌림 대기" : "포지션")
+    if st >= 1
+        s += "\n" + (dir == 1 ? "롱" : "숏") + " · " + swNm + (swExt ? " (외부)" : " (내부)")
+    if st == 2
+        s += "\n터치 " + str.tostring(touches) + " · 유지 " + str.tostring(holdCnt) + "/" + str.tostring(holdBars) + " · 점수 " + str.tostring(score)
+    if st == 3
+        s += "\n진입 " + str.tostring(ePx) + " 손절 " + str.tostring(eStop) + " TP1 " + str.tostring(eTp1)
+    s += "\n오늘 " + str.tostring(tradesToday) + "/" + str.tostring(maxTrades)
+    table.cell(tb, 0, 0, s, text_color = color.white, text_size = size.small, text_halign = text.align_left)
+
+// ─── 알림 ──────────────────────────────────────────────────────────────────────
+alertcondition(newBull and extLo or newBear and extHi, "외부 스윕", "외부 유동성 스윕")
+alertcondition(st == 2 and st[1] == 1, "MSS 확정 (되돌림 대기 시작)", "변위 MSS + FVG")
+alertcondition(enterNow, "진입 신호", "ICT 셋업 진입")
