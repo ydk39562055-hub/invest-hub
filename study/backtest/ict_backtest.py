@@ -99,7 +99,7 @@ def prepare(df, P):
         df[name + "H"], df[name + "L"], df["in_" + name] = H, L, IN
 
     df["kz"] = [any(in_sess(t, a, b) for a, b in P["kz"]) for t in ts]
-    df["eod"] = [in_sess(t, *P["eod"]) for t in ts]
+    df["eod"] = [in_sess(t, *P["eod"]) for t in ts] if P["eod"] else [False] * N
     # 거래량이 없는 데이터(histdata)는 VWAP 을 단순 평균으로
     if np.nansum(v) == 0: df["volume"] = 1.0
     return df
