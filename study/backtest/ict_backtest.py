@@ -19,6 +19,7 @@ DEFAULT = dict(
     bias_len=3,            # 상위 TF 스윙 피벗 길이
     disp15=False,          # 15분 변위 필수: 최근 disp15_bars 개 15분 봉 안에 편향 방향 변위 봉(몸통 ≥ ATR15 × disp15_mult) + FVG
     disp15_bars=8, disp15_mult=1.5,
+    smt_mode="없음",       # 없음 | 가중 | 필수 : 상관 자산이 같은 종류 레벨을 못 넘었을 때(SMT) 만/가중
     conf_mode="5m MSS",    # 5m MSS | 15m CISD : 스윕 후 확인 방식
     cisd_window=8,         # 15m CISD 를 기다리는 5분 봉 수 상한 (스윕 후)   # 다리: 스윕 직전 단기 고점(STH)을 변위 다리가 돌파 + 다리 안 FVG / 캔들: 변위 캔들 하나로 5봉 피벗 돌파
     atr_len=14, atr_mult=1.5, body_pct=0.5, strong_x=1.5,
@@ -164,6 +165,12 @@ def prepare(df, P):
     if np.nansum(v) == 0: df["volume"] = 1.0
     return df
 
+def attach_smt(df, corr_raw, P):
+    """상관 자산(예: NAS100) 의 레벨을 같은 규칙으로 계산해 기준 자산 시각에 맞춘다."""
+    c = prepare(corr_raw, P)
+    cols = ["high", "low", "pdh", "pdl", "asiaH", "asiaL", "ldnH", "ldnL", "nyH", "nyL", "hh", "hl", "sh", "sl"]
+    return c[cols].reindex(df.index, method="ffill")
+
 def attach_m1(df, m1):
     """5분 봉 i 에 속하는 1분 봉 (high, low, close) 배열을 붙인다. 체결 순서 판정용."""
     m1 = m1.copy(); m1.index = pd.to_datetime(m1.index, utc=True).tz_convert(NY)
@@ -186,8 +193,14 @@ def fill_order(d_, bars, stop, tp1, tp2, tp1_done):
         if hit_tp2: ev.append(("TP2", tp2)); break
     return ev
 
-def run(df, P, m1bars=None, verbose=False):
+def run(df, P, m1bars=None, verbose=False, smt=None):
     d = df
+    if smt is not None:
+        S = {k: smt[k].values for k in smt.columns}
+        # 레벨 이름 → 상관 자산의 같은 종류 레벨 (고점, 저점)
+        smt_map = {"PDH": ("pdh", None), "PDL": (None, "pdl"), "Asia H": ("asiaH", None), "Asia L": (None, "asiaL"),
+                   "London H": ("ldnH", None), "London L": (None, "ldnL"), "NY H": ("nyH", None), "NY L": (None, "nyL"),
+                   "HTF H": ("hh", None), "HTF L": (None, "hl"), "Swing H": ("sh", None), "Swing L": (None, "sl")}
     o, h, l, c, v = d.open.values, d.high.values, d.low.values, d.close.values, d.volume.values
     atr, sh, sl, hh, hl = d.atr.values, d.sh.values, d.sl.values, d.hh.values, d.hl.values
     sth, stl = d.sth.values, d.stl.values
@@ -204,7 +217,7 @@ def run(df, P, m1bars=None, verbose=False):
 
     st = 0; dr = 0; sw_bar = -1; sw_wick = sw_lvl = np.nan; sw_ext = False; sw_nm = ""
     mss_bar = -1; fvg_top = fvg_bot = np.nan; strong = False
-    touches = 0; in_zone = False; hold = 0; against = 0; mss_lvl = np.nan; brk_bar = -1
+    touches = 0; in_zone = False; hold = 0; against = 0; mss_lvl = np.nan; brk_bar = -1; sw_smt = False
     sPV = sV = sPV2 = 0.0; a_bar = -1
     trades = []; pos = None; trades_today = 0; cur_day = None
     F = dict(sweep=0, sweep_ext=0, mss=0, no_fvg=0, mss_timeout=0, zone_touch=0, pb_timeout=0, pb_invalid=0, vwap_against=0, entry=0, score_fail=0, kz_fail=0, daily_cap=0)
@@ -267,8 +280,18 @@ def run(df, P, m1bars=None, verbose=False):
             bull = next((x for x in lo_hits if x[0]), None) if allow_bull else None
             bear = (next((x for x in hi_hits if x[0]), None) if allow_bear else None) if bull is None else None
             hit = bull or bear
+            if hit and smt is not None and P["smt_mode"] != "없음":
+                hk, lk = smt_map[hit[1]]
+                if bull:
+                    lvl_c = S[lk][i]; smt_ok = (not np.isnan(lvl_c)) and S["low"][i] > lvl_c       # 나스닥은 저점 안 깸
+                else:
+                    lvl_c = S[hk][i]; smt_ok = (not np.isnan(lvl_c)) and S["high"][i] < lvl_c      # 나스닥은 고점 안 넘음
+                if P["smt_mode"] == "필수" and not smt_ok: hit = None; bull = None; bear = None
+                cur_smt = bool(smt_ok)
+            else:
+                cur_smt = False
             if hit:
-                F["sweep"] += 1; F["sweep_ext"] += int(hit[3])
+                F["sweep"] += 1; F["sweep_ext"] += int(hit[3]); sw_smt = cur_smt
                 st = 1; dr = 1 if bull else -1; sw_bar = i
                 sw_wick = l[i] if bull else h[i]; sw_nm, sw_lvl, sw_ext = hit[1], hit[2], hit[3]
                 mss_lvl = sth[i] if bull else stl[i]   # 스윕 직전 단기 고/저점
@@ -348,7 +371,7 @@ def run(df, P, m1bars=None, verbose=False):
                 mid = (hh[i] + hl[i]) / 2
                 loc = P["loc_mode"] != "사용 안 함" and not np.isnan(mid) and ((sw_lvl < mid) if dr == 1 else (sw_lvl > mid))
                 kzh = P["kz_mode"] != "사용 안 함" and kz[i]
-                score = (2 if sw_ext else 1) + kzh + loc + strong + (touches == 1)
+                score = (2 if sw_ext else 1) + kzh + loc + strong + (touches == 1) + (1 if (P["smt_mode"] == "가중" and sw_smt) else 0)
                 kz_ok = P["kz_mode"] != "필수" or kz[i]
                 loc_ok = P["loc_mode"] != "필수" or loc
                 ready = 1 <= touches <= P["max_touch"] and hold >= P["hold_bars"]
@@ -382,7 +405,7 @@ def run(df, P, m1bars=None, verbose=False):
                     tp1 = liq if (P["tp1_mode"] == "유동성" and not np.isnan(liq)) else entry + dr * risk * P["rr1"]
                     pos = dict(dir=dr, entry=entry, stop=stop, risk=risk, tp1=tp1, qty=1.0, pnl=0.0, tp1_done=False, be_on=False,
                                vwap_prev=vwap, sd_prev=sd, bar=i, time=ts[i], sweep=sw_nm, ext=sw_ext, score=score,
-                               kz=bool(kz[i]), loc=bool(loc), strong=bool(strong), touch=touches)
+                               kz=bool(kz[i]), loc=bool(loc), strong=bool(strong), touch=touches, smt=bool(sw_smt))
                     trades_today += 1; st = 3
     out = pd.DataFrame(trades); out.attrs["funnel"] = F
     return out
