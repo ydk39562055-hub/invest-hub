@@ -66,7 +66,7 @@ buyLtf  = clsMode == "종가 위치" ? (high == low ? volume / 2 : volume * (clo
 sellLtf = volume - buyLtf
 [buyArr, sellArr] = request.security_lower_tf(syminfo.tickerid, ltf, [buyLtf, sellLtf])
 
-n     = buyArr.size()
+n     = array.size(buyArr)
 hasD  = n > 0
 buyV  = hasD ? array.sum(buyArr) : na
 sellV = hasD ? array.sum(sellArr) : na
@@ -76,16 +76,16 @@ delta = buyV - sellV
 reset = anchor == "세션" ? session.isfirstbar : anchor == "일" ? timeframe.change("D") : anchor == "주" ? timeframe.change("W") : false
 
 var float cvd = 0.0
-float cO  = reset ? 0.0 : cvd
-float run = cO
-float cH  = cO
-float cL  = cO
+float cO = reset ? 0.0 : cvd
+float cC = cO
+float cH = cO
+float cL = cO
 if hasD
-    for [i, b] in buyArr
-        run += b - sellArr.get(i)
-        cH := math.max(cH, run)
-        cL := math.min(cL, run)
-cvd := run
+    for i = 0 to n - 1
+        cC := cC + array.get(buyArr, i) - array.get(sellArr, i)
+        cH := math.max(cH, cC)
+        cL := math.min(cL, cC)
+cvd := cC
 
 // ─── 큰 델타 · 흡수 ────────────────────────────────────────────────────────────
 absD   = math.abs(delta)
