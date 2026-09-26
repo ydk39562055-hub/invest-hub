@@ -1,0 +1,70 @@
+봉 수 235667 기간 2023-01-02 18:00:00-05:00 ~ 2026-05-07 19:55:00-04:00
+   깔때기: {'sfp_bias_ok': {1: 497, -1: 366}, 'entry': {1: 125, -1: 0}}
+JadeCap 원형: 1H 편향, 1:2, 롱+숏 {'n': 221, 'win': np.float64(39.4), 'avgR': np.float64(0.11), 'sumR': np.float64(24.9), 'pf': np.float64(1.19), 'maxDD_R': np.float64(10.6), 'pts': np.float64(854.0)}
+   청산별: {'EOD': {'count': 14, 'mean': 0.28}, 'STOP': {'count': 131, 'mean': -1.0}, 'TP': {'count': 76, 'mean': 2.0}}
+   연도별: {2023: 16.2, 2024: -2.6, 2025: 16.0, 2026: -4.6}
+   깔때기: {'sfp_bias_ok': {1: 497, -1: 366}, 'entry': {1: 125, -1: 0}}
+롱 전용 {'n': 221, 'win': np.float64(39.4), 'avgR': np.float64(0.11), 'sumR': np.float64(24.9), 'pf': np.float64(1.19), 'maxDD_R': np.float64(10.6), 'pts': np.float64(854.0)}
+   청산별: {'EOD': {'count': 14, 'mean': 0.28}, 'STOP': {'count': 131, 'mean': -1.0}, 'TP': {'count': 76, 'mean': 2.0}}
+   연도별: {2023: 16.2, 2024: -2.6, 2025: 16.0, 2026: -4.6}
+   깔때기: {'sfp_bias_ok': {1: 486, -1: 351}, 'entry': {1: 113, -1: 0}}
+전날 방향 편향 {'n': 206, 'win': np.float64(43.7), 'avgR': np.float64(0.22), 'sumR': np.float64(45.4), 'pf': np.float64(1.4), 'maxDD_R': np.float64(9.7), 'pts': np.float64(1785.2)}
+   청산별: {'EOD': {'count': 18, 'mean': 0.46}, 'STOP': {'count': 113, 'mean': -1.0}, 'TP': {'count': 75, 'mean': 2.0}}
+   연도별: {2023: 8.9, 2024: 13.1, 2025: 28.5, 2026: -5.2}
+   깔때기: {'sfp_bias_ok': {1: 497, -1: 366}, 'entry': {1: 125, -1: 0}}
+1:2 + 본전@+1R {'n': 221, 'win': np.float64(33.0), 'avgR': np.float64(0.08), 'sumR': np.float64(18.0), 'pf': np.float64(1.15), 'maxDD_R': np.float64(12.8), 'pts': np.float64(338.2)}
+   청산별: {'BE': {'count': 30, 'mean': 0.0}, 'EOD': {'count': 9, 'mean': 0.22}, 'STOP': {'count': 116, 'mean': -1.0}, 'TP': {'count': 66, 'mean': 2.0}}
+   연도별: {2023: 17.0, 2024: -4.7, 2025: 8.2, 2026: -2.6}
+   깔때기: {'sfp_bias_ok': {1: 497, -1: 366}, 'entry': {1: 125, -1: 0}}
+1:3 {'n': 221, 'win': np.float64(31.2), 'avgR': np.float64(0.03), 'sumR': np.float64(7.5), 'pf': np.float64(1.05), 'maxDD_R': np.float64(17.7), 'pts': np.float64(637.8)}
+   청산별: {'EOD': {'count': 32, 'mean': 1.02}, 'STOP': {'count': 148, 'mean': -1.0}, 'TP': {'count': 41, 'mean': 3.0}}
+   연도별: {2023: 7.6, 2024: -10.4, 2025: 10.3, 2026: -0.0}
+   깔때기: {'sfp_bias_ok': {1: 497, -1: 366}, 'entry': {1: 125, -1: 0}}
+트레일 1R, 목표 없음 {'n': 221, 'win': np.float64(23.5), 'avgR': np.float64(-0.0), 'sumR': np.float64(-0.0), 'pf': np.float64(1.0), 'maxDD_R': np.float64(23.4), 'pts': np.float64(248.0)}
+   청산별: {'BE': {'count': 107, 'mean': 0.57}, 'EOD': {'count': 19, 'mean': 1.82}, 'STOP': {'count': 95, 'mean': -1.0}}
+   연도별: {2023: 8.2, 2024: -14.5, 2025: 11.9, 2026: -5.6}
+   깔때기: {'sfp_bias_ok': {1: 497, -1: 366}, 'entry': {1: 125, -1: 0}}
+트레일 0.5R + 목표 1:3 {'n': 221, 'win': np.float64(16.7), 'avgR': np.float64(-0.06), 'sumR': np.float64(-14.3), 'pf': np.float64(0.71), 'maxDD_R': np.float64(17.3), 'pts': np.float64(-546.2)}
+   청산별: {'BE': {'count': 167, 'mean': 0.14}, 'EOD': {'count': 4, 'mean': 1.15}, 'STOP': {'count': 48, 'mean': -1.0}, 'TP': {'count': 2, 'mean': 3.0}}
+   연도별: {2023: -1.6, 2024: -2.3, 2025: -6.4, 2026: -4.0}
+   깔때기: {'sfp_bias_ok': {1: 297, -1: 230}, 'entry': {1: 50, -1: 0}}
+10:30 이전 SFP 제외(첫 시간 트랩 회피) {'n': 90, 'win': np.float64(40.0), 'avgR': np.float64(0.15), 'sumR': np.float64(13.5), 'pf': np.float64(1.25), 'maxDD_R': np.float64(7.0), 'pts': np.float64(880.0)}
+   청산별: {'EOD': {'count': 5, 'mean': 0.51}, 'STOP': {'count': 53, 'mean': -1.0}, 'TP': {'count': 32, 'mean': 2.0}}
+   연도별: {2023: 0.2, 2024: 0.0, 2025: 9.3, 2026: 4.0}
+   깔때기: {'sfp_bias_ok': {1: 346, -1: 238}, 'entry': {1: 91, -1: 0}}
+스윙 5봉 프랙탈 {'n': 155, 'win': np.float64(34.2), 'avgR': np.float64(-0.0), 'sumR': np.float64(-0.1), 'pf': np.float64(1.0), 'maxDD_R': np.float64(23.1), 'pts': np.float64(-92.0)}
+   청산별: {'EOD': {'count': 7, 'mean': 0.13}, 'STOP': {'count': 99, 'mean': -1.0}, 'TP': {'count': 49, 'mean': 2.0}}
+   연도별: {2023: 14.0, 2024: -12.9, 2025: -0.5, 2026: -0.7}
+   깔때기: {'sfp_bias_ok': {1: 497, -1: 366}, 'entry': {1: 131, -1: 0}}
+하루 2회 {'n': 229, 'win': np.float64(39.3), 'avgR': np.float64(0.11), 'sumR': np.float64(25.9), 'pf': np.float64(1.19), 'maxDD_R': np.float64(10.6), 'pts': np.float64(967.2)}
+   청산별: {'EOD': {'count': 14, 'mean': 0.28}, 'STOP': {'count': 136, 'mean': -1.0}, 'TP': {'count': 79, 'mean': 2.0}}
+   연도별: {2023: 15.2, 2024: -3.6, 2025: 17.0, 2026: -2.6}
+   깔때기: {'sfp_bias_ok': {1: 497, -1: 366}, 'entry': {1: 201, -1: 0}}
+12시 이후 진입 창 15:00 까지 {'n': 356, 'win': np.float64(36.5), 'avgR': np.float64(0.03), 'sumR': np.float64(11.9), 'pf': np.float64(1.05), 'maxDD_R': np.float64(22.0), 'pts': np.float64(825.5)}
+   청산별: {'EOD': {'count': 24, 'mean': 0.33}, 'STOP': {'count': 220, 'mean': -1.0}, 'TP': {'count': 112, 'mean': 2.0}}
+   연도별: {2023: 10.2, 2024: -9.0, 2025: 13.4, 2026: -2.6}
+   깔때기: {'sfp_bias_ok': {1: 497, -1: 366}, 'entry': {1: 125, -1: 0}}
+EA 기본: 목표 반대편 유동성 {'n': 221, 'win': np.float64(35.7), 'avgR': np.float64(0.01), 'sumR': np.float64(1.7), 'pf': np.float64(1.01), 'maxDD_R': np.float64(20.5), 'pts': np.float64(124.0)}
+   청산별: {'EOD': {'count': 16, 'mean': 0.51}, 'STOP': {'count': 139, 'mean': -1.0}, 'TP': {'count': 66, 'mean': 2.01}}
+   연도별: {2023: 14.6, 2024: -10.3, 2025: 4.6, 2026: -7.3}
+   깔때기: {'sfp_bias_ok': {1: 497, -1: 366}, 'entry': {1: 125, -1: 0}}
+EA 기본 + 본전@+1R {'n': 221, 'win': np.float64(29.4), 'avgR': np.float64(-0.01), 'sumR': np.float64(-2.4), 'pf': np.float64(0.98), 'maxDD_R': np.float64(17.9), 'pts': np.float64(-242.0)}
+   청산별: {'BE': {'count': 38, 'mean': 0.0}, 'EOD': {'count': 9, 'mean': 0.42}, 'STOP': {'count': 116, 'mean': -1.0}, 'TP': {'count': 58, 'mean': 1.89}}
+   연도별: {2023: 12.4, 2024: -9.3, 2025: -0.3, 2026: -5.3}
+   깔때기: {'sfp_bias_ok': {1: 497, -1: 366}, 'entry': {1: 125, -1: 0}}
+손절 여유 5pt, 1:2 {'n': 221, 'win': np.float64(38.5), 'avgR': np.float64(0.07), 'sumR': np.float64(15.6), 'pf': np.float64(1.12), 'maxDD_R': np.float64(13.4), 'pts': np.float64(589.8)}
+   청산별: {'EOD': {'count': 18, 'mean': 0.48}, 'STOP': {'count': 133, 'mean': -1.0}, 'TP': {'count': 70, 'mean': 2.0}}
+   연도별: {2023: 13.0, 2024: -5.1, 2025: 12.4, 2026: -4.6}
+   깔때기: {'sfp_bias_ok': {1: 497, -1: 366}, 'entry': {1: 125, -1: 0}}
+손절 여유 5pt, 1:3 + 본전@+1R {'n': 221, 'win': np.float64(24.4), 'avgR': np.float64(0.04), 'sumR': np.float64(8.7), 'pf': np.float64(1.07), 'maxDD_R': np.float64(19.8), 'pts': np.float64(373.5)}
+   청산별: {'BE': {'count': 49, 'mean': 0.0}, 'EOD': {'count': 24, 'mean': 1.19}, 'STOP': {'count': 116, 'mean': -1.0}, 'TP': {'count': 32, 'mean': 3.0}}
+   연도별: {2023: 17.2, 2024: -14.8, 2025: 11.1, 2026: -4.9}
+   깔때기: {'sfp_bias_ok': {1: 497, -1: 366}, 'entry': {1: 125, -1: 0}}
+1:3 + 본전@+1R {'n': 221, 'win': np.float64(23.5), 'avgR': np.float64(0.03), 'sumR': np.float64(7.4), 'pf': np.float64(1.06), 'maxDD_R': np.float64(16.9), 'pts': np.float64(266.8)}
+   청산별: {'BE': {'count': 50, 'mean': 0.0}, 'EOD': {'count': 20, 'mean': 1.12}, 'STOP': {'count': 117, 'mean': -1.0}, 'TP': {'count': 34, 'mean': 3.0}}
+   연도별: {2023: 11.4, 2024: -11.9, 2025: 9.4, 2026: -1.6}
+   깔때기: {'sfp_bias_ok': {1: 497, -1: 366}, 'entry': {1: 125, -1: 0}}
+트레일 1R + 목표 1:3 {'n': 221, 'win': np.float64(23.5), 'avgR': np.float64(0.0), 'sumR': np.float64(0.7), 'pf': np.float64(1.01), 'maxDD_R': np.float64(19.1), 'pts': np.float64(240.0)}
+   청산별: {'BE': {'count': 92, 'mean': 0.2}, 'EOD': {'count': 13, 'mean': 1.1}, 'STOP': {'count': 95, 'mean': -1.0}, 'TP': {'count': 21, 'mean': 3.0}}
+   연도별: {2023: 6.4, 2024: -12.5, 2025: 11.5, 2026: -4.6}
+DONE

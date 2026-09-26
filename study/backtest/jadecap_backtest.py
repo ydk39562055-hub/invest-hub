@@ -135,9 +135,9 @@ if __name__ == "__main__":
         "트레일 1R + 목표 1:3": dict(rr=3.0, trail_step=1.0),
     }
     if "--improve" in sys.argv:
-        base = dict(bias="prev")
+        base = dict(bias="1H", short=False) if "--long1h" in sys.argv else dict(bias="prev")
         configs = {
-            "기준: 전날 편향, 1:2": {},
+            "기준": {},
             "1) 전날+1H 편향 일치": dict(bias="both"),
             "2) 세션 VWAP 필터": dict(vwap_filter=True),
             "3) 하루 첫 SFP 만": dict(first_sfp_only=True),
