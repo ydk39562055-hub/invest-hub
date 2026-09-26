@@ -18,7 +18,9 @@ DEFAULT = dict(
     bias_mode="없음",      # 없음 | 1H | 1H+4H : 상위 TF 구조 편향 방향의 스윕만 (롱 편향 → 저점 스윕만)
     bias_len=3,            # 상위 TF 스윙 피벗 길이
     disp15=False,          # 15분 변위 필수: 최근 disp15_bars 개 15분 봉 안에 편향 방향 변위 봉(몸통 ≥ ATR15 × disp15_mult) + FVG
-    disp15_bars=8, disp15_mult=1.5,   # 다리: 스윕 직전 단기 고점(STH)을 변위 다리가 돌파 + 다리 안 FVG / 캔들: 변위 캔들 하나로 5봉 피벗 돌파
+    disp15_bars=8, disp15_mult=1.5,
+    conf_mode="5m MSS",    # 5m MSS | 15m CISD : 스윕 후 확인 방식
+    cisd_window=8,         # 15m CISD 를 기다리는 5분 봉 수 상한 (스윕 후)   # 다리: 스윕 직전 단기 고점(STH)을 변위 다리가 돌파 + 다리 안 FVG / 캔들: 변위 캔들 하나로 5봉 피벗 돌파
     atr_len=14, atr_mult=1.5, body_pct=0.5, strong_x=1.5,
     use_pd=True, use_asia=True, use_ldn=True, use_ny=True, use_htf=True, use_int=False,
     s_asia=("20:00", "00:00"), s_ldn=("02:00", "05:00"), s_ny=("09:30", "16:00"),
@@ -110,6 +112,32 @@ def prepare(df, P):
             if c15[j] > o15[j] and l15[j + 1] > h15[j - 1]: last_dir, last_j = 1, j
             elif c15[j] < o15[j] and h15[j + 1] < l15[j - 1]: last_dir, last_j = -1, j
         d15[j + 1] = last_dir if j + 1 - last_j <= P["disp15_bars"] else 0   # j+1 봉이 닫혀야 FVG 확정
+    # 15분 CISD: 연속 음봉 묶음의 첫 시가를 종가가 넘으면 +1 (숏은 대칭). 값은 CISD 봉 마감 후 유효.
+    cis_dir = np.zeros(len(x15)); cis_lvl = np.full(len(x15), np.nan); cis_ft = np.full(len(x15), np.nan); cis_fb = np.full(len(x15), np.nan)
+    run_dn_open = np.nan; run_up_open = np.nan   # 진행 중인 연속 음봉/양봉 묶음의 첫 시가
+    last_dn_open = np.nan; last_up_open = np.nan  # 마지막으로 완성된 묶음의 첫 시가
+    for j in range(1, len(x15)):
+        dn = c15[j] < o15[j]; up = c15[j] > o15[j]
+        # 묶음 갱신
+        if dn:
+            if np.isnan(run_dn_open): run_dn_open = o15[j]
+            if not np.isnan(run_up_open): last_up_open = run_up_open; run_up_open = np.nan
+        elif up:
+            if np.isnan(run_up_open): run_up_open = o15[j]
+            if not np.isnan(run_dn_open): last_dn_open = run_dn_open; run_dn_open = np.nan
+        # CISD 판정: 이번 양봉 종가가 방금 끝난 음봉 묶음 첫 시가 위 (또는 대칭)
+        if up and not np.isnan(last_dn_open) and c15[j] > last_dn_open:
+            cis_dir[j] = 1; cis_lvl[j] = last_dn_open; last_dn_open = np.nan
+            if j + 1 < len(x15) and l15[j + 1] > h15[j - 1]: cis_fb[j], cis_ft[j] = h15[j - 1], l15[j + 1]
+        elif dn and not np.isnan(last_up_open) and c15[j] < last_up_open:
+            cis_dir[j] = -1; cis_lvl[j] = last_up_open; last_up_open = np.nan
+            if j + 1 < len(x15) and h15[j + 1] < l15[j - 1]: cis_ft[j], cis_fb[j] = l15[j - 1], h15[j + 1]
+    idx15 = x15.index + pd.Timedelta(minutes=15)
+    df["cisd"] = pd.Series(cis_dir, index=idx15).reindex(ts).fillna(0).values          # 해당 5분 봉 시각에 15m 봉이 막 닫혔을 때만 값
+    df["cisd_lvl"] = pd.Series(cis_lvl, index=idx15).reindex(ts).values
+    df["cisd_ft"] = pd.Series(cis_ft, index=idx15).reindex(ts).values
+    df["cisd_fb"] = pd.Series(cis_fb, index=idx15).reindex(ts).values
+
     df["disp15"] = pd.Series(d15, index=x15.index + pd.Timedelta(minutes=30)).reindex(ts, method="ffill").fillna(0).values
 
     # 전일 고/저 (뉴욕 달력일 기준, 직전 거래일)
@@ -164,6 +192,7 @@ def run(df, P, m1bars=None, verbose=False):
     atr, sh, sl, hh, hl = d.atr.values, d.sh.values, d.sl.values, d.hh.values, d.hl.values
     sth, stl = d.sth.values, d.stl.values
     b1, b4, d15v = d.bias1h.values, d.bias4h.values, d.disp15.values
+    cisd, cisd_lvl, cisd_ft, cisd_fb = d.cisd.values, d.cisd_lvl.values, d.cisd_ft.values, d.cisd_fb.values
     pdh, pdl = d.pdh.values, d.pdl.values
     kz, eod, ts = d.kz.values, d.eod.values, d.index
     sess = {k: (d[k + "H"].values, d[k + "L"].values, d["in_" + k].values) for k in ("asia", "ldn", "ny")}
@@ -252,7 +281,23 @@ def run(df, P, m1bars=None, verbose=False):
             sd = math.sqrt(max(sPV2 / sV - vwap * vwap, 0)) if not np.isnan(vwap) else np.nan
 
         # ── MSS
-        if st == 1:
+        if st == 1 and P["conf_mode"] == "15m CISD":
+            if i - sw_bar > P["cisd_window"]: st = 0; F["mss_timeout"] += 1
+            elif cisd[i] == dr and i > sw_bar:
+                # 15m CISD 확정 (이 5분 봉 시각에 15m 봉 마감). 구역: 15m FVG 우선, 없으면 5분 다리 FVG. 둘 다 없으면 CISD 레벨 ± ATR/2
+                if not np.isnan(cisd_ft[i]):
+                    zone = (cisd_fb[i], cisd_ft[i])
+                else:
+                    zone = None
+                    for k in range(i - 1, sw_bar, -1):
+                        if dr == 1 and l[k + 1] > h[k - 1]: zone = (h[k - 1], l[k + 1]); break
+                        if dr == -1 and h[k + 1] < l[k - 1]: zone = (h[k + 1], l[k - 1]); break
+                    if zone is None:
+                        zone = (cisd_lvl[i] - atr[i] / 2, cisd_lvl[i] + atr[i] / 2)
+                fvg_bot, fvg_top = min(zone), max(zone)
+                strong = dr * (c[i] - sw_wick) >= atr[i] * P["atr_mult"] * P["strong_x"]
+                st = 2; mss_bar = i; F["mss"] += 1
+        elif st == 1:
             if i - sw_bar > P["window"]: st = 0; F["mss_timeout"] += 1
             elif P["mss_mode"] == "캔들":
                 rng1 = h[i - 1] - l[i - 1]; body1 = abs(c[i - 1] - o[i - 1])
