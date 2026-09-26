@@ -21,8 +21,11 @@ DEFAULT = dict(
     hold_bars=2, max_touch=2, req_overlap=True, tol_atr=0.5, sigma_t=2.0,
     loc_mode="가중", min_score=4,
     stop_mode="스윕 극단값", stop_buf=1.0, tp1_mode="유동성", rr1=1.0, tp2_mode="2σ", rr2=2.0,
-    be_after_tp1=True, max_trades=3, eod=("15:55", "16:00"),
+    be_mode="TP1 후", be_r=1.0, max_trades=3, eod=("15:55", "16:00"),
 )
+# stop_mode: 스윕 극단값 | 오더블록 | FVG 반대편
+# tp1_mode : 유동성(가장 가까운 풀) | RR
+# be_mode  : TP1 후 | 구역 이탈 후(be_r × 리스크만큼 유리하게 간 뒤) | 없음
 
 # ───────────────────────── 유틸 ─────────────────────────
 def in_sess(t, start, end):
@@ -95,10 +98,33 @@ def prepare(df, P):
 
     df["kz"] = [any(in_sess(t, a, b) for a, b in P["kz"]) for t in ts]
     df["eod"] = [in_sess(t, *P["eod"]) for t in ts]
+    # 거래량이 없는 데이터(histdata)는 VWAP 을 단순 평균으로
+    if np.nansum(v) == 0: df["volume"] = 1.0
     return df
 
+def attach_m1(df, m1):
+    """5분 봉 i 에 속하는 1분 봉 (high, low, close) 배열을 붙인다. 체결 순서 판정용."""
+    m1 = m1.copy(); m1.index = pd.to_datetime(m1.index, utc=True).tz_convert(NY)
+    key = m1.index.floor("5min")
+    grp = {k: g[["high", "low", "close"]].values for k, g in m1.groupby(key)}
+    return [grp.get(t) for t in df.index]
+
 # ───────────────────────── 백테스트 ─────────────────────────
-def run(df, P, verbose=False):
+def fill_order(d_, bars, stop, tp1, tp2, tp1_done):
+    """1분 봉 시퀀스로 손절/TP 도달 순서 판정. 반환: 이벤트 리스트 [(종류, 가격)]"""
+    ev = []
+    for hh_, ll_, cc_ in bars:
+        hit_stop = ll_ <= stop if d_ == 1 else hh_ >= stop
+        hit_tp1 = (not tp1_done) and (hh_ >= tp1 if d_ == 1 else ll_ <= tp1)
+        hit_tp2 = tp1_done and (hh_ >= tp2 if d_ == 1 else ll_ <= tp2)
+        if hit_stop and (hit_tp1 or hit_tp2):
+            ev.append(("STOP", stop)); break          # 1분 안에서도 겹치면 손절 우선
+        if hit_stop: ev.append(("STOP", stop)); break
+        if hit_tp1: ev.append(("TP1", tp1)); tp1_done = True
+        if hit_tp2: ev.append(("TP2", tp2)); break
+    return ev
+
+def run(df, P, m1bars=None, verbose=False):
     d = df
     o, h, l, c, v = d.open.values, d.high.values, d.low.values, d.close.values, d.volume.values
     atr, sh, sl, hh, hl = d.atr.values, d.sh.values, d.sl.values, d.hh.values, d.hl.values
@@ -126,25 +152,29 @@ def run(df, P, verbose=False):
         # ── 포지션 관리 (진입 다음 봉부터, 이 봉의 OHLC 로 체결 판정)
         if pos is not None:
             p = pos; d_ = p["dir"]
-            stop = p["entry"] if (P["be_after_tp1"] and p["tp1_done"]) else p["stop"]
+            be_now = (P["be_mode"] == "TP1 후" and p["tp1_done"]) or (P["be_mode"] == "구역 이탈 후" and p["be_on"])
+            stop = p["entry"] if be_now else p["stop"]
             if P["tp2_mode"] == "2σ" and not np.isnan(p["sd_prev"]):
                 tp2 = (max(p["vwap_prev"] + p["sd_prev"] * P["sigma_t"], p["entry"] + p["risk"] * P["rr1"]) if d_ == 1
                        else min(p["vwap_prev"] - p["sd_prev"] * P["sigma_t"], p["entry"] - p["risk"] * P["rr1"]))
             else:
                 tp2 = p["entry"] + d_ * p["risk"] * P["rr2"]
-            hit_stop = (l[i] <= stop) if d_ == 1 else (h[i] >= stop)
-            hit_tp1 = (h[i] >= p["tp1"]) if d_ == 1 else (l[i] <= p["tp1"])
-            hit_tp2 = (h[i] >= tp2) if d_ == 1 else (l[i] <= tp2)
             gap_open = (o[i] <= stop) if d_ == 1 else (o[i] >= stop)
+            bars = m1bars[i] if m1bars is not None and m1bars[i] is not None else [(h[i], l[i], c[i])]
             closed = False
-            if hit_stop:  # 보수적으로 손절 우선. 갭이면 시가 체결
-                px = o[i] if gap_open else stop
-                p["pnl"] += d_ * (px - p["entry"]) * p["qty"]; closed = True; p["exit"] = "STOP" if not p["tp1_done"] else "BE"
+            if gap_open:
+                p["pnl"] += d_ * (o[i] - p["entry"]) * p["qty"]; closed = True; p["exit"] = "STOP" if not p["tp1_done"] else "BE"
             else:
-                if not p["tp1_done"] and hit_tp1:
-                    p["pnl"] += d_ * (p["tp1"] - p["entry"]) * 0.5; p["qty"] = 0.5; p["tp1_done"] = True
-                if p["tp1_done"] and hit_tp2:
-                    p["pnl"] += d_ * (tp2 - p["entry"]) * p["qty"]; closed = True; p["exit"] = "TP2"
+                for kind, px in fill_order(d_, bars, stop, p["tp1"], tp2, p["tp1_done"]):
+                    if kind == "STOP":
+                        p["pnl"] += d_ * (px - p["entry"]) * p["qty"]; closed = True; p["exit"] = "STOP" if not p["tp1_done"] else "BE"
+                    elif kind == "TP1":
+                        p["pnl"] += d_ * (px - p["entry"]) * 0.5; p["qty"] = 0.5; p["tp1_done"] = True
+                    elif kind == "TP2":
+                        p["pnl"] += d_ * (px - p["entry"]) * p["qty"]; closed = True; p["exit"] = "TP2"
+            # 본전 이동: 구역 이탈 모드 = 리스크 × be_r 만큼 유리하게 간 뒤
+            if not closed and P["be_mode"] == "구역 이탈 후" and not p["be_on"] and d_ * (c[i] - p["entry"]) >= p["risk"] * P["be_r"]:
+                p["be_on"] = True
             if not closed and P["eod"] and eod[i]:
                 p["pnl"] += d_ * (c[i] - p["entry"]) * p["qty"]; closed = True; p["exit"] = "EOD"
             if closed:
@@ -215,13 +245,28 @@ def run(df, P, verbose=False):
                 if (1 <= touches <= P["max_touch"] and hold >= P["hold_bars"] and score >= P["min_score"]
                         and kz_ok and loc_ok and trades_today < P["max_trades"] and not eod[i] and pos is None):
                     entry = c[i]
-                    stop = (sw_wick - dr * P["stop_buf"]) if P["stop_mode"] == "스윕 극단값" else ((fvg_bot if dr == 1 else fvg_top) - dr * P["stop_buf"])
+                    if P["stop_mode"] == "스윕 극단값":
+                        base = sw_wick
+                    elif P["stop_mode"] == "오더블록":
+                        # 변위 봉(mss_bar) 직전 반대색 봉들의 극단값. 없으면 변위 봉 자체 극단값
+                        j = mss_bar - 1; cand = []
+                        while j >= mss_bar - 3 and j > sw_bar - 1:
+                            if (dr == 1 and c[j] < o[j]) or (dr == -1 and c[j] > o[j]): cand.append(l[j] if dr == 1 else h[j])
+                            elif cand: break
+                            j -= 1
+                        base = (min(cand) if dr == 1 else max(cand)) if cand else (l[mss_bar] if dr == 1 else h[mss_bar])
+                    else:
+                        base = fvg_bot if dr == 1 else fvg_top
+                    stop = base - dr * P["stop_buf"]
                     risk = abs(entry - stop)
                     if risk <= 0: st = 0; continue
-                    liq = hh[i] if dr == 1 else hl[i]
-                    liq_ok = not np.isnan(liq) and dr * (liq - entry) >= risk * 0.5
-                    tp1 = liq if (P["tp1_mode"] == "유동성" and liq_ok) else entry + dr * risk * P["rr1"]
-                    pos = dict(dir=dr, entry=entry, stop=stop, risk=risk, tp1=tp1, qty=1.0, pnl=0.0, tp1_done=False,
+                    # 가장 가까운 유동성 풀 (진입 방향, 최소 0.5R 거리)
+                    pools = [hh[i], pdh[i], sess["asia"][0][i], sess["ldn"][0][i], sess["ny"][0][i], sh[i]] if dr == 1 else \
+                            [hl[i], pdl[i], sess["asia"][1][i], sess["ldn"][1][i], sess["ny"][1][i], sl[i]]
+                    pools = [x for x in pools if not np.isnan(x) and dr * (x - entry) >= risk * 0.5]
+                    liq = (min(pools) if dr == 1 else max(pools)) if pools else np.nan
+                    tp1 = liq if (P["tp1_mode"] == "유동성" and not np.isnan(liq)) else entry + dr * risk * P["rr1"]
+                    pos = dict(dir=dr, entry=entry, stop=stop, risk=risk, tp1=tp1, qty=1.0, pnl=0.0, tp1_done=False, be_on=False,
                                vwap_prev=vwap, sd_prev=sd, bar=i, time=ts[i], sweep=sw_nm, ext=sw_ext, score=score,
                                kz=bool(kz[i]), loc=bool(loc), strong=bool(strong), touch=touches)
                     trades_today += 1; st = 3
@@ -249,11 +294,27 @@ if __name__ == "__main__":
     path = sys.argv[1]
     raw = pd.read_csv(path, index_col=0)
     P = dict(DEFAULT)
+    for a in sys.argv[2:]:
+        if "=" in a and not a.startswith("--"):
+            k, val = a.split("=", 1); P[k] = type(DEFAULT[k])(val) if not isinstance(DEFAULT[k], (bool, tuple, list)) else (val == "True" if isinstance(DEFAULT[k], bool) else DEFAULT[k])
     df = prepare(raw, P)
+    m1 = None
+    if "--m1" in sys.argv:
+        m1 = attach_m1(df, pd.read_csv(sys.argv[sys.argv.index("--m1") + 1], index_col=0))
+        print("1분 봉으로 체결 순서 판정:", sum(x is not None for x in m1), "/", len(m1), "봉 매핑")
     print(f"봉 수 {len(df)}  기간 {df.index[0]} ~ {df.index[-1]}\n")
-    tr = run(df, P)
+    tr = run(df, P, m1)
     report(tr)
     tr.to_csv(path.replace(".csv", "_trades.csv"), index=False)
+
+    if "--compare" in sys.argv:
+        print("\n\n=== 손절 방식 × 본전 이동 비교 ===")
+        rows = []
+        for sm in ("스윕 극단값", "오더블록", "FVG 반대편"):
+            for bm in ("TP1 후", "구역 이탈 후", "없음"):
+                Q = dict(P); Q["stop_mode"] = sm; Q["be_mode"] = bm
+                s_ = stats(run(df, Q, m1)); s_.update(stop=sm, be=bm); rows.append(s_)
+        print(pd.DataFrame(rows).to_string(index=False))
 
     if "--sweep" in sys.argv:
         print("\n\n=== 파라미터 스윕 ===")
