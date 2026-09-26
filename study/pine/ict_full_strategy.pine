@@ -29,7 +29,7 @@ pbWindow = input.int(24, "MSS 후 되돌림 대기 봉 수", minval = 1, group =
 
 gD = "변위"
 atrLen  = input.int(14, "ATR 기간", minval = 1, group = gD)
-atrMult = input.float(1.5, "몸통 ≥ ATR × 배수", minval = 0.1, step = 0.1, group = gD)
+atrMult = input.float(2.0, "몸통 ≥ ATR × 배수", minval = 0.1, step = 0.1, group = gD)
 bodyPct = input.float(0.5, "몸통 / 범위 최소 비율", minval = 0, maxval = 1, step = 0.05, group = gD)
 strongX = input.float(1.5, "강한 변위 = 배수 × 이 값", minval = 1, step = 0.1, group = gD)
 
@@ -46,7 +46,7 @@ sLdn    = input.session("0200-0500", "런던 세션", group = gL)
 sNY     = input.session("0930-1600", "뉴욕 세션", group = gL)
 
 gK = "킬존"
-kzMode = input.string("필수", "킬존 적용", options = ["필수", "가중", "사용 안 함"], group = gK)
+kzMode = input.string("가중", "킬존 적용", options = ["필수", "가중", "사용 안 함"], group = gK)
 kz1    = input.session("0200-0500", "킬존 1 (런던 오픈)", group = gK)
 kz2    = input.session("0700-1000", "킬존 2 (뉴욕 AM)", group = gK)
 kz3    = input.session("1330-1600", "킬존 3 (뉴욕 PM)", group = gK)
@@ -70,7 +70,7 @@ minScore = input.int(4, "최소 점수 (최대 7)", minval = 1, maxval = 7, grou
 
 gR = "리스크"
 stopMode   = input.string("스윕 극단값", "손절 기준", options = ["스윕 극단값", "FVG 반대편"], group = gR)
-stopBuf    = input.float(1.0, "손절 여유 (포인트)", minval = 0, step = 0.25, group = gR)
+stopBuf    = input.float(2.0, "손절 여유 (포인트)", minval = 0, step = 0.25, group = gR)
 tp1Mode    = input.string("유동성", "TP1", options = ["유동성", "RR"], group = gR)
 rr1        = input.float(1.0, "TP1 RR (유동성 없을 때 대체)", minval = 0.2, step = 0.1, group = gR)
 tp2Mode    = input.string("2σ", "TP2", options = ["2σ", "RR"], group = gR)
