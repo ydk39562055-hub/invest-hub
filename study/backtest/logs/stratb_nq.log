@@ -1,0 +1,35 @@
+봉 수 235667 기간 2023-01-02 18:00:00-05:00 ~ 2026-05-07 19:55:00-04:00
+원본 규칙 (롱 전용, 09:30-12:00) {'n': 171, 'win': np.float64(28.1), 'avgR': np.float64(-0.21), 'sumR': np.float64(-35.4), 'pf': np.float64(0.71), 'maxDD_R': np.float64(40.4), 'pts': np.float64(-1067.2)}
+   청산별: {'EOD': {'count': 8, 'mean': 0.57}, 'STOP': {'count': 122, 'mean': -1.0}, 'TP': {'count': 41, 'mean': 2.0}}
+   연도별: {2023: -5.1, 2024: -13.7, 2025: -18.6, 2026: 2.0}
+원본 + 숏 허용 {'n': 265, 'win': np.float64(32.1), 'avgR': np.float64(-0.07), 'sumR': np.float64(-19.5), 'pf': np.float64(0.89), 'maxDD_R': np.float64(33.5), 'pts': np.float64(-752.5)}
+   청산별: {'EOD': {'count': 13, 'mean': 0.34}, 'STOP': {'count': 176, 'mean': -1.0}, 'TP': {'count': 76, 'mean': 2.0}}
+   연도별: {2023: 2.9, 2024: -15.4, 2025: -12.8, 2026: 5.8}
+10:00-12:00 창 {'n': 170, 'win': np.float64(28.2), 'avgR': np.float64(-0.2), 'sumR': np.float64(-34.4), 'pf': np.float64(0.72), 'maxDD_R': np.float64(39.4), 'pts': np.float64(-1049.5)}
+   청산별: {'EOD': {'count': 8, 'mean': 0.57}, 'STOP': {'count': 121, 'mean': -1.0}, 'TP': {'count': 41, 'mean': 2.0}}
+   연도별: {2023: -4.1, 2024: -13.7, 2025: -18.6, 2026: 2.0}
+1H 편향 {'n': 131, 'win': np.float64(30.5), 'avgR': np.float64(-0.14), 'sumR': np.float64(-18.1), 'pf': np.float64(0.8), 'maxDD_R': np.float64(28.0), 'pts': np.float64(-367.0)}
+   청산별: {'EOD': {'count': 7, 'mean': 0.56}, 'STOP': {'count': 90, 'mean': -1.0}, 'TP': {'count': 34, 'mean': 2.0}}
+   연도별: {2023: -5.1, 2024: -8.4, 2025: -9.6, 2026: 5.0}
+1H+4H 편향 {'n': 87, 'win': np.float64(35.6), 'avgR': np.float64(0.03), 'sumR': np.float64(2.5), 'pf': np.float64(1.05), 'maxDD_R': np.float64(14.4), 'pts': np.float64(139.0)}
+   청산별: {'EOD': {'count': 3, 'mean': 0.85}, 'STOP': {'count': 56, 'mean': -1.0}, 'TP': {'count': 28, 'mean': 2.0}}
+   연도별: {2023: 2.9, 2024: -0.4, 2025: -8.0, 2026: 8.0}
+1H+4H 편향 + 숏 {'n': 124, 'win': np.float64(36.3), 'avgR': np.float64(0.05), 'sumR': np.float64(5.9), 'pf': np.float64(1.07), 'maxDD_R': np.float64(13.0), 'pts': np.float64(49.8)}
+   청산별: {'EOD': {'count': 5, 'mean': 0.38}, 'STOP': {'count': 78, 'mean': -1.0}, 'TP': {'count': 41, 'mean': 2.0}}
+   연도별: {2023: 4.9, 2024: -2.1, 2025: -1.9, 2026: 5.0}
+직전 스윕 필수(12봉) {'n': 44, 'win': np.float64(20.5), 'avgR': np.float64(-0.44), 'sumR': np.float64(-19.1), 'pf': np.float64(0.45), 'maxDD_R': np.float64(19.1), 'pts': np.float64(-863.5)}
+   청산별: {'EOD': {'count': 2, 'mean': 0.93}, 'STOP': {'count': 35, 'mean': -1.0}, 'TP': {'count': 7, 'mean': 2.0}}
+   연도별: {2023: -3.0, 2024: -5.1, 2025: -10.0, 2026: -1.0}
+1H+4H + 스윕 {'n': 19, 'win': np.float64(26.3), 'avgR': np.float64(-0.25), 'sumR': np.float64(-4.8), 'pf': np.float64(0.66), 'maxDD_R': np.float64(8.8), 'pts': np.float64(-230.0)}
+   청산별: {'EOD': {'count': 1, 'mean': 1.17}, 'STOP': {'count': 14, 'mean': -1.0}, 'TP': {'count': 4, 'mean': 2.0}}
+   연도별: {2023: 0.0, 2024: -2.8, 2025: -4.0, 2026: 2.0}
+세션 VWAP 위 {'n': 129, 'win': np.float64(32.6), 'avgR': np.float64(-0.09), 'sumR': np.float64(-12.1), 'pf': np.float64(0.86), 'maxDD_R': np.float64(20.0), 'pts': np.float64(-475.2)}
+   청산별: {'EOD': {'count': 9, 'mean': 0.65}, 'STOP': {'count': 86, 'mean': -1.0}, 'TP': {'count': 34, 'mean': 2.0}}
+   연도별: {2023: -2.1, 2024: 0.3, 2025: -12.3, 2026: 2.0}
+1H+4H + VWAP + 10-12시 {'n': 68, 'win': np.float64(39.7), 'avgR': np.float64(0.14), 'sumR': np.float64(9.5), 'pf': np.float64(1.23), 'maxDD_R': np.float64(7.6), 'pts': np.float64(276.0)}
+   청산별: {'EOD': {'count': 3, 'mean': 0.84}, 'STOP': {'count': 41, 'mean': -1.0}, 'TP': {'count': 24, 'mean': 2.0}}
+   연도별: {2023: 2.9, 2024: 3.6, 2025: -3.0, 2026: 6.0}
+하루 3회 허용 {'n': 204, 'win': np.float64(28.4), 'avgR': np.float64(-0.2), 'sumR': np.float64(-41.0), 'pf': np.float64(0.72), 'maxDD_R': np.float64(47.0), 'pts': np.float64(-1107.2)}
+   청산별: {'EOD': {'count': 11, 'mean': 0.72}, 'STOP': {'count': 145, 'mean': -1.0}, 'TP': {'count': 48, 'mean': 2.0}}
+   연도별: {2023: -5.1, 2024: -18.6, 2025: -20.3, 2026: 3.0}
+DONE
