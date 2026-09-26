@@ -14,6 +14,7 @@ NY = "America/New_York"
 # ───────────────────────── 파라미터 ─────────────────────────
 DEFAULT = dict(
     htf_len=5, len=5, window=12, pb_window=24,
+    mss_mode="다리", sth_len=2,   # 다리: 스윕 직전 단기 고점(STH)을 변위 다리가 돌파 + 다리 안 FVG / 캔들: 변위 캔들 하나로 5봉 피벗 돌파
     atr_len=14, atr_mult=1.5, body_pct=0.5, strong_x=1.5,
     use_pd=True, use_asia=True, use_ldn=True, use_ny=True, use_htf=True, use_int=False,
     s_asia=("20:00", "00:00"), s_ldn=("02:00", "05:00"), s_ny=("09:30", "16:00"),
@@ -67,6 +68,7 @@ def prepare(df, P):
     tr = np.maximum(h - l, np.maximum(abs(h - np.roll(c, 1)), abs(l - np.roll(c, 1)))); tr[0] = h[0] - l[0]
     df["atr"] = rma(tr, P["atr_len"])
     df["sh"], df["sl"] = pivots(h, l, P["len"])
+    df["sth"], df["stl"] = pivots(h, l, P["sth_len"])
 
     # HTF(15분) 스윙: 15분 봉 확정 + 1봉 지연 (Pine lookahead_on + [1] 과 동일)
     htf = df[["open", "high", "low", "close"]].resample("15min", label="left", closed="left").agg(
@@ -128,6 +130,7 @@ def run(df, P, m1bars=None, verbose=False):
     d = df
     o, h, l, c, v = d.open.values, d.high.values, d.low.values, d.close.values, d.volume.values
     atr, sh, sl, hh, hl = d.atr.values, d.sh.values, d.sl.values, d.hh.values, d.hl.values
+    sth, stl = d.sth.values, d.stl.values
     pdh, pdl = d.pdh.values, d.pdl.values
     kz, eod, ts = d.kz.values, d.eod.values, d.index
     sess = {k: (d[k + "H"].values, d[k + "L"].values, d["in_" + k].values) for k in ("asia", "ldn", "ny")}
@@ -139,9 +142,10 @@ def run(df, P, m1bars=None, verbose=False):
 
     st = 0; dr = 0; sw_bar = -1; sw_wick = sw_lvl = np.nan; sw_ext = False; sw_nm = ""
     mss_bar = -1; fvg_top = fvg_bot = np.nan; strong = False
-    touches = 0; in_zone = False; hold = 0; against = 0
+    touches = 0; in_zone = False; hold = 0; against = 0; mss_lvl = np.nan; brk_bar = -1
     sPV = sV = sPV2 = 0.0; a_bar = -1
     trades = []; pos = None; trades_today = 0; cur_day = None
+    F = dict(sweep=0, sweep_ext=0, mss=0, no_fvg=0, mss_timeout=0, zone_touch=0, pb_timeout=0, pb_invalid=0, vwap_against=0, entry=0, score_fail=0, kz_fail=0, daily_cap=0)
 
     for i in range(max(P["len"] * 2 + 2, 3), len(d)):
         day = ts[i].date()
@@ -197,8 +201,11 @@ def run(df, P, m1bars=None, verbose=False):
             bear = next((x for x in hi_hits if x[0]), None) if bull is None else None
             hit = bull or bear
             if hit:
+                F["sweep"] += 1; F["sweep_ext"] += int(hit[3])
                 st = 1; dr = 1 if bull else -1; sw_bar = i
                 sw_wick = l[i] if bull else h[i]; sw_nm, sw_lvl, sw_ext = hit[1], hit[2], hit[3]
+                mss_lvl = sth[i] if bull else stl[i]   # 스윕 직전 단기 고/저점
+                brk_bar = -1
                 sPV = sV = sPV2 = 0.0; a_bar = i; mss_bar = -1
                 touches = 0; in_zone = False; hold = 0; against = 0; absorbed = False
         if a_bar >= 0:
@@ -208,30 +215,49 @@ def run(df, P, m1bars=None, verbose=False):
 
         # ── MSS
         if st == 1:
-            if i - sw_bar > P["window"]: st = 0
-            else:
+            if i - sw_bar > P["window"]: st = 0; F["mss_timeout"] += 1
+            elif P["mss_mode"] == "캔들":
                 rng1 = h[i - 1] - l[i - 1]; body1 = abs(c[i - 1] - o[i - 1])
                 disp1 = body1 >= atr[i - 1] * P["atr_mult"] and rng1 > 0 and body1 / rng1 >= P["body_pct"]
                 strong1 = body1 >= atr[i - 1] * P["atr_mult"] * P["strong_x"]
                 if dr == 1 and not np.isnan(sh[i - 1]) and c[i - 1] > sh[i - 1] and c[i - 2] <= sh[i - 1] and disp1 and l[i] > h[i - 2] and i - 1 >= sw_bar:
-                    st = 2; mss_bar = i - 1; fvg_bot, fvg_top, strong = h[i - 2], l[i], strong1
+                    st = 2; mss_bar = i - 1; fvg_bot, fvg_top, strong = h[i - 2], l[i], strong1; F["mss"] += 1
                 elif dr == -1 and not np.isnan(sl[i - 1]) and c[i - 1] < sl[i - 1] and c[i - 2] >= sl[i - 1] and disp1 and h[i] < l[i - 2] and i - 1 >= sw_bar:
-                    st = 2; mss_bar = i - 1; fvg_top, fvg_bot, strong = l[i - 2], h[i], strong1
+                    st = 2; mss_bar = i - 1; fvg_top, fvg_bot, strong = l[i - 2], h[i], strong1; F["mss"] += 1
+            else:
+                # 다리 모드: 단기 고/저점(STH/STL) 을 종가로 돌파, 스윕 극단값→돌파 종가 다리 길이가 ATR×배수 이상
+                if brk_bar < 0:
+                    lvl = mss_lvl if not np.isnan(mss_lvl) else (sth[i] if dr == 1 else stl[i])
+                    leg = dr * (c[i] - sw_wick)
+                    broke = (not np.isnan(lvl)) and i > sw_bar and (dr * (c[i] - lvl) > 0) and leg >= atr[i] * P["atr_mult"]
+                    if broke: brk_bar = i; strong = leg >= atr[i] * P["atr_mult"] * P["strong_x"]
+                elif i == brk_bar + 1:
+                    # 다리 안(스윕 다음 봉 ~ 이번 봉) 의 마지막 FVG 를 진입 구역으로
+                    found = None
+                    for k in range(i - 1, sw_bar, -1):        # k = FVG 가운데 봉
+                        if dr == 1 and l[k + 1] > h[k - 1]: found = (h[k - 1], l[k + 1]); break
+                        if dr == -1 and h[k + 1] < l[k - 1]: found = (h[k + 1], l[k - 1]); break
+                    if found:
+                        st = 2; mss_bar = brk_bar; fvg_bot, fvg_top = found; F["mss"] += 1
+                    else:
+                        st = 0; F["no_fvg"] += 1
 
         # ── 되돌림 대기 → 진입
         if st == 2:
             side = dr * (c[i] - vwap)
-            if i - mss_bar > P["pb_window"] or (dr == 1 and c[i] < fvg_bot) or (dr == -1 and c[i] > fvg_top):
-                st = 0
+            if i - mss_bar > P["pb_window"]:
+                st = 0; F["pb_timeout"] += 1
+            elif (dr == 1 and c[i] < fvg_bot) or (dr == -1 and c[i] > fvg_top):
+                st = 0; F["pb_invalid"] += 1
             else:
                 against = against + 1 if side < 0 else 0
-                if against >= P["hold_bars"]: st = 0
+                if against >= P["hold_bars"]: st = 0; F["vwap_against"] += 1
             if st == 2:
                 tol = atr[i] * P["tol_atr"]
                 overlap = (not P["req_overlap"]) or (not np.isnan(vwap) and fvg_bot - tol <= vwap <= fvg_top + tol)
                 touch = overlap and ((l[i] <= fvg_top) if dr == 1 else (h[i] >= fvg_bot))
                 if touch:
-                    if not in_zone: touches += 1
+                    if not in_zone: touches += 1; F["zone_touch"] += 1
                     in_zone = True
                 else:
                     in_zone = False
@@ -242,8 +268,13 @@ def run(df, P, m1bars=None, verbose=False):
                 score = (2 if sw_ext else 1) + kzh + loc + strong + (touches == 1)
                 kz_ok = P["kz_mode"] != "필수" or kz[i]
                 loc_ok = P["loc_mode"] != "필수" or loc
-                if (1 <= touches <= P["max_touch"] and hold >= P["hold_bars"] and score >= P["min_score"]
+                ready = 1 <= touches <= P["max_touch"] and hold >= P["hold_bars"]
+                if ready and score < P["min_score"]: F["score_fail"] += 1
+                if ready and not kz_ok: F["kz_fail"] += 1
+                if ready and trades_today >= P["max_trades"]: F["daily_cap"] += 1
+                if (ready and score >= P["min_score"]
                         and kz_ok and loc_ok and trades_today < P["max_trades"] and not eod[i] and pos is None):
+                    F["entry"] += 1
                     entry = c[i]
                     if P["stop_mode"] == "스윕 극단값":
                         base = sw_wick
@@ -270,7 +301,8 @@ def run(df, P, m1bars=None, verbose=False):
                                vwap_prev=vwap, sd_prev=sd, bar=i, time=ts[i], sweep=sw_nm, ext=sw_ext, score=score,
                                kz=bool(kz[i]), loc=bool(loc), strong=bool(strong), touch=touches)
                     trades_today += 1; st = 3
-    return pd.DataFrame(trades)
+    out = pd.DataFrame(trades); out.attrs["funnel"] = F
+    return out
 
 # ───────────────────────── 통계 ─────────────────────────
 def stats(tr):
@@ -304,6 +336,7 @@ if __name__ == "__main__":
         print("1분 봉으로 체결 순서 판정:", sum(x is not None for x in m1), "/", len(m1), "봉 매핑")
     print(f"봉 수 {len(df)}  기간 {df.index[0]} ~ {df.index[-1]}\n")
     tr = run(df, P, m1)
+    print("깔때기:", tr.attrs.get("funnel"))
     report(tr)
     tr.to_csv(path.replace(".csv", "_trades.csv"), index=False)
 
